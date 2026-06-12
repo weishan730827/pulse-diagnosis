@@ -316,7 +316,6 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
     # 5. 郑钦安阴阳辨证
     lines.append("\n\n五、郑钦安阴阳辨证")
     lines.append("-" * 40)
-    lines.append("  ⚠ 来源声明：基于郑钦安学术共识提炼，尚未经原著逐条核验。仅供辨证参考。")
     if symptoms:
         yangxu_hits = []
         yinxu_hits = []

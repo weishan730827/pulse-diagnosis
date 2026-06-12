@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 辨证施治辅助系统 v2.0
-整合：姚梅龄脉学 + 张锡纯方证 + 胡希恕经方 + 知医邦量化（脉诊/舌诊）+ 辨证规则
+整合：姚梅龄脉学 + 张锡纯方证 + 胡希恕经方 + 郑钦安阴阳辨证 + 知医邦量化（脉诊/舌诊）+ 辨证规则
 """
 
 import json
@@ -34,6 +34,9 @@ with open(os.path.join(BASE_DIR, "hu_xishu_rules.json"), "r", encoding="utf-8") 
 
 with open(os.path.join(BASE_DIR, "yao_meiling_rules.json"), "r", encoding="utf-8") as f:
     YAOMEILING_RULES = json.load(f)
+
+with open(os.path.join(BASE_DIR, "zheng_qinan_rules.json"), "r", encoding="utf-8") as f:
+    ZHENGQINAN_RULES = json.load(f)
 
 # ============================================================
 # 1. 知医邦 28 脉 ∈ 公式计算引擎
@@ -310,9 +313,39 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
     else:
         lines.append("\n未匹配到方证。")
 
-    # 5. 鉴别诊断
+    # 5. 郑钦安阴阳辨证
+    lines.append("\n\n五、郑钦安阴阳辨证")
+    lines.append("-" * 40)
+    if symptoms:
+        yangxu_hits = []
+        yinxu_hits = []
+        for rule in ZHENGQINAN_RULES["核心原则"]:
+            if "关键症状" not in rule:
+                continue
+            for kw in rule["关键症状"]:
+                for sym in symptoms:
+                    if kw in sym or sym in kw:
+                        if rule["分类"] in ["阳虚辨识", "阳虚阴盛核心病机", "真阳判别法", "阴盛逼阳外越"]:
+                            yangxu_hits.append(f"[郑钦安: 阴阳辨证] {rule['id']}「{kw}」→ {rule['规则'][:30]}")
+                        elif rule["分类"] == "阴虚辨识":
+                            yinxu_hits.append(f"[郑钦安: 阴阳辨证] {rule['id']}「{kw}」→ {rule['规则'][:30]}")
+        if yangxu_hits:
+            lines.append(f"\n  阳虚证据（{len(yangxu_hits)}条）：")
+            for h in yangxu_hits[:6]:
+                lines.append(f"    {h}")
+            lines.append(f"\n  [郑钦安: 阴阳辨证] 结论：阳虚阴盛，治以扶阳抑阴。阳不化阴则湿浊内生。")
+        if yinxu_hits:
+            lines.append(f"\n  阴虚证据（{len(yinxu_hits)}条）：")
+            for h in yinxu_hits[:6]:
+                lines.append(f"    {h}")
+        if not yangxu_hits and not yinxu_hits:
+            lines.append("\n  症状未直接命中核心辨证条目，需四诊合参。")
+    else:
+        lines.append("\n  请提供症状以进行郑钦安阴阳辨证。")
+
+    # 6. 鉴别诊断
     if len(results) >= 2:
-        lines.append("\n\n五、鉴别诊断")
+        lines.append("\n\n六、鉴别诊断")
         lines.append("-" * 40)
         top = results[:3]
         for i in range(len(top)):

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-辨证施治辅助系统 v2.0
-整合：姚梅龄脉学 + 张锡纯方证 + 胡希恕经方 + 郑钦安阴阳辨证 + 知医邦量化（脉诊/舌诊）+ 辨证规则
+辨证施治辅助系统 v2.1（七家并列版）
+整合：姚梅龄脉学 + 胡希恕六经八纲 + 张锡纯方证升降 + 刘渡舟十论辨证 + 曹颖甫方证对应 + 郑钦安阴阳辨证 + 知医邦量化（脉诊/舌诊）
+七家并列输出 → 方证匹配 → 跨体系冲突审查 → 综合处方建议
 """
 
 import json
@@ -37,6 +38,12 @@ with open(os.path.join(BASE_DIR, "yao_meiling_rules.json"), "r", encoding="utf-8
 
 with open(os.path.join(BASE_DIR, "zheng_qinan_rules.json"), "r", encoding="utf-8") as f:
     ZHENGQINAN_RULES = json.load(f)
+
+with open(os.path.join(BASE_DIR, "liu_duzhou_rules.json"), "r", encoding="utf-8") as f:
+    LIUDUZHOU_RULES = json.load(f)
+
+with open(os.path.join(BASE_DIR, "cao_yingfu_rules.json"), "r", encoding="utf-8") as f:
+    CAOYINGFU_RULES = json.load(f)
 
 # ============================================================
 # 1. 知医邦 28 脉 ∈ 公式计算引擎
@@ -248,10 +255,17 @@ def search_fangzheng(pulses=None, symptoms=None):
 # 6. 综合辨证分析
 # ============================================================
 def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=None):
-    """综合辨证分析（姚梅龄脉诊 + 方证匹配 + 知医邦量化 + 舌诊）"""
+    """综合辨证分析（姚梅龄脉诊 + 方证匹配 + 知医邦量化 + 舌诊 + 七家并列）"""
     lines = []
+    sheng_hits = []
+    jiang_hits = []
+    yangxu_hits = []
+    yinxu_hits = []
+    jing_hits = []
     lines.append("=" * 60)
-    lines.append("【辨证施治分析报告 v2.0】")
+    lines.append("【辨证施治分析报告 v2.1（七家并列）】")
+    lines.append("  姚梅龄脉诊 · 胡希恕六经 · 张锡纯升降 · 刘渡舟十论")
+    lines.append("  曹颖甫方证 · 郑钦安阴阳 · 知医邦量化（脉诊/舌诊）")
     lines.append("=" * 60)
 
     # 1. 姚梅龄脉象分析
@@ -297,10 +311,145 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
         else:
             lines.append("  未推导出明确证型。")
 
-    # 4. 方证匹配
-    lines.append("\n\n四、方证匹配")
-    lines.append("-" * 40)
+    # 方证匹配结果（预计算，各体系共用）
     results = search_fangzheng(pulses, symptoms)
+
+    # 4. 胡希恕六经八纲辨证
+    lines.append("\n\n四、胡希恕六经八纲辨证")
+    lines.append("-" * 40)
+    liujing = HUXISHU_RULES.get("六经体系", {})
+    bagang = HUXISHU_RULES.get("八纲辨证框架", {})
+    fzd = HUXISHU_RULES.get("方证对应核心", {})
+    # 六经定位
+    jing_hits.clear()
+    all_symptoms = " ".join(symptoms).lower() if symptoms else ""
+    for jname, jdata in liujing.items():
+        if jname == "六经皆有表证（关键规则）":
+            continue
+        hits = 0
+        if isinstance(jdata, dict):
+            if "主症" in jdata:
+                for s in jdata["主症"]:
+                    if s and s in all_symptoms:
+                        hits += 1
+            if "提纲" in jdata:
+                for s in jdata["提纲"].replace("，",",").replace("、",",").split(","):
+                    if s.strip() and s.strip() in all_symptoms:
+                        hits += 1
+        if hits > 0:
+            jing_hits.append((jname, hits, jdata))
+    jing_hits.sort(key=lambda x: x[1], reverse=True)
+    if jing_hits:
+        for jname, hits, jdata in jing_hits[:3]:
+            lines.append(f"\n■ {jname}（命中{hits}项）")
+            if isinstance(jdata, dict):
+                lines.append(f"  病位：{jdata.get('病位','?')} / 病性：{jdata.get('病性','?')}")
+                if jdata.get("核心病机"):
+                    lines.append(f"  病机：{jdata['核心病机'][:60]}")
+                if jdata.get("代表方"):
+                    lines.append(f"  [胡希恕: 六经] 代表方：{jdata['代表方']}")
+        # 八纲判定
+        lines.append(f"\n  [胡希恕: 八纲] 已有线索：{'阳' if jing_hits[0][0] in ['太阳病','阳明病','少阳病'] else '阴'}证 · {'表' if jing_hits[0][0] in ['太阳病','少阴病'] else '里' if jing_hits[0][0] in ['阳明病','太阴病'] else '半表半里'}位")
+    else:
+        lines.append("\n  症状不足，未定位六经。需补充恶寒/发热/汗出/饮食/二便等信息以定六经归属。")
+    # 方证对应核心速查
+    if symptoms:
+        lines.append(f"\n  [胡希恕: 方证] 速查：")
+        for fz_name, fz_data in fzd.items():
+            if "必备" in fz_data:
+                reqs = fz_data["必备"]
+                matched = sum(1 for s in symptoms if any(kw in s for kw in reqs.split("+")))
+                total = len([x for x in reqs.replace("+"," ").split() if x])
+                if total > 0 and matched / total >= 0.5:
+                    lines.append(f"    {fz_name}（{matched}/{total}）：{fz_data.get('方','?')}")
+
+    # 5. 张锡纯方证升降分析
+    lines.append("\n\n五、张锡纯方证升降分析")
+    lines.append("-" * 40)
+    sx_frame = ZHANGXICHUN_RULES.get("升降辨证框架", {})
+    if sx_frame:
+        lines.append(f"  体系：张锡纯衷中参西——大气升降·药证对应")
+        lines.append(f"  [张锡纯: 核心] {sx_frame.get('核心升降对立轴','')[:80]}")
+        # 升降判断
+        sx_symptoms = all_symptoms
+        sheng_indicators = ["气短","不足以息","胸闷","乏力","懒言","脉弱","脉沉迟"]
+        jiang_indicators = ["气逆","喘促","呃逆","呕吐","眩晕","面赤","脉弦","脉弦长"]
+        sheng_hits.clear()
+        jiang_hits.clear()
+        sheng_hits.extend([s for s in sheng_indicators if s in sx_symptoms])
+        jiang_hits.extend([s for s in jiang_indicators if s in sx_symptoms])
+        if sheng_hits:
+            lines.append(f"\n  [张锡纯: 升降] 大气下陷指征：{'、'.join(sheng_hits)}")
+            lines.append(f"  [张锡纯: 方药] 升陷汤类方适用。忌破气、忌误降。")
+            # 展示升陷类方鉴别
+            sx_classes = sx_frame.get("升陷类方鉴别", {})
+            if sx_classes:
+                lines.append(f"  升陷类方：{' / '.join(sx_classes.keys())}")
+        if jiang_hits:
+            lines.append(f"\n  [张锡纯: 升降] 气机上逆指征：{'、'.join(jiang_hits)}")
+            lines.append(f"  [张锡纯: 方药] 镇逆降气类方适用。")
+        if not sheng_hits and not jiang_hits:
+            lines.append(f"\n  症状中未发现明显升降失常指征。")
+        # 用药禁忌
+        if results:
+            top_fangs = [name for name, _, _ in results[:3]]
+            taboo = ZHANGXICHUN_RULES.get("禁忌规则", {})
+            for rule_name in taboo:
+                for f in top_fangs:
+                    if f in rule_name or rule_name in f:
+                        lines.append(f"\n  [张锡纯: 禁忌] 「{f}」相关：{list(taboo[rule_name].keys())[:2]}")
+    else:
+        lines.append("\n  张锡纯规则数据未完整加载。")
+
+    # 6. 刘渡舟十论辨证
+    lines.append("\n\n六、刘渡舟十论辨证")
+    lines.append("-" * 40)
+    ldz_rules = LIUDUZHOU_RULES.get("核心原则", [])
+    ldz_hits = []
+    for rule in ldz_rules:
+        rid = rule.get("id","")
+        cat = rule.get("分类","")
+        # 水证论匹配
+        if "水" in cat and any(s in all_symptoms for s in ["小便","浮肿","眩","悸","渴","泻","咳","痰","舌"]):
+            ldz_hits.append(f"  [刘渡舟: {cat}] {rid}")
+        # 气机论匹配
+        if "气机" in cat and any(s in all_symptoms for s in ["胁","口苦","纳","呕","痞","胀","弦"]):
+            ldz_hits.append(f"  [刘渡舟: {cat}] {rid}")
+        # 脾胃论匹配
+        if "脾胃" in cat and any(s in all_symptoms for s in ["食","腹","便","泄","呕","痞","胀"]):
+            ldz_hits.append(f"  [刘渡舟: {cat}] {rid}")
+        # 六经
+        if "六经" in cat:
+            ldz_hits.append(f"  [刘渡舟: {cat}] 六经提纲+标本中气已加载，可交叉验证")
+    if ldz_hits:
+        for h in ldz_hits[:5]:
+            lines.append(h)
+        lines.append(f"\n  [刘渡舟: 辨证知机] 方证相对为初阶，辨证知机为神品——以色脉之诊决死生处百病。")
+    else:
+        lines.append("\n  症状不足以触发刘渡舟十论的具体分支。请补充小便/浮肿/痰饮/气机/脾胃/六经相关症状。")
+
+    # 7. 曹颖甫方证对应评估
+    lines.append("\n\n七、曹颖甫方证对应评估")
+    lines.append("-" * 40)
+    cyf_rules = CAOYINGFU_RULES.get("核心原则", [])
+    lines.append(f"  体系：{CAOYINGFU_RULES.get('体系','曹颖甫经方实验派')}")
+    lines.append(f"  准则：法遵仲景·方证对应——有是证用是方。92案中91案用仲景方，66案（72%）原方不加减。")
+    lines.append(f"  曹氏加减原则：加减不出经方范畴。不拘病名，唯证是辨。")
+    # 方证匹配结果与曹氏标准对照
+    if results:
+        top3 = results[:3]
+        lines.append(f"\n  方证匹配Top3与曹氏标准对照：")
+        for name, fz, score in top3:
+            src = fz.get("来源","?")
+            is_zhongjing = src in ["伤寒论","金匮要略"]
+            zhongjing_tag = "√仲景方" if is_zhongjing else "⚠非仲景方(曹氏极少用)"
+            lines.append(f"    {name}（{score}分）→ {src} [{zhongjing_tag}]")
+    else:
+        lines.append("\n  未匹配到方证，无法对照曹氏标准。")
+
+    # 8. 方证匹配
+    lines.append("\n\n八、方证匹配（跨体系）")
+    lines.append("-" * 40)
     if results:
         for rank, (name, fz, score) in enumerate(results[:8], 1):
             lines.append(f"\n{rank}. 【{name}】（匹配度：{score}分）")
@@ -313,22 +462,25 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
     else:
         lines.append("\n未匹配到方证。")
 
-    # 5. 郑钦安阴阳辨证
-    lines.append("\n\n五、郑钦安阴阳辨证")
+    # 9. 郑钦安阴阳辨证
+    lines.append("\n\n九、郑钦安阴阳辨证")
     lines.append("-" * 40)
     if symptoms:
-        yangxu_hits = []
-        yinxu_hits = []
+        yangxu_hits.clear()
+        yinxu_hits.clear()
         for rule in ZHENGQINAN_RULES["核心原则"]:
-            if "关键症状" not in rule:
+            keywords = rule.get("关键症状", [])
+            if not keywords:
                 continue
-            for kw in rule["关键症状"]:
+            rule_text = rule.get("规则", rule.get("原文", ""))[:30]
+            for kw in keywords:
                 for sym in symptoms:
                     if kw in sym or sym in kw:
-                        if rule["分类"] in ["阳虚辨识", "阳虚阴盛核心病机", "真阳判别法", "阴盛逼阳外越"]:
-                            yangxu_hits.append(f"[郑钦安: 阴阳辨证] {rule['id']}「{kw}」→ {rule['规则'][:30]}")
-                        elif rule["分类"] == "阴虚辨识":
-                            yinxu_hits.append(f"[郑钦安: 阴阳辨证] {rule['id']}「{kw}」→ {rule['规则'][:30]}")
+                        cat = rule.get("分类", "")
+                        if cat in ["阳虚辨识", "阳虚阴盛核心病机", "真阳判别法", "阴盛逼阳外越"]:
+                            yangxu_hits.append(f"[郑钦安: 阴阳辨证] {rule['id']}「{kw}」→ {rule_text}")
+                        elif cat == "阴虚辨识":
+                            yinxu_hits.append(f"[郑钦安: 阴阳辨证] {rule['id']}「{kw}」→ {rule_text}")
         if yangxu_hits:
             lines.append(f"\n  阳虚证据（{len(yangxu_hits)}条）：")
             for h in yangxu_hits[:6]:
@@ -343,9 +495,9 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
     else:
         lines.append("\n  请提供症状以进行郑钦安阴阳辨证。")
 
-    # 6. 鉴别诊断
+    # 10. 鉴别诊断
     if len(results) >= 2:
-        lines.append("\n\n六、鉴别诊断")
+        lines.append("\n\n十、鉴别诊断")
         lines.append("-" * 40)
         top = results[:3]
         for i in range(len(top)):
@@ -367,8 +519,40 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
                         if rev:
                             lines.append(f"  {n2}脉：{'、'.join(list(rev)[:2])}")
 
+    # 11. 七家综合处方建议
+    lines.append("\n\n十一、七家综合处方建议")
+    lines.append("-" * 40)
+    if results:
+        top = results[0]
+        lines.append(f"  首选方证：{top[0]}（{top[2]}分）")
+        lines.append(f"  来源体系：[方证: {top[1]['来源']}]")
+        lines.append(f"  方剂：{' / '.join(x[0] for x in top[1]['方剂'])}")
+        # 跨体系审查
+        lines.append(f"\n  跨体系审查：")
+        if jing_hits:
+            lines.append(f"    [胡希恕: 六经定位] {jing_hits[0][0]} → 治法方向：{jing_hits[0][2].get('治疗原则','随证治之')}")
+        if yangxu_hits:
+            lines.append(f"    [郑钦安: 阴阳] 阳虚阴盛 → 治以扶阳抑阴，诊脉当辩'独处藏奸'")
+            lines.append(f"    [姚梅龄: 脉诊] 如脉沉细无力=阳不化阴，脉浮大而空=虚阳外越——需结合具体脉象判断")
+        lines.append(f"    [张锡纯: 升降] {'大气下陷→升陷类方慎用破气药' if sheng_hits else '气机上逆→镇逆降气' if jiang_hits else '升降未显异常'}")
+        lines.append(f"    [刘渡舟: 接轨] 经方为骨，时方为翼——可据兼证参入古今接轨思路")
+        lines.append(f"    [曹颖甫: 原方率] 曹氏72%原方不加减。如用仲景方，先考原方，非必要不加减。")
+        # 冲突审查
+        conflicts = []
+        if yangxu_hits and top[0] in ["白虎汤证","承气汤证","泻心汤证"]:
+            conflicts.append("⚠ 郑钦安阳虚辨证 vs 方证匹配寒凉方——需重点复核脉象：脉沉细微弱不可用寒凉")
+        if sheng_hits and "破气" in " ".join(top[1].get("方剂",[("","")])[0][1] if top[1].get("方剂") else ""):
+            conflicts.append("⚠ 张锡纯大气下陷 vs 方中含破气药——冲突")
+        if conflicts:
+            lines.append(f"\n  ⚠ 冲突警示：")
+            for c in conflicts:
+                lines.append(f"    {c}")
+    else:
+        lines.append("  无方证匹配结果，无法生成处方建议。")
+
     lines.append("\n" + "=" * 60)
-    lines.append("以上分析仅供参考。临床需四诊合参。")
+    lines.append("【七家辨证完成】姚梅龄·胡希恕·张锡纯·刘渡舟·曹颖甫·郑钦安·知医邦——七体系并列输出。")
+    lines.append("以上分析仅供参考。临床需四诊合参，不可偏执一家。")
     lines.append("=" * 60)
     return "\n".join(lines)
 
@@ -434,8 +618,9 @@ def list_tongue_options():
 # ============================================================
 HELP_TEXT = """
 ========================================
-  辨证施治辅助系统 v2.0
-  姚梅龄 + 张锡纯 + 胡希恕 + 知医邦
+  辨证施治辅助系统 v2.1（七家并列版）
+  姚梅龄 + 胡希恕 + 张锡纯 + 刘渡舟
+  + 曹颖甫 + 郑钦安 + 知医邦
 ========================================
 
 命令：
@@ -607,7 +792,7 @@ if __name__ == "__main__":
         arg = " ".join(sys.argv[1:])
         cmd, params = parse_input(arg)
         if cmd == "search":
-            print(differential_diagnosis(params["symptoms"], params["pulses"]))
+            print(differential_diagnosis(params["pulses"], params["symptoms"]))
         elif cmd == "pulse":
             result, matched = query_pulse(params["name"])
             if result:

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-辨证施治辅助系统 v2.1（七家并列版）
-整合：姚梅龄脉学 + 胡希恕六经八纲 + 张锡纯方证升降 + 刘渡舟十论辨证 + 曹颖甫方证对应 + 郑钦安阴阳辨证 + 知医邦量化（脉诊/舌诊）
-七家并列输出 → 方证匹配 → 跨体系冲突审查 → 综合处方建议
+辨证施治辅助系统 v2.2（八家并列·仲景为根）
+整合：张仲景（本经·六经定纲）+ 姚梅龄脉学 + 胡希恕六经八纲 + 张锡纯方证升降 + 刘渡舟十论辨证 + 曹颖甫方证对应 + 郑钦安阴阳辨证 + 知医邦量化（脉诊/舌诊）
+八家并列输出 → 方证匹配 → 跨体系冲突审查 → 综合处方建议
 """
 
 import json
@@ -45,6 +45,9 @@ with open(os.path.join(BASE_DIR, "liu_duzhou_rules.json"), "r", encoding="utf-8"
 with open(os.path.join(BASE_DIR, "cao_yingfu_rules.json"), "r", encoding="utf-8") as f:
     CAOYINGFU_RULES = json.load(f)
 
+with open(os.path.join(BASE_DIR, "zhang_zhongjing_rules.json"), "r", encoding="utf-8") as f:
+    ZHANGZHONGJING_RULES = json.load(f)
+
 # ============================================================
 # 1. 知医邦 28 脉 ∈ 公式计算引擎
 # ============================================================
@@ -71,44 +74,57 @@ def parse_formula_weight(pulse_name):
 
 
 def calc_pulse_confidence(selected_options, pulse_name):
-    """计算某脉象的置信度∈值"""
+    """计算某脉象的置信度∈值（知医邦公式 v1.2）
+    
+    公式：∈ = (等效阳性 × e - 阴性个数) / (阳性个数 + 阴性个数 + 1.5)
+    - 阳性个数 = 公式项中实际命中的维度数（未加权）
+    - 倍加数 = 命中项中属于{}核心的个数（选中1个等效+2）
+    - 倍减数 = 命中项中属于()次要的个数（选中1个等效+0.5）
+    - 等效阳性 = 阳性个数 + 倍加数 - 0.5×倍减数
+    - 阴性个数 = 公式总项数 - 阳性个数（漏项数，公式写了但没采集到）
+    - e = 2.718281828（自然常数）
+    - 阈值：∈ ≥ 1 脉象成立
+    """
+    import math
+    E = math.e
     formula = PULSE_FORMULAS.get(pulse_name)
     if not formula:
         return 0.0
     core, secondary, normal = parse_formula_weight(pulse_name)
-    positive = 0.0
-    negative = 0.0
     selected_set = set(selected_options)
-    for c in core:
-        if c in selected_set:
-            positive += 2  # f=2
-        else:
-            negative += 1
-    for s in secondary:
-        if s in selected_set:
-            positive += 0.5  # f=1/2
-        else:
-            negative += 1
-    for n in normal:
-        if n in selected_set:
-            positive += 1  # f=1
-        else:
-            negative += 1
-    denom = positive + negative + 1.5
-    if denom == 0:
-        return 0.0
-    epsilon = (positive * 1.0 - negative) / denom  # e=1
-    return round(epsilon, 2)
+    
+    # 统计各项选中情况
+    selected_core = [c for c in core if c in selected_set]
+    selected_sec = [s for s in secondary if s in selected_set]
+    selected_norm = [n for n in normal if n in selected_set]
+    
+    # 阳性个数（原始计数，未加权）
+    N_pos = len(selected_core) + len(selected_sec) + len(selected_norm)
+    
+    # 倍加数、倍减数
+    n_double = len(selected_core)
+    n_half = len(selected_sec)
+    
+    # 等效阳性 = 原始阳性 + 倍加(每项+1额外) - 倍减折扣(每项-0.5)
+    eff_pos = N_pos + n_double - 0.5 * n_half
+    
+    # 阴性个数 = 公式总项数 - 阳性个数（漏项）
+    total_items = len(core) + len(secondary) + len(normal)
+    N_neg = total_items - N_pos
+    
+    # ∈ = (等效阳性 × e - 阴性) / (阳性 + 阴性 + 1.5)
+    eps = (eff_pos * E - N_neg) / (N_pos + N_neg + 1.5)
+    return round(eps, 2)
 
 
 def zhiyibang_diagnose_28mai(selected_options):
-    """输入选中的维度选项列表，输出28脉∈值排序"""
+    """输入选中的维度选项列表，输出28脉∈值排序（仅∈≥1的成立脉象）"""
     results = {}
     for pname in PULSE_FORMULAS:
         if pname.startswith("_"):
             continue
         eps = calc_pulse_confidence(selected_options, pname)
-        if eps > 0:
+        if eps >= 1.0:
             results[pname] = eps
     sorted_results = sorted(results.items(), key=lambda x: x[1], reverse=True)
     return sorted_results
@@ -215,6 +231,34 @@ def get_zhangxichun_principles():
 # ============================================================
 # 4. 脉象诊断（姚梅龄体系）
 # ============================================================
+
+# 已知脉象词列表（从 PULSE_DB 提取，用于复合脉短语拆解）
+_PULSE_TERMS = sorted(
+    [k for k in PULSE_DB.keys() if len(k) <= 4 and not k.startswith("_")],
+    key=lambda x: -len(x)
+)
+
+def extract_pulse_terms(pulse_str):
+    """
+    从复合脉象短语中提取单个脉象词。
+    如 "脉细欲绝" → ["细"]，"脉沉微" → ["沉","微"]
+    "浮紧" → ["浮","紧"]
+    """
+    s = pulse_str.lstrip("脉")
+    found = []
+    i = 0
+    while i < len(s):
+        matched = False
+        for term in _PULSE_TERMS:
+            if s[i:i+len(term)] == term:
+                found.append(term)
+                i += len(term)
+                matched = True
+                break
+        if not matched:
+            i += 1
+    return found
+
 def query_pulse(pulse_name):
     """查询脉象的诊断意义（姚梅龄体系）"""
     result = PULSE_DB.get(pulse_name)
@@ -231,14 +275,24 @@ def query_pulse(pulse_name):
 # 5. 方证匹配引擎
 # ============================================================
 def search_fangzheng(pulses=None, symptoms=None):
-    """根据脉象+症状匹配方证"""
+    """根据脉象+症状匹配方证（含复合脉拆解）"""
     results = []
+    # 拆解复合脉象为单脉词
+    all_pulse_terms = set()
+    for p in (pulses or []):
+        for t in extract_pulse_terms(p):
+            all_pulse_terms.add(t)
+        all_pulse_terms.add(p)  # 也保留原始脉短语
+    
     for name, fz in FANGZHENG_DB.items():
         score = 0
         if pulses:
+            # 精确匹配
             matched = set(pulses) & set(fz["主脉"])
-            if matched:
-                score += len(matched) * 5
+            score += len(matched) * 5
+            # 拆解后单脉词匹配
+            matched2 = all_pulse_terms & set(fz["主脉"])
+            score += len(matched2) * 4
         if symptoms:
             for u_sym in symptoms:
                 for fz_sym in fz["主症"]:
@@ -249,6 +303,192 @@ def search_fangzheng(pulses=None, symptoms=None):
             results.append((name, fz, score))
     results.sort(key=lambda x: x[2], reverse=True)
     return results
+
+
+def search_hu_xishu_fangzheng(pulses, symptoms):
+    """
+    胡希恕体系独立方证检索——搜索 103 方方证对应数据库。
+    匹配维度：六经症状 + 特征脉象 + 症候群关键词
+    """
+    fz_db = HUXISHU_RULES.get("方证对应数据库", {}).get("方剂条目", {})
+    if not fz_db:
+        return []
+    
+    all_symptoms_text = " ".join(symptoms) if symptoms else ""
+    # 分解脉象
+    all_pulse_terms = set()
+    for p in (pulses or []):
+        for t in extract_pulse_terms(p):
+            all_pulse_terms.add(t)
+    
+    results = []
+    for f_name, entry in fz_db.items():
+        score = 0
+        # 脉象匹配
+        fp = entry.get("特征脉", "")
+        if fp:
+            fp_lower = fp.lower()
+            for pt in all_pulse_terms:
+                if pt in fp_lower:
+                    score += 8
+            # 完整脉短语匹配
+            for p in (pulses or []):
+                p_clean = p.lstrip("脉")
+                if p_clean in fp_lower:
+                    score += 10
+        
+        # 症候群匹配
+        for sym in (symptoms or []):
+            for fz_sym in entry.get("症候群", []):
+                if sym in fz_sym or fz_sym in sym:
+                    score += 3
+                    break
+        
+        # 六经方向加分（如果已有六经定位线索）
+        # 不作精确匹配，给分即可
+        if score > 0:
+            results.append((f_name, entry, score))
+    
+    results.sort(key=lambda x: x[2], reverse=True)
+    return results
+
+
+# ============================================================
+# 5.5 张仲景六经定纲搜索
+# ============================================================
+def search_zhang_zhongjing(pulses, symptoms):
+    """
+    张仲景层——根本层（本经）：六经提纲 + 脉证纲领 + 治则大法 + 附录方鉴别。
+    返回: {
+        "六经归属": [(经名, 匹配数, data), ...],
+        "治则推荐": [方名, ...],
+        "脉证匹配": [(规则名, 匹配内容), ...],
+        "附录方匹配": [(方名, data), ...]
+    }
+    """
+    result = {"六经归属": [], "治则推荐": [], "脉证匹配": [], "附录方匹配": []}
+    
+    all_symptoms_text = " ".join(symptoms) if symptoms else ""
+    all_pulse_text = " ".join(pulses) if pulses else ""
+    
+    # --- 六经归属 ---
+    jing_ti = ZHANGZHONGJING_RULES.get("六经提纲", {})
+    # 扩展同义词映射
+    keyword_expand = {
+        "恶寒": ["恶寒", "畏寒", "怕冷", "寒战", "背恶寒"],
+        "发热": ["发热", "身热", "潮热", "壮热", "翕翕发热"],
+        "汗出": ["汗出", "自汗", "盗汗", "多汗", "汗自出"],
+        "脉浮": ["脉浮", "浮"],
+        "脉微细": ["脉微细", "脉细", "脉微", "脉沉细", "脉沉微", "细", "沉", "微"],
+        "头项强痛": ["头项强痛", "头痛", "项强", "头项", "颈项强"],
+        "胃家实": ["胃家实", "腹胀", "便秘", "大便难", "不大便", "燥屎"],
+        "口苦": ["口苦"],
+        "咽干": ["咽干", "口干", "口渴"],
+        "目眩": ["目眩", "眩晕", "头晕"],
+        "往来寒热": ["往来寒热", "寒热往来"],
+        "胸胁苦满": ["胸胁苦满", "胸胁", "胁痛", "胁胀"],
+        "腹满": ["腹满", "腹胀", "腹痛"],
+        "吐": ["吐", "呕吐", "呕", "恶心"],
+        "自利": ["自利", "下利", "腹泻", "便溏", "泄泻"],
+        "但欲寐": ["但欲寐", "欲寐", "嗜睡", "精神萎靡", "倦怠", "乏力"],
+        "消渴": ["消渴", "口渴多饮"],
+        "气上撞心": ["气上撞心", "气上冲", "冲气"],
+        "心中疼热": ["心中疼热", "心痛", "心下疼"],
+        "四肢厥冷": ["四肢厥冷", "手足厥冷", "手足厥寒", "四肢冷", "肢冷", "厥冷", "厥寒"],
+    }
+    
+    for jing_name in ["太阳", "阳明", "少阳", "太阴", "少阴", "厥阴"]:
+        jdata = jing_ti.get(jing_name, {})
+        if not jdata:
+            continue
+        match_count = 0
+        matched_items = []
+        keywords = jdata.get("关键症状", [])
+        for kw in keywords:
+            expanded = keyword_expand.get(kw, [kw])
+            for exp_kw in expanded:
+                if exp_kw in all_symptoms_text or exp_kw in all_pulse_text:
+                    # 脉象关键词加权2倍
+                    weight = 2 if ("脉" in kw or any(p in exp_kw for p in ["浮","沉","细","微","弦","紧","滑","涩","数","迟","弱"])) else 1
+                    match_count += weight
+                    matched_items.append(f"{kw}（{exp_kw}）")
+                    break
+        if match_count > 0:
+            result["六经归属"].append((jing_name, match_count, matched_items, jdata))
+    result["六经归属"].sort(key=lambda x: -x[1])
+    
+    # --- 治则大法 ---
+    zhize = ZHANGZHONGJING_RULES.get("治则大法", {})
+    # 按六经归属推断治则——仅从top经的治则字段提取推荐方
+    if result["六经归属"]:
+        top_jing = result["六经归属"][0]
+        jing_name = top_jing[0]
+        jdata = top_jing[3]
+        zhize_raw = jdata.get("治则", "")
+        for zf in ["麻黄汤","桂枝汤","葛根汤","大青龙汤","小青龙汤",
+                    "白虎汤","白虎加人参汤","大承气汤","小承气汤","调胃承气汤",
+                    "小柴胡汤","大柴胡汤","柴胡桂枝汤",
+                    "四逆汤","通脉四逆汤","白通汤","理中丸","理中汤",
+                    "当归四逆汤","乌梅丸","黄连阿胶汤","四逆辈",
+                    "栀子豉汤","五苓散","猪苓汤","苓桂术甘汤",
+                    "抵当汤","桃核承气汤","小建中汤","炙甘草汤"]:
+            if zf in zhize_raw and zf not in result["治则推荐"]:
+                result["治则推荐"].append(zf)
+        # 同时提取治则大法名称
+        zhize_names = []
+        if ("汗" in zhize_raw or "发汗" in zhize_raw) and "禁汗" not in zhize_raw: zhize_names.append("汗法")
+        if ("下" in zhize_raw) and "禁下" not in zhize_raw: zhize_names.append("下法")
+        if "和" in zhize_raw: zhize_names.append("和法")
+        if "温" in zhize_raw: zhize_names.append("温法")
+        if "清" in zhize_raw: zhize_names.append("清法")
+        if ("吐" in zhize_raw) and "禁吐" not in zhize_raw: zhize_names.append("吐法")
+        if "消" in zhize_raw: zhize_names.append("消法")
+        if "补" in zhize_raw: zhize_names.append("补法")
+        result["治则推荐"] = zhize_names + result["治则推荐"]
+    
+    # --- 脉证纲领匹配 ---
+    maizheng = ZHANGZHONGJING_RULES.get("脉证纲领", {})
+    # 检查各层
+    for section_key in ["三_病脉纲领", "八_六经病脉", "四_特殊脉象"]:
+        section = maizheng.get(section_key, {})
+        if not isinstance(section, dict):
+            continue
+        for rule_key, rule_data in section.items():
+            if rule_key.startswith("_"):
+                continue
+            rule_text = str(rule_data)
+            pulse_match = any(p in rule_text for p in pulses)
+            sym_match = any(s in rule_text for s in (symptoms or [])[:5])
+            if pulse_match or sym_match:
+                snippet = rule_text[:80]
+                result["脉证匹配"].append((f"{section_key}/{rule_key}", snippet))
+    
+    # --- 附录方脉证鉴别 ---
+    for key in ZHANGZHONGJING_RULES:
+        if key.startswith("附录_") and "脉证鉴别" in key:
+            append_data = ZHANGZHONGJING_RULES[key]
+            if not isinstance(append_data, dict):
+                continue
+            score = 0
+            matched_detail = []
+            for sub_key, sub_val in append_data.items():
+                if sub_key.startswith("_"):
+                    continue
+                sub_text = str(sub_val)
+                for p in pulses:
+                    if p in sub_text:
+                        score += 3
+                        matched_detail.append(f"脉{p}")
+                for s in (symptoms or [])[:8]:
+                    if s in sub_text:
+                        score += 2
+                        matched_detail.append(s)
+            if score >= 4:
+                fang_name = key.replace("附录_", "").replace("_脉证鉴别_巍哥口述原著原文", "")
+                result["附录方匹配"].append((fang_name, score, append_data, matched_detail))
+    result["附录方匹配"].sort(key=lambda x: -x[1])
+    
+    return result
 
 
 # ============================================================
@@ -263,13 +503,55 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
     yinxu_hits = []
     jing_hits = []
     lines.append("=" * 60)
-    lines.append("【辨证施治分析报告 v2.1（七家并列）】")
-    lines.append("  姚梅龄脉诊 · 胡希恕六经 · 张锡纯升降 · 刘渡舟十论")
+    lines.append("【辨证施治分析报告 v2.2（八家并列·仲景为根）】")
+    lines.append("  张仲景（本经）→ 姚梅龄脉诊 · 胡希恕六经 · 张锡纯升降 · 刘渡舟十论")
     lines.append("  曹颖甫方证 · 郑钦安阴阳 · 知医邦量化（脉诊/舌诊）")
     lines.append("=" * 60)
 
+    # 0. 张仲景六经定纲（根本层）
+    zzj_result = search_zhang_zhongjing(pulses, symptoms)
+    lines.append("\n【零·根本层】张仲景六经定纲")
+    lines.append("-" * 40)
+    lines.append(f"  体系：宋本《伤寒论》397法113方·《金匮要略》杂病纲领")
+    lines.append(f"  总纲：'观其脉证，知犯何逆，随证治之'（第16条）")
+    
+    # 六经归属
+    if zzj_result["六经归属"]:
+        ti = zzj_result["六经归属"][0]
+        jdata = ti[3]
+        lines.append(f"\n  六经归属：{ti[0]}病（匹配{ti[1]}项：{'、'.join(ti[2][:5])}）")
+        lines.append(f"    原文：{jdata.get('原文','')[:80]}")
+        lines.append(f"    分类：{jdata.get('分类','')} | 病位：{jdata.get('病位','')} | 病性：{jdata.get('病性','')}")
+        lines.append(f"    治则：{jdata.get('治则','')[:80]}")
+        lines.append(f"    出处：{jdata.get('出处','')}")
+        if len(zzj_result["六经归属"]) > 1:
+            ci = zzj_result["六经归属"][1]
+            lines.append(f"  兼见：{ci[0]}病（{'、'.join(ci[2][:3])}）")
+    else:
+        lines.append("\n  六经归属：症状不足以定经，需补充恶寒/发热/汗出/二便等信息。")
+    
+    # 脉证纲领
+    if zzj_result["脉证匹配"]:
+        lines.append(f"\n  脉证纲领（{len(zzj_result['脉证匹配'])}条命中）：")
+        for rule_name, snippet in zzj_result["脉证匹配"][:4]:
+            short_name = rule_name.split("/")[-1] if "/" in rule_name else rule_name
+            lines.append(f"    [{short_name}] {snippet[:70]}")
+    
+    # 治则大法
+    if zzj_result["治则推荐"]:
+        lines.append(f"\n  治则大法：{'、'.join(zzj_result['治则推荐'][:4])}")
+    
+    # 附录方鉴别
+    if zzj_result["附录方匹配"]:
+        lines.append(f"\n  附录方脉证鉴别（{len(zzj_result['附录方匹配'])}方命中）：")
+        for fang_name, score, data, hits in zzj_result["附录方匹配"][:3]:
+            ben_pulse = data.get("本方脉证", "")
+            lines.append(f"    ■ {fang_name}（{score}分）→ {'、'.join(hits[:4])}")
+            if ben_pulse:
+                lines.append(f"      脉证：{ben_pulse[:100]}")
+
     # 1. 姚梅龄脉象分析
-    lines.append("\n一、姚梅龄脉象分析")
+    lines.append("\n\n一、姚梅龄脉象分析")
     lines.append("-" * 40)
     for p in pulses:
         result, matched = query_pulse(p)
@@ -319,7 +601,6 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
     lines.append("-" * 40)
     liujing = HUXISHU_RULES.get("六经体系", {})
     bagang = HUXISHU_RULES.get("八纲辨证框架", {})
-    fzd = HUXISHU_RULES.get("方证对应核心", {})
     # 六经定位
     jing_hits.clear()
     all_symptoms = " ".join(symptoms).lower() if symptoms else ""
@@ -352,16 +633,23 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
         lines.append(f"\n  [胡希恕: 八纲] 已有线索：{'阳' if jing_hits[0][0] in ['太阳病','阳明病','少阳病'] else '阴'}证 · {'表' if jing_hits[0][0] in ['太阳病','少阴病'] else '里' if jing_hits[0][0] in ['阳明病','太阴病'] else '半表半里'}位")
     else:
         lines.append("\n  症状不足，未定位六经。需补充恶寒/发热/汗出/饮食/二便等信息以定六经归属。")
-    # 方证对应核心速查
-    if symptoms:
-        lines.append(f"\n  [胡希恕: 方证] 速查：")
-        for fz_name, fz_data in fzd.items():
-            if "必备" in fz_data:
-                reqs = fz_data["必备"]
-                matched = sum(1 for s in symptoms if any(kw in s for kw in reqs.split("+")))
-                total = len([x for x in reqs.replace("+"," ").split() if x])
-                if total > 0 and matched / total >= 0.5:
-                    lines.append(f"    {fz_name}（{matched}/{total}）：{fz_data.get('方','?')}")
+    # 方证对应——检索103方完整数据库
+    lines.append(f"\n  [胡希恕: 方证] 103方检索结果：")
+    hu_results = search_hu_xishu_fangzheng(pulses, symptoms)
+    if hu_results:
+        for f_name, entry, score in hu_results[:5]:
+            lines.append(f"    {f_name}（{score}分）→ {entry.get('六经','?')}·{entry.get('八纲','?')}")
+            lines.append(f"      症候：{'；'.join(entry.get('症候群',[])[:3])}")
+            lines.append(f"      按语：{entry.get('胡希恕按语','')[:80]}")
+    else:
+        # 兜底：尝试六经方向 + 代表方
+        if jing_hits:
+            top_jing = jing_hits[0]
+            rep_fang = top_jing[2].get("代表方", "")
+            if rep_fang:
+                lines.append(f"    症状不足以精确定方，六经方向指向：[{top_jing[0]}] 代表方：{rep_fang}")
+        else:
+            lines.append("    脉症不足，请补充详细症状以精确定方。")
 
     # 5. 张锡纯方证升降分析
     lines.append("\n\n五、张锡纯方证升降分析")
@@ -520,7 +808,7 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
                             lines.append(f"  {n2}脉：{'、'.join(list(rev)[:2])}")
 
     # 11. 七家综合处方建议
-    lines.append("\n\n十一、七家综合处方建议")
+    lines.append("\n\n十一、八家综合处方建议")
     lines.append("-" * 40)
     if results:
         top = results[0]
@@ -551,7 +839,7 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
         lines.append("  无方证匹配结果，无法生成处方建议。")
 
     lines.append("\n" + "=" * 60)
-    lines.append("【七家辨证完成】姚梅龄·胡希恕·张锡纯·刘渡舟·曹颖甫·郑钦安·知医邦——七体系并列输出。")
+    lines.append("【八家辨证完成】张仲景（本经）·姚梅龄·胡希恕·张锡纯·刘渡舟·曹颖甫·郑钦安·知医邦——八体系并列输出。")
     lines.append("以上分析仅供参考。临床需四诊合参，不可偏执一家。")
     lines.append("=" * 60)
     return "\n".join(lines)

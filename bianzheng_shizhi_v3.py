@@ -401,10 +401,207 @@ def huang_yuanyu_analyze(symptoms, pulses):
 # ============================================================
 # 5.4 陈建国仲景阴阳脉法辨证
 # ============================================================
+# 陈建国50方脉位签名加载（延迟加载，首次调用时初始化）
+_CHENJIANGUO_FORMULA_SIGNATURES = None
+
+def _load_signatures():
+    global _CHENJIANGUO_FORMULA_SIGNATURES
+    if _CHENJIANGUO_FORMULA_SIGNATURES is None:
+        sig_path = os.path.join(BASE_DIR, "chen_jianguo_formula_signatures.json")
+        if os.path.exists(sig_path):
+            with open(sig_path, "r", encoding="utf-8") as f:
+                _CHENJIANGUO_FORMULA_SIGNATURES = json.load(f)
+        else:
+            _CHENJIANGUO_FORMULA_SIGNATURES = []
+    return _CHENJIANGUO_FORMULA_SIGNATURES
+
+# ---- 脉象解析：字符串列表→结构化格子 ----
+def _parse_pulses_to_grid(pulses):
+    """将脉象字符串列表（如['左寸浮紧','右关滑数']）解析为6位×3层的结构化格子"""
+    import re
+
+    grid = {}
+    for hand in ['L', 'R']:
+        grid[hand] = {}
+        for pos in ['cun', 'guan', 'chi']:
+            grid[hand][pos] = {}
+            for d in ['fu', 'zhong', 'chen']:
+                grid[hand][pos][d] = 'normal'
+
+    excess_kw = ['太过', '浮紧', '浮滑', '浮弦', '弦', '滑', '数', '洪', '大', '有力',
+                 '紧', '实', '盛', '最强', '独异', '最力']
+    defic_kw = ['不及', '无力', '弱', '微', '细', '沉微', '沉迟', '沉弱',
+                '濡', '芤', '虚', '塌陷']
+
+    for pulse in pulses:
+        pulse = pulse.strip()
+        if not pulse:
+            continue
+
+        # 确定左右
+        hand = None
+        if re.search(r'左', pulse):
+            hand = 'L'
+        elif re.search(r'右', pulse):
+            hand = 'R'
+        else:
+            continue
+
+        # 确定寸关尺
+        pos = None
+        if re.search(r'寸', pulse):
+            pos = 'cun'
+        elif re.search(r'关', pulse):
+            pos = 'guan'
+        elif re.search(r'尺', pulse):
+            pos = 'chi'
+        if pos is None:
+            continue
+
+        # 确定浮中沉
+        depth = None
+        if re.search(r'浮|浮位', pulse):
+            depth = 'fu'
+        elif re.search(r'中位|中部', pulse):
+            depth = 'zhong'
+        elif re.search(r'沉|沉位', pulse):
+            depth = 'chen'
+
+        # 确定太过/不及
+        is_excess = any(kw in pulse for kw in excess_kw)
+        is_defic = any(kw in pulse for kw in defic_kw)
+
+        if is_excess and not is_defic:
+            ed = 'excess'
+        elif is_defic and not is_excess:
+            ed = 'deficiency'
+        elif is_excess and is_defic:
+            # 同时含太过和不及关键词 → 需要进一步判断
+            ed = 'excess'  # 默认倾向太过
+        else:
+            ed = 'normal'
+
+        # 填入格子
+        if depth:
+            grid[hand][pos][depth] = ed
+        else:
+            for d in ['fu', 'zhong', 'chen']:
+                grid[hand][pos][d] = ed
+
+    return grid
+
+# ---- 匹配核心 ----
+def _match_formulas(patient_grid):
+    """将患者脉象格子与50方签名逐一对比，返回排序结果"""
+    formulas = _load_signatures()
+    if not formulas:
+        return []
+
+    # 计算总体趋势
+    exc_cnt = 0
+    defic_cnt = 0
+    for hand in ['L', 'R']:
+        for pos in ['cun', 'guan', 'chi']:
+            for d in ['fu', 'zhong', 'chen']:
+                v = patient_grid[hand][pos][d]
+                if v in ('excess', 'relative_excess'):
+                    exc_cnt += 1
+                elif v == 'deficiency':
+                    defic_cnt += 1
+    overall_trend = 'excess' if exc_cnt > defic_cnt else ('deficiency' if defic_cnt > exc_cnt else 'mixed')
+
+    # 优势手
+    l_exc = sum(1 for pos in ['cun','guan','chi'] for d in ['fu','zhong','chen']
+                if patient_grid['L'][pos][d] in ('excess','relative_excess'))
+    r_exc = sum(1 for pos in ['cun','guan','chi'] for d in ['fu','zhong','chen']
+                if patient_grid['R'][pos][d] in ('excess','relative_excess'))
+    dominant = 'L' if l_exc > r_exc else ('R' if r_exc > l_exc else None)
+
+    results = []
+    for formula in formulas:
+        sig = formula.get('signature', {})
+        sig_positions = sig.get('positions', [])
+        f_overall = sig.get('overall_trend')
+        f_dominant = sig.get('dominant_hand')
+
+        score = 0
+        matched = 0
+        total = len(sig_positions)
+        detail_lines = []
+
+        for sp in sig_positions:
+            h = sp['hand']
+            p = sp['pos']
+            d = sp['depth']
+            expected_ed = sp['excess_deficiency']
+            w = sp['weight']
+
+            if h not in ('L', 'R') or p not in ('cun', 'guan', 'chi'):
+                continue
+
+            # depth=None → 匹配该脉位的任意层次
+            if d is None:
+                found = False
+                for dd in ['fu', 'zhong', 'chen']:
+                    actual = patient_grid[h][p][dd]
+                    if actual == expected_ed:
+                        score += w * 70
+                        matched += 1
+                        detail_lines.append(f"  ✓ {h}.{p}.{dd}={expected_ed} (any depth)")
+                        found = True
+                        break
+                if not found:
+                    score -= w * 20
+                    detail_lines.append(f"  ✗ {h}.{p}=?{expected_ed} miss")
+            else:
+                actual = patient_grid[h][p][d]
+                if actual == expected_ed:
+                    score += w * 100
+                    matched += 1
+                    detail_lines.append(f"  ✓ {h}.{p}.{d}={expected_ed}")
+                elif expected_ed == 'relative_excess' and actual == 'excess':
+                    score += w * 60
+                    detail_lines.append(f"  △ {h}.{p}.{d}≈{expected_ed}")
+                elif actual != 'normal':
+                    score -= w * 30
+                    detail_lines.append(f"  ✗ {h}.{p}.{d}!={expected_ed}（实际={actual}）")
+
+        # 总体趋势一致性
+        if f_overall and overall_trend:
+            if f_overall == overall_trend:
+                score += 80
+            else:
+                score -= 40
+
+        # 优势手一致性
+        if f_dominant and dominant:
+            if f_dominant == dominant:
+                score += 60
+
+        # 单手方型加成
+        if formula.get('type') == 'single_hand' and dominant:
+            score += 20
+
+        results.append({
+            'name': formula['name'],
+            'score': score,
+            'matched': matched,
+            'total': total,
+            'treatment_direction': formula.get('treatment_direction', ''),
+            'pathomechanism': formula.get('pathomechanism', ''),
+            'pulse_text': formula.get('pulse_text', ''),
+            'details': detail_lines
+        })
+
+    results.sort(key=lambda x: -x['score'])
+    return results, overall_trend, dominant
+
+# ---- 主分析函数 ----
 def chen_jianguo_analyze(pulses):
     """
-    陈建国体系：仲景阴阳脉法——以左右手脉分阴阳，以太过不及定盛衰。
-    输出：阴阳定位 + 升降方向 + 候选方药。
+    陈建国体系：仲景阴阳脉法——50方三部九候精确定位匹配。
+    输入：脉象字符串列表（如['左寸浮紧','右关滑数']）
+    输出：阴阳定位 + 升降方向 + 按匹配度排序的候选方药 + 详细匹配依据。
     """
     result = {
         "left_status": "unknown",
@@ -412,64 +609,109 @@ def chen_jianguo_analyze(pulses):
         "direction": "unknown",
         "method": "unknown",
         "candidates": [],
+        "candidate_details": [],  # 新增：详细匹配信息
         "diagnostic_summary": ""
     }
 
-    # 从脉象中推断左右手太过/不及
-    left_keywords = ["左", "左手", "左脉"]
-    right_keywords = ["右", "右手", "右脉"]
-    excess_keywords = ["太过", "实", "有力", "盛", "浮紧", "弦", "滑数", "洪", "大"]
-    deficiency_keywords = ["不及", "虚", "无力", "弱", "微", "细", "沉微", "沉迟", "濡", "芤"]
+    if not pulses or (len(pulses) == 1 and not pulses[0].strip()):
+        result["diagnostic_summary"] = "脉象输入为空。陈建国阴阳脉法需明确：①总体太过/不及 ②左手/右手哪侧盛衰突出 ③寸关尺浮中沉的具体脉位。建议补充脉位描述（如'左寸浮紧'、'右关滑数中位'等）。"
+        return result
 
-    pulse_text = " ".join(pulses).lower() if pulses else ""
-    pulse_text_orig = " ".join(pulses) if pulses else ""
+    # 1. 解析脉象
+    try:
+        grid = _parse_pulses_to_grid(pulses)
+    except Exception as e:
+        result["diagnostic_summary"] = f"脉象解析失败：{e}。请按格式提供如'左寸浮紧'、'右关滑数'等脉位描述。"
+        return result
 
-    # 确定左右
-    has_left = any(kw in pulse_text_orig for kw in left_keywords)
-    has_right = any(kw in pulse_text_orig for kw in right_keywords)
+    # 2. 50方匹配
+    try:
+        match_results, overall_trend, dominant = _match_formulas(grid)
+    except Exception as e:
+        match_results, overall_trend, dominant = [], "unknown", None
 
-    # 确定太过/不及
-    is_excess = any(kw in pulse_text for kw in excess_keywords)
-    is_deficiency = any(kw in pulse_text for kw in deficiency_keywords)
+    # 3. 汇总左右状态
+    import re
+    pulse_text = " ".join(pulses)
+    has_left = bool(re.search(r'左', pulse_text))
+    has_right = bool(re.search(r'右', pulse_text))
+    has_excess = bool(re.search(r'太过|弦|滑|数|紧|洪|大|有力|盛|独异', pulse_text))
+    has_defic = bool(re.search(r'不及|无力|弱|微|细|沉微|沉迟|濡|芤|虚|塌陷', pulse_text))
 
-    core_theory = CHENJIANGUO_RULES.get("core_theory", {})
-    diag_steps = CHENJIANGUO_RULES.get("diagnostic_steps", [])
-
-    # 尝试从50方脉证图中匹配
-    # 50方数据在 chen_jianguo_rules 中的 "fifty_formulas" 或类似key
-    # 先使用阴阳脉法核心规则做方向判定
-    asc_desc = CHENJIANGUO_RULES.get("ascending_descending_treatment", {})
-    yin_yang_diag = CHENJIANGUO_RULES.get("yin_yang_pulse_diagnosis", {})
-    core_rule = yin_yang_diag.get("core_rule", {}).get("detailed", {})
-
-    if has_left and is_excess:
+    if has_left and has_excess:
         result["left_status"] = "太过（阴盛）"
-        result["direction"] = "升法"
-        result["method"] = "辛温升法"
-        result["diagnostic_summary"] = "左脉太过→阴盛→实则左升→辛温升法（汗法代表：麻黄汤、小柴胡汤）"
-        result["candidates"] = ["麻黄汤", "小柴胡汤", "桂枝汤（表寒）", "葛根汤"]
-    elif has_right and is_excess:
-        result["right_status"] = "太过（阳盛）"
-        result["direction"] = "降法"
-        result["method"] = "苦寒降法"
-        result["diagnostic_summary"] = "右脉太过→阳盛→实则右降→苦寒降法（下法代表：大黄黄连泻心汤、白虎汤、大承气汤）"
-        result["candidates"] = ["大黄黄连泻心汤", "白虎汤", "大承气汤", "调胃承气汤"]
-    elif has_left and is_deficiency:
+    elif has_left and has_defic:
         result["left_status"] = "不及（阴虚）"
-        result["direction"] = "降法"
-        result["method"] = "甘寒降法"
-        result["diagnostic_summary"] = "左脉不及→阴虚→甘寒降法（补阴代表：百合地黄汤、麦门冬汤）"
-        result["candidates"] = ["百合地黄汤", "麦门冬汤", "芍药甘草汤"]
-    elif has_right and is_deficiency:
+    if has_right and has_excess:
+        result["right_status"] = "太过（阳盛）"
+    elif has_right and has_defic:
         result["right_status"] = "不及（阳虚）"
-        result["direction"] = "升法"
-        result["method"] = "甘温升法"
-        result["diagnostic_summary"] = "右脉不及→阳虚→甘温升法（补阳代表：四逆汤、理中汤）"
-        result["candidates"] = ["四逆汤", "理中汤", "附子汤", "桂枝甘草汤"]
+
+    # 4. 从匹配结果推断方向和候选方
+    top_candidates = [r for r in match_results if r['score'] >= 80 or r['matched'] >= 1]
+    if not top_candidates:
+        top_candidates = match_results[:8]
+
+    candidate_names = []
+    candidate_details = []
+    for i, r in enumerate(top_candidates[:10]):
+        candidate_names.append(r['name'])
+        detail = {
+            "rank": i + 1,
+            "name": r['name'],
+            "score": r['score'],
+            "matched": f"{r['matched']}/{r['total']}",
+            "direction": r['treatment_direction'],
+            "pathomechanism": r['pathomechanism'],
+            "pulse_text": r['pulse_text'],
+            "match_details": r['details']
+        }
+        candidate_details.append(detail)
+
+    result["candidates"] = candidate_names[:12] if candidate_names else []
+    result["candidate_details"] = candidate_details
+
+    # 5. 确定主要方向（基于升法/降法频次）
+    direction_counts = {}
+    for r in top_candidates[:5]:
+        d = r['treatment_direction']
+        if d:
+            # 取治疗大方向：升法 or 降法 or 方向相反
+            if '升法' in d:
+                direction_counts['升法'] = direction_counts.get('升法', 0) + 1
+            elif '降法' in d:
+                direction_counts['降法'] = direction_counts.get('降法', 0) + 1
+
+    if direction_counts:
+        best_dir = max(direction_counts, key=direction_counts.get)
+        result["direction"] = best_dir
+        # 按虚实确定具体治法
+        has_yin_sheng = any('阴盛' in r['treatment_direction'] for r in top_candidates[:5])
+        has_yang_sheng = any('阳盛' in r['treatment_direction'] for r in top_candidates[:5])
+        if '升法' == best_dir:
+            result["method"] = "辛温升法" if has_yin_sheng else "甘温升法"
+        elif '降法' == best_dir:
+            result["method"] = "苦寒降法" if has_yang_sheng else "甘寒降法"
+
+    # 6. 生成诊断总结
+    if top_candidates:
+        top3 = "、".join(candidate_names[:3])
+        ratio = f"{top_candidates[0]['matched']}/{top_candidates[0]['total']}"
+        result["diagnostic_summary"] = (
+            f"50方三部九候匹配完成（总体趋势：{overall_trend} | 优势手：{dominant or '不明显'}）。"
+            f"Top3候选：{top3}。最高匹配{ratio}位。"
+        )
+    elif match_results:
+        result["diagnostic_summary"] = (
+            f"50方匹配已完成，但无高分候选（总体趋势：{overall_trend}）。"
+            f"脉象描述可能不够精确，建议补充浮中沉层次和寸关尺独异信息。"
+        )
     else:
-        # 无法明确判定，给出通用指引
-        result["diagnostic_summary"] = "脉象信息不足以明确左右太过/不及。陈建国阴阳脉法需明确：①总体太过/不及 ②左手/右手哪侧盛衰突出。建议补充脉位描述（如'右关浮滑'、'左寸沉微'等）。"
-        result["candidates"] = []
+        result["diagnostic_summary"] = (
+            "脉象信息不足以明确左右太过/不及。陈建国阴阳脉法需明确："
+            "①总体太过/不及 ②左手/右手哪侧盛衰突出。"
+            "建议补充脉位描述（如'右关浮滑'、'左寸沉微'等）。"
+        )
 
     return result
 
@@ -898,8 +1140,19 @@ def differential_diagnosis(pulses, symptoms, zhiyibang_opts=None, tongue_opts=No
         lines.append(f"  右手脉状态：{cj_result['right_status']}")
     if cj_result['direction'] != "unknown":
         lines.append(f"  治疗方向：{cj_result['direction']}（{cj_result['method']}）")
-    if cj_result['candidates']:
-        lines.append(f"  候选方：{'、'.join(cj_result['candidates'])}")
+    # 显示50方详匹配结果
+    cj_details = cj_result.get('candidate_details', [])
+    if cj_details:
+        lines.append(f"\n  50方三部九候匹配结果（Top {min(len(cj_details),6)}）：")
+        for cd in cj_details[:6]:
+            lines.append(f"    {cd['rank']}. 【{cd['name']}】Score={cd['score']} 命中={cd['matched']}")
+            lines.append(f"       方向：{cd['direction']}")
+            lines.append(f"       病机：{cd['pathomechanism'][:60]}")
+            lines.append(f"       脉证原文：{cd['pulse_text'][:80]}")
+            for d in cd['match_details'][:4]:
+                lines.append(f"       {d}")
+    elif cj_result['candidates']:
+        lines.append(f"  候选方：{'、'.join(cj_result['candidates'][:8])}")
     # 显示诊断步骤
     diag_steps = CHENJIANGUO_RULES.get("diagnostic_steps", [])
     if diag_steps:

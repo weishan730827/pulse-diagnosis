@@ -1,0 +1,66 @@
+{
+  "_name": "姚梅龄脉学辨证勾选表",
+  "_version": "1.0",
+  "_source": "姚梅龄脉诊体系（《中医脉诊学》）",
+  "_method": "纯脉诊辨证。知医邦28脉10维量化全量输入→分层分析→病机推演。",
+  "_shared_tables": ["知医邦脉诊量化表"],
+
+  "intro": "姚梅龄辨证完全建筑在脉诊之上。问诊、舌诊都是辅助。知医邦量化表已是姚梅龄体系的最直接消费者——28脉×10维（部位/至数/长度/宽度/强度/流利度/紧张度/节律/深浅/形态）=每个脉象280个量化参考点。以下勾选表只补充脉诊之外的辅助信息。",
+
+  "step1_补充问诊": {
+    "description": "姚梅龄体系中，脉象为主，问诊仅做验证。以下为辅助问诊项。",
+    "sections": [
+      {
+        "id": "YML_A1_寒热",
+        "label": "一、寒热（辅助验证脉象的寒热定性）",
+        "type": "checkbox",
+        "items": [
+          {"id": "yml_wen_ehan", "text": "恶寒（怕冷）"},
+          {"id": "yml_wen_fare", "text": "发热"},
+          {"id": "yml_wen_wanglai", "text": "往来寒热"},
+          {"id": "yml_wen_wuzhi", "text": "手足心热"},
+          {"id": "yml_wen_wuhou_fare", "text": "午后潮热"},
+          {"id": "yml_wen_shen_hong", "text": "身热不扬"}
+        ]
+      },
+      {
+        "id": "YML_A2_汗出",
+        "label": "二、汗出（辅助验证营卫虚实）",
+        "type": "checkbox",
+        "items": [
+          {"id": "yml_han_zihan", "text": "自汗"},
+          {"id": "yml_han_daohan", "text": "盗汗"},
+          {"id": "yml_han_wuhan", "text": "无汗"},
+          {"id": "yml_han_dahan", "text": "大汗出"},
+          {"id": "yml_han_touhan", "text": "但头汗出"}
+        ]
+      },
+      {
+        "id": "YML_A3_精神",
+        "label": "三、精神状态（辅助验证气血盛衰）",
+        "type": "checkbox",
+        "items": [
+          {"id": "yml_jing_fanzao", "text": "烦躁"},
+          {"id": "yml_jing_bumei", "text": "不寐（失眠）"},
+          {"id": "yml_jing_duomei", "text": "但欲寐（嗜睡）"},
+          {"id": "yml_jing_yi_jing", "text": "易惊"},
+          {"id": "yml_jing_jian_wang", "text": "健忘"},
+          {"id": "yml_jing_chanyu", "text": "谵语（说胡话）"}
+        ]
+      }
+    ]
+  },
+
+  "step2_舌脉兼证": {
+    "description": "姚梅龄不排斥舌诊，但仅做脉诊的交叉验证。以知医邦舌诊量化表为准。",
+    "type": "ref_table",
+    "refs": ["知医邦舌诊量化表"]
+  },
+
+  "step3_脉诊输入": {
+    "description": "这是姚梅龄辨证的核心入口。直接使用知医邦脉诊量化表。",
+    "type": "ref_table",
+    "refs": ["知医邦脉诊量化表"],
+    "note": "知医邦28脉×10维度已经全面覆盖姚梅龄的脉诊需求。每脉每维度填入具体值后，姚梅龄引擎按病位（表/里/半表半里）→病性（寒/热/虚/实）→病势（进退/缓急）三层解析。"
+  }
+}

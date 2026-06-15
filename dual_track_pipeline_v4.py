@@ -654,20 +654,36 @@ def cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms):
                 return m.group(0).strip()
         return ""
 
-    zzj_conclusion = extract_first_match(bajia_sections.get("张仲景", ""),
-        [r"六经归属[：:].*", r"少阴病.*", r"治则大法[：:].*"])
-    hu_conclusion = extract_first_match(bajia_sections.get("胡希恕", ""),
-        [r"■ (?:厥阴病|少阳病|阳明病|太阳病|少阴病).*命中\d+项.*", r"六经定位.*"])
-    zhangxi_conclusion = extract_first_match(bajia_sections.get("张锡纯", ""),
-        [r"大气下陷[指征]*[：:].*", r"结论[：:].*升陷汤.*", r"升陷.*"])
-    liu_conclusion = extract_first_match(bajia_sections.get("刘渡舟", ""),
-        [r"触发[：:].*", r"苓桂.*", r"水[证饮].*"])
-    cao_conclusion = extract_first_match(bajia_sections.get("曹颖甫", ""),
-        [r"Top.*", r"原方率.*"])
-    zhengqin_conclusion = extract_first_match(bajia_sections.get("郑钦安", ""),
-        [r"结论[：:].*", r"阳虚阴盛.*", r"扶阳抑阴.*"])
-    huang_conclusion = extract_first_match(bajia_sections.get("黄元御", ""),
-        [r"气机方向.*", r"命中规则.*"])
+    def extract_key_line(text, keywords):
+        """从多行文本中提取包含关键词的首个有意义行"""
+        for line in text.split("\n"):
+            line = line.strip()
+            # 跳过标题行和空行
+            if not line or line.startswith("=") or line.startswith("---") or line.startswith("#"):
+                continue
+            if len(line) < 8:
+                continue
+            if any(l in line for l in ["体系：", "诊断", "分析", "辨证"]):
+                continue
+            for kw in keywords:
+                if kw in line:
+                    return line[:120]
+        return ""
+
+    zzj_conclusion = extract_key_line(bajia_sections.get("张仲景", ""),
+        ["六经归属", "治则大法", "太阳病", "少阴病", "阳明病", "厥阴病"])
+    hu_conclusion = extract_key_line(bajia_sections.get("胡希恕", ""),
+        ["方证检索", "桂枝", "麻黄", "柴胡", "六经定位", "命中"])
+    zhangxi_conclusion = extract_key_line(bajia_sections.get("张锡纯", ""),
+        ["升陷汤", "镇肝", "大气", "升降"])
+    liu_conclusion = extract_key_line(bajia_sections.get("刘渡舟", ""),
+        ["方证相对", "辨证知机", "苓桂", "水证", "接轨", "气化"])
+    cao_conclusion = extract_key_line(bajia_sections.get("曹颖甫", ""),
+        ["方证匹配", "原方率", "仲景方"])
+    zhengqin_conclusion = extract_key_line(bajia_sections.get("郑钦安", ""),
+        ["阳虚", "阴虚", "扶阳", "阴阳"])
+    huang_conclusion = extract_key_line(bajia_sections.get("黄元御", ""),
+        ["中气", "周流", "土枢", "湿"])
 
     fz_top = []
     fz_text = bajia_sections.get("方证匹配", "")
@@ -743,6 +759,11 @@ def cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms):
     chen_only = [(s["name"], s["score"], s.get("interpretation", "")[:80])
                  for s in chen_scored[:5] if s["name"] not in bajia_formulas]
 
+    # 提取姚梅龄结论
+    yaomei_text = bajia_sections.get("姚梅龄", "")
+    yao_pulses = re.findall(r"■\s*(\S+脉)", yaomei_text)
+    yao_conclusion = "、".join(yao_pulses[:6]) if yao_pulses else ""
+
     # ========== 组装报告 ==========
     lines.append(sep)
     lines.append(f"【双轨并行交叉验证报告 v4.0 — 277方签名库】")
@@ -750,20 +771,48 @@ def cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms):
     lines.append(sep)
     lines.append("")
 
-    # 一、轨道A摘要
-    lines.append("## 一、轨道A：八家辨证关键结论")
+    # 零、张锡纯重点升降辨证
+    lines.append("## 零、张锡纯升降辨证（⚠️ 重点条目）")
     lines.append("")
-    lines.append("| 医家 | 关键结论 |")
-    lines.append("|------|----------|")
-    for label, conclusion in [
-        ("张仲景（本经）", zzj_conclusion), ("胡希恕（六经）", hu_conclusion),
-        ("张锡纯（升降）", zhangxi_conclusion), ("刘渡舟（十论）", liu_conclusion),
-        ("曹颖甫（方证）", cao_conclusion), ("郑钦安（阴阳）", zhengqin_conclusion),
-        ("黄元御（周流）", huang_conclusion)
-    ]:
+    zhangxi_full = bajia_sections.get("张锡纯", "")
+    if zhangxi_full:
+        for line in zhangxi_full.split("\n"):
+            line = line.strip()
+            if "升陷汤" in line or "镇肝" in line or "大气" in line or "升降" in line or "鉴别" in line:
+                lines.append(f"> {line}")
+    if not zhangxi_full or "升陷" not in zhangxi_full:
+        lines.append("> 症状未触发张锡纯升降辨证规则，请补充大气/升降相关症状。")
+    lines.append("")
+
+    # 一、轨道A：八家各体系辨证结论
+    lines.append("## 一、轨道A：八家各体系辨证结论")
+    lines.append("")
+
+    masters = [
+        ("张仲景（本经·六经定纲）", zzj_conclusion, bajia_sections.get("张仲景", "")),
+        ("姚梅龄（脉象分析）", yao_conclusion, bajia_sections.get("姚梅龄", "")),
+        ("胡希恕（六经八纲·方证）", hu_conclusion, bajia_sections.get("胡希恕", "")),
+        ("刘渡舟（十论·气化）", liu_conclusion, bajia_sections.get("刘渡舟", "")),
+        ("曹颖甫（方证对应）", cao_conclusion, bajia_sections.get("曹颖甫", "")),
+        ("郑钦安（阴阳辨证）", zhengqin_conclusion, bajia_sections.get("郑钦安", "")),
+        ("黄元御（一气周流）", huang_conclusion, bajia_sections.get("黄元御", "")),
+    ]
+
+    for label, conclusion, full_text in masters:
+        lines.append(f"### {label}")
+        lines.append("")
         if conclusion:
-            lines.append(f"| {label} | {conclusion[:60]} |")
-    lines.append("")
+            lines.append(f"**结论**：{conclusion}")
+        else:
+            # 尝试提取关键句
+            key_sentences = [l.strip() for l in full_text.split("\n") if l.strip()
+                           and not l.startswith("=") and not l.startswith("---")
+                           and len(l.strip()) > 10]
+            if key_sentences:
+                lines.append(f"**结论**：{key_sentences[0][:120]}")
+            else:
+                lines.append("**结论**：（症状不足，未触发该体系）")
+        lines.append("")
 
     if fz_top:
         lines.append("**方证匹配Top8**：")

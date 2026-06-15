@@ -1165,7 +1165,7 @@
         {
           "hand": "R",
           "pos": "chi",
-          "depth": null,
+          "depth": "chen",
           "excess_deficiency": "deficiency",
           "weight": 3
         }
@@ -1173,7 +1173,10 @@
       "overall_trend": null,
       "dominant_hand": null,
       "raw_text": "左手桂枝汤脉证（左寸太过浮缓）兼右手尺部不及脉（无力）。左寸太过为主，右尺不及为次"
-    }
+    },
+    "notes": [
+      "左手脉较标准桂枝汤证稍细（津液虚）。右手尺部浮中沉均为不及小圆点，阳虚沉取最显。"
+    ]
   },
   {
     "name": "桂枝人参汤",
@@ -1186,14 +1189,14 @@
         {
           "hand": "L",
           "pos": "cun",
-          "depth": null,
+          "depth": "fu",
           "excess_deficiency": "excess",
           "weight": 3
         },
         {
           "hand": "R",
           "pos": "guan",
-          "depth": null,
+          "depth": "chen",
           "excess_deficiency": "deficiency",
           "weight": 3
         }
@@ -1256,21 +1259,21 @@
         {
           "hand": "R",
           "pos": "guan",
-          "depth": null,
+          "depth": "zhong",
           "excess_deficiency": "excess",
           "weight": 3
         },
         {
           "hand": "R",
           "pos": "guan",
-          "depth": null,
+          "depth": "chen",
           "excess_deficiency": "deficiency",
           "weight": 3
         },
         {
           "hand": "L",
           "pos": null,
-          "depth": null,
+          "depth": "chen",
           "excess_deficiency": "deficiency",
           "weight": 3
         }

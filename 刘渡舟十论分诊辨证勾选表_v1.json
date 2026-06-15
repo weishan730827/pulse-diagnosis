@@ -1,0 +1,162 @@
+{
+  "_name": "刘渡舟十论分诊辨证勾选表",
+  "_version": "1.0",
+  "_source": "《伤寒论通俗讲话》《刘渡舟伤寒论临证指要》",
+  "_method": "十论分诊：表里→寒热→虚实→气血→津液→脏腑→经络→六经→病邪→禀赋，十维度逐层过筛。",
+  "_shared_tables": ["知医邦脉诊量化表", "知医邦舌诊量化表"],
+
+  "step1_十论框架": {
+    "description": "十个维度分别勾选，层层锁定病位与病因",
+    "sections": [
+      {
+        "id": "LDZ_A1_表里",
+        "label": "一、表里定位",
+        "type": "radio",
+        "items": [
+          {"id": "ldz_bl_biao", "text": "表证（恶寒/发热/头痛/身痛/脉浮）"},
+          {"id": "ldz_bl_li", "text": "里证（但热不寒/不恶寒/腹痛/二便异常）"},
+          {"id": "ldz_bl_ban", "text": "半表半里（往来寒热/胸胁苦满/口苦咽干目眩）"},
+          {"id": "ldz_bl_jiaza", "text": "表里夹杂"}
+        ]
+      },
+      {
+        "id": "LDZ_A2_寒热",
+        "label": "二、寒热定性",
+        "type": "radio",
+        "items": [
+          {"id": "ldz_hr_han", "text": "寒证（恶寒/不渴/面白/四肢不温/脉迟）"},
+          {"id": "ldz_hr_re", "text": "热证（发热/口渴/面赤/烦躁/脉数）"},
+          {"id": "ldz_hr_hanre_cuoza", "text": "寒热错杂"},
+          {"id": "ldz_hr_jiahan", "text": "真热假寒"},
+          {"id": "ldz_hr_jiare", "text": "真寒假热"}
+        ]
+      },
+      {
+        "id": "LDZ_A3_虚实",
+        "label": "三、虚实证候",
+        "type": "radio",
+        "items": [
+          {"id": "ldz_xs_xu", "text": "虚证（脉弱无力/神疲/自汗/食少）"},
+          {"id": "ldz_xs_shi", "text": "实证（脉有力/腹胀拒按/便秘/烦躁谵语）"},
+          {"id": "ldz_xs_xushi", "text": "虚实夹杂"}
+        ]
+      },
+      {
+        "id": "LDZ_A4_气血",
+        "label": "四、气血辨证",
+        "type": "checkbox",
+        "items": [
+          {"id": "ldz_qx_qi_xu", "text": "气虚（乏力懒言/气短/自汗/脉虚）"},
+          {"id": "ldz_qx_qi_zhi", "text": "气滞（胸闷/腹胀/窜痛/脉弦）"},
+          {"id": "ldz_qx_qi_ni", "text": "气逆（咳喘/呕吐/呃逆/头痛）"},
+          {"id": "ldz_qx_qi_xian", "text": "大气下陷（气短不足以息/胸闷/脉弱）"},
+          {"id": "ldz_qx_xue_xu", "text": "血虚（面白/唇淡/头晕/心悸/脉细）"},
+          {"id": "ldz_qx_xue_yu", "text": "血瘀（刺痛固定/舌暗瘀斑/脉涩）"},
+          {"id": "ldz_qx_xue_re", "text": "血热（面红/出血鲜红/舌绛/脉数）"},
+          {"id": "ldz_qx_xue_han", "text": "血寒（四肢冷/痛处得温则减/脉沉细）"}
+        ]
+      },
+      {
+        "id": "LDZ_A5_津液",
+        "label": "五、津液辨证",
+        "type": "checkbox",
+        "items": [
+          {"id": "ldz_jy_shui_ting", "text": "水饮内停（小便不利/浮肿/心悸/头眩）"},
+          {"id": "ldz_jy_tan_yin", "text": "痰饮（咳痰/胸闷/恶心/苔腻/脉滑）"},
+          {"id": "ldz_jy_jin_kui", "text": "津亏（口干/咽燥/皮肤干/大便干/脉细数）"},
+          {"id": "ldz_jy_jin_da_kui", "text": "津液大亏（大渴引饮/舌干裂/目眶凹陷）"}
+        ]
+      }
+    ]
+  },
+
+  "step2_脏腑经络": {
+    "description": "六~七论：锁定具体脏腑和经络",
+    "sections": [
+      {
+        "id": "LDZ_B1_脏腑",
+        "label": "六、脏腑定位",
+        "type": "checkbox",
+        "items": [
+          {"id": "ldz_zf_xin", "text": "心（心悸/心烦/失眠/舌红）"},
+          {"id": "ldz_zf_gan", "text": "肝（头痛/烦躁易怒/胁痛/目赤）"},
+          {"id": "ldz_zf_pi", "text": "脾（纳呆/腹胀/便溏/乏力）"},
+          {"id": "ldz_zf_fei", "text": "肺（咳嗽/气喘/胸闷/鼻塞）"},
+          {"id": "ldz_zf_shen", "text": "肾（腰酸/耳鸣/小便异常/四肢厥冷）"},
+          {"id": "ldz_zf_wei", "text": "胃（呕恶/嗳气/胃脘胀痛）"},
+          {"id": "ldz_zf_dan", "text": "胆（口苦/咽干/目眩/易惊）"},
+          {"id": "ldz_zf_dachang", "text": "大肠（便秘/腹泻/里急后重）"},
+          {"id": "ldz_zf_xiaochang", "text": "小肠（小便赤涩/脐周痛）"},
+          {"id": "ldz_zf_pangguang", "text": "膀胱（小便不利/尿频/尿痛）"},
+          {"id": "ldz_zf_sanjiao", "text": "三焦（上焦热/中焦痞/下焦湿）"}
+        ]
+      },
+      {
+        "id": "LDZ_B2_经络",
+        "label": "七、经络归经",
+        "type": "checkbox",
+        "items": [
+          {"id": "ldz_jl_taiyang", "text": "太阳经（头项强痛/恶寒）“"},
+          {"id": "ldz_jl_yangming", "text": "阳明经（身热/口渴/脉大）"},
+          {"id": "ldz_jl_shaoyang", "text": "少阳经（口苦/咽干/目眩/胸胁苦满）"},
+          {"id": "ldz_jl_taiyin", "text": "太阴经（腹满而吐/食不下/自利益甚）"},
+          {"id": "ldz_jl_shaoyin", "text": "少阴经（脉微细/但欲寐/四肢厥冷）"},
+          {"id": "ldz_jl_jueyin", "text": "厥阴经（消渴/气上撞心/心中疼热/饥而不欲食）"}
+        ]
+      }
+    ]
+  },
+
+  "step3_病邪禀赋": {
+    "description": "八~十论：病因与个人因素",
+    "sections": [
+      {
+        "id": "LDZ_C1_病邪",
+        "label": "八、病邪性质",
+        "type": "checkbox",
+        "items": [
+          {"id": "ldz_bx_feng", "text": "风邪（游走性痛/恶风/脉浮）"},
+          {"id": "ldz_bx_han", "text": "寒邪（剧痛得温减/恶寒/脉紧）"},
+          {"id": "ldz_bx_shu", "text": "暑邪（身热/汗出/口渴/乏力）"},
+          {"id": "ldz_bx_shi", "text": "湿邪（身重/固定痛/头重如裹/苔腻/脉濡）"},
+          {"id": "ldz_bx_zao", "text": "燥邪（口鼻干燥/干咳无痰/皮肤干）"},
+          {"id": "ldz_bx_huo", "text": "火邪（高热/面赤/局部红肿/出血/脉数）"},
+          {"id": "ldz_bx_yi", "text": "疫毒（传染性/高热/口渴/发斑）"}
+        ]
+      },
+      {
+        "id": "LDZ_C2_禀赋",
+        "label": "九、禀赋体质",
+        "type": "checkbox",
+        "items": [
+          {"id": "ldz_bf_yang_xu", "text": "阳虚体质（自幼畏寒/易感冒/手足不温）"},
+          {"id": "ldz_bf_yin_xu", "text": "阴虚体质（自幼消瘦/手足心热/易盗汗）"},
+          {"id": "ldz_bf_tan_shi", "text": "痰湿体质（体胖/舌胖苔腻/易疲劳）"},
+          {"id": "ldz_bf_qi_xu", "text": "气虚体质（自幼乏力/易感冒/食少）"},
+          {"id": "ldz_bf_ping_he", "text": "平和体质"}
+        ]
+      }
+    ]
+  },
+
+  "step4_方证锁定": {
+    "description": "十论完成后，按六经定位+关键症候群输出经方",
+    "items": [
+      "太阳表寒实证 → 麻黄汤",
+      "太阳表寒虚证 → 桂枝汤",
+      "阳明经证 → 白虎汤",
+      "阳明腑实证 → 承气汤系列",
+      "少阳半表半里 → 小柴胡汤",
+      "太阴虚寒 → 理中汤",
+      "少阴寒化 → 四逆汤",
+      "少阴热化 → 黄连阿胶汤",
+      "厥阴上热下寒 → 乌梅丸"
+    ]
+  },
+
+  "step5_知医邦脉舌": {
+    "description": "共用层量化数据",
+    "type": "ref_table",
+    "refs": ["知医邦脉诊量化表", "知医邦舌诊量化表"]
+  }
+}

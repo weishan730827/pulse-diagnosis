@@ -610,7 +610,7 @@ def load_external_signatures():
 # 5. 交叉验证（v4增强版）
 # ============================================================================
 
-def cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms):
+def cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms, pulses_str=""):
     """v4增强交叉验证 —— 含解读/鉴别深度对比"""
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     sep = "=" * 70
@@ -764,158 +764,202 @@ def cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms):
     yao_pulses = re.findall(r"■\s*(\S+脉)", yaomei_text)
     yao_conclusion = "、".join(yao_pulses[:6]) if yao_pulses else ""
 
+    # ========== 提取各体系方剂 ==========
+    def extract_formulas(text, top_n=5):
+        """从文本中提取方剂名及分值"""
+        found = []
+        for m in re.finditer(r'([\u4e00-\u9fff]+汤|[\u4e00-\u9fff]+丸|[\u4e00-\u9fff]+散|[\u4e00-\u9fff]+丹)\s*[（(](\d+)\s*分[）)]', text):
+            found.append((m.group(1), int(m.group(2))))
+        for m in re.finditer(r'→\s*(?:方[：:]?\s*)?([\u4e00-\u9fff]+汤|[\u4e00-\u9fff]+丸|[\u4e00-\u9fff]+散)', text):
+            name = m.group(1)
+            if not any(f[0] == name for f in found):
+                found.append((name, 0))
+        return found[:top_n]
+
+    def extract_basis(text, max_len=200):
+        """提取辨证根据"""
+        basis_lines = []
+        for line in text.split("\n"):
+            line = line.strip()
+            if not line or line.startswith("=") or line.startswith("---"):
+                continue
+            if any(kw in line for kw in ["六经归属", "治则", "原文", "症候", "按语", "诊断意义",
+                                           "核心", "准则", "方证匹配", "Top", "匹配度"]):
+                basis_lines.append(line[:120])
+            if len("".join(basis_lines)) > max_len:
+                break
+        return "; ".join(basis_lines[:3]) if basis_lines else ""
+
+    zzj_full = bajia_sections.get("张仲景", "")
+    yao_full = bajia_sections.get("姚梅龄", "")
+    hu_full = bajia_sections.get("胡希恕", "")
+    zhangxi_full = bajia_sections.get("张锡纯", "")
+    liu_full = bajia_sections.get("刘渡舟", "")
+    cao_full = bajia_sections.get("曹颖甫", "")
+    zhengqin_full = bajia_sections.get("郑钦安", "")
+    huang_full = bajia_sections.get("黄元御", "")
+    fz_full = bajia_sections.get("方证匹配", "")
+
+    # 方证匹配段提取方剂
+    fz_formulas = []
+    for line in fz_full.split("\n"):
+        m = re.search(r'→\s*方[：:]\s*([\u4e00-\u9fff]+(?:汤|丸|散|丹))', line)
+        if m:
+            name = m.group(1)
+            if name not in [f[0] for f in fz_formulas]:
+                fz_formulas.append((name, 0))
+        m2 = re.search(r'(\d+)\.\s*【(.+?)】', line)
+        if m2:
+            fz_formulas.append((f"【{m2.group(2)}】", 0))
+
     # ========== 组装报告 ==========
     lines.append(sep)
-    lines.append(f"【双轨并行交叉验证报告 v4.0 — 277方签名库】")
+    lines.append(f"【双轨辨证独立报告 v4.0 — 277方签名库】")
     lines.append(f"生成时间：{now}")
     lines.append(sep)
     lines.append("")
 
-    # 零、张锡纯重点升降辨证
-    lines.append("## 零、张锡纯升降辨证（⚠️ 重点条目）")
+    # 脉象输入
+    lines.append("## 零·脉象输入")
     lines.append("")
-    zhangxi_full = bajia_sections.get("张锡纯", "")
-    if zhangxi_full:
-        for line in zhangxi_full.split("\n"):
-            line = line.strip()
-            if "升陷汤" in line or "镇肝" in line or "大气" in line or "升降" in line or "鉴别" in line:
-                lines.append(f"> {line}")
-    if not zhangxi_full or "升陷" not in zhangxi_full:
-        lines.append("> 症状未触发张锡纯升降辨证规则，请补充大气/升降相关症状。")
+    lines.append(f"```\n{pulses_str}\n```")
+    if symptoms:
+        lines.append(f"症状：{'、'.join(symptoms)}")
     lines.append("")
 
-    # 一、轨道A：八家各体系辨证结论
-    lines.append("## 一、轨道A：八家各体系辨证结论")
-    lines.append("")
-
-    masters = [
-        ("张仲景（本经·六经定纲）", zzj_conclusion, bajia_sections.get("张仲景", "")),
-        ("姚梅龄（脉象分析）", yao_conclusion, bajia_sections.get("姚梅龄", "")),
-        ("胡希恕（六经八纲·方证）", hu_conclusion, bajia_sections.get("胡希恕", "")),
-        ("刘渡舟（十论·气化）", liu_conclusion, bajia_sections.get("刘渡舟", "")),
-        ("曹颖甫（方证对应）", cao_conclusion, bajia_sections.get("曹颖甫", "")),
-        ("郑钦安（阴阳辨证）", zhengqin_conclusion, bajia_sections.get("郑钦安", "")),
-        ("黄元御（一气周流）", huang_conclusion, bajia_sections.get("黄元御", "")),
+    # 各体系独立输出
+    systems = [
+        ("张仲景（本经·六经定纲）", zzj_full,
+         [r"六经归属[：:].*", r"治则大法[：:].*", r"太阳.*病", r"原文[：:].*"],
+         ["汗法", "麻黄汤", "桂枝汤", "下法", "和法"]),
+        ("姚梅龄（脉象分析）", yao_full,
+         [r"■\s*\S+脉", r"脉象.*结论", r"诊断意义"],
+         []),
+        ("胡希恕（六经八纲·方证）", hu_full,
+         [r"方证.*检索", r"六经定位", r"桂枝.*汤.*\d+分"],
+         []),
+        ("张锡纯（升降辨证）⭐", zhangxi_full,
+         [r"升陷汤.*升", r"镇肝.*降", r"大气下陷", r"升降"],
+         ["升陷汤", "镇肝熄风汤", "参赭镇气汤"]),
+        ("刘渡舟（十论·气化）", liu_full,
+         [r"方证相对", r"辨证知机", r"苓桂", r"接轨"],
+         []),
+        ("曹颖甫（方证对应）", cao_full,
+         [r"原方率", r"方证匹配", r"仲景方"],
+         []),
+        ("郑钦安（阴阳辨证）", zhengqin_full,
+         [r"阳虚", r"阴虚", r"扶阳抑阴"],
+         ["四逆汤", "白通汤", "理中汤"]),
+        ("黄元御（一气周流）", huang_full,
+         [r"中气", r"周流", r"土枢", r"湿"],
+         ["黄芽汤", "天魂汤", "地魄汤"]),
     ]
 
-    for label, conclusion, full_text in masters:
-        lines.append(f"### {label}")
-        lines.append("")
-        if conclusion:
-            lines.append(f"**结论**：{conclusion}")
-        else:
-            # 尝试提取关键句
-            key_sentences = [l.strip() for l in full_text.split("\n") if l.strip()
-                           and not l.startswith("=") and not l.startswith("---")
-                           and len(l.strip()) > 10]
-            if key_sentences:
-                lines.append(f"**结论**：{key_sentences[0][:120]}")
-            else:
-                lines.append("**结论**：（症状不足，未触发该体系）")
+    section_num = 1
+    for label, full_text, conclusion_patterns, default_formulas in systems:
+        lines.append(f"## {section_num}、{label}")
         lines.append("")
 
-    if fz_top:
-        lines.append("**方证匹配Top8**：")
-        for i, f in enumerate(fz_top[:8]):
-            lines.append(f"  {i+1}. {f}")
+        # 结论
+        conclusion = ""
+        for pat in conclusion_patterns:
+            m = re.search(pat, full_text)
+            if m:
+                conclusion = m.group(0).strip()[:150]
+                break
+        if not conclusion:
+            for line in full_text.split("\n"):
+                line = line.strip()
+                if line and len(line) > 15 and not line.startswith("=") and not line.startswith("---") \
+                   and not line.startswith("#") and "体系" not in line[:4] and "辨证" not in line[:4]:
+                    conclusion = line[:150]
+                    break
+
+        lines.append(f"**辨证结论**：{conclusion if conclusion else '（症状不足，未触发）'}")
         lines.append("")
 
-    # 二、轨道B摘要
-    lines.append("## 二、轨道B：陈建国 v4.0 独立辨证摘要（277方）")
+        # 推荐方剂
+        formulas = extract_formulas(full_text)
+        if not formulas and default_formulas:
+            formulas = [(f, 0) for f in default_formulas[:3]]
+
+        if formulas:
+            lines.append("**推荐方剂**：")
+            lines.append("")
+            lines.append("| 方剂 | 评分/依据 |")
+            lines.append("|------|-----------|")
+            for fname, score in formulas[:5]:
+                if score > 0:
+                    lines.append(f"| {fname} | {score}分 |")
+                else:
+                    lines.append(f"| {fname} | 体系指向 |")
+            lines.append("")
+
+        # 辨证根据
+        basis = extract_basis(full_text)
+        if basis:
+            lines.append(f"**辨证根据**：{basis}")
+            lines.append("")
+
+        section_num += 1
+
+    # 方证匹配（跨体系）
+    if fz_formulas:
+        lines.append(f"## {section_num}、方证匹配（跨体系综合）")
+        lines.append("")
+        lines.append("**推荐方剂**：")
+        lines.append("")
+        for fname, _ in fz_formulas[:8]:
+            lines.append(f"- {fname}")
+        lines.append("")
+
+        # 提取匹配根据
+        fz_basis = extract_basis(fz_full, 300)
+        if fz_basis:
+            lines.append(f"**辨证根据**：{fz_basis}")
+            lines.append("")
+        section_num += 1
+
+    # 陈建国 v4
+    lines.append(f"## {section_num}、陈建国 v4（277方脉位签名）")
     lines.append("")
-    lines.append("**Top10按评分**：")
+
+    # 六步定向
+    for line in chen_report.split("\n"):
+        line_stripped = line.strip()
+        if any(kw in line_stripped for kw in ["总体：", "大法：", "四象：", "三部：", "层次：", "脉质："]):
+            lines.append(f"> {line_stripped}")
+    lines.append("")
+
+    lines.append("**推荐方剂（Top10）**：")
+    lines.append("")
+    lines.append("| 排名 | 方剂 | 评分 | 治法 | 病机 |")
+    lines.append("|------|------|------|------|------|")
     for i, s in enumerate(chen_scored[:10]):
-        lines.append(f"  {i+1}. {s['name']}（{s['score']}分）→ {s['treatment']}")
+        pm = s.get("pathomechanism", "")[:25]
+        lines.append(f"| {i+1} | **{s['name']}** | {s['score']} | {s['treatment'][:16]} | {pm} |")
     lines.append("")
 
-    # 三、会合点
-    lines.append("## 三、会合点（两轨共同指向）")
-    lines.append("")
-    lines.append("| 方剂 | 陈建国v4评分 | 置信度 | 说明 |")
-    lines.append("|------|-------------|--------|------|")
-    for name, score, stars, source in convergence:
-        lines.append(f"| {name} | {score}分 | {stars} | {source} |")
-    for label, stars, note in directional:
-        lines.append(f"| {label} | — | {stars} | {note} |")
-    if not convergence and not directional:
-        lines.append("| （无明确会合点） | — | — | 两轨无共同方剂命中 |")
-    lines.append("")
+    # 选取Top2展示根据
+    for s in chen_scored[:2]:
+        interp = s.get("interpretation", "")
+        if interp and len(interp) > 20:
+            lines.append(f"**{s['name']} 辨证根据**：{interp[:200]}...")
+            lines.append("")
 
-    # 四、分叉点
-    lines.append("## 四、分叉点（需辨析的不一致）")
-    lines.append("")
-    if divergence:
-        lines.append("| 方剂 | 八家支持 | 陈建国拒入原因 |")
-        lines.append("|------|---------|---------------|")
-        for name, reason in divergence:
-            lines.append(f"| {name} | 八家辨证命中 | {reason} |")
-    else:
-        lines.append("（无显著分叉点）")
-    lines.append("")
+    section_num += 1
 
-    # 五、单向点
-    if chen_only:
-        lines.append("## 五、单向点（仅陈建国277方给出，八家未命中）")
-        lines.append("")
-        lines.append("| 方剂 | v4评分 | 解读摘要 |")
-        lines.append("|------|--------|----------|")
-        for name, score, interp in chen_only:
-            lines.append(f"| {name} | {score}分 | {interp[:60]} |")
-        lines.append("")
-
-    # 六、三线整合
-    lines.append("## 六、三线整合方案（临证参考）")
-    lines.append("")
-    lines.append("**上焦（心肺·大气）**：")
-    if "升陷汤" in bajia_formulas:
-        lines.append("  → 升陷汤 提大气下陷（张锡纯 ± 陈建国升法印证）")
-    else:
-        top_upper = [s for s in chen_scored[:10] if "上焦" in s.get("pathomechanism", "")]
-        if top_upper:
-            lines.append(f"  → {top_upper[0]['name']}（陈建国v4指向：{top_upper[0]['pathomechanism'][:40]}）")
-        else:
-            lines.append("  → 待定")
-
-    lines.append("**中焦（脾胃·肝胆·气机）**：")
-    if "乌梅丸" in [c[0] for c in convergence]:
-        lines.append("  → 乌梅丸 调厥阴枢机、清上温下（胡希恕 + 陈建国v4双向印证）")
-    elif "小柴胡汤" in bajia_formulas:
-        lines.append("  → 小柴胡汤 调少阳枢机（胡希恕少阳方向）")
-    else:
-        mid_hits = [s for s in chen_scored[:10] if any(kw in s.get("pathomechanism", "") for kw in ("中焦", "气滞", "脾胃"))]
-        if mid_hits:
-            lines.append(f"  → {mid_hits[0]['name']}（陈建国v4指向：{mid_hits[0]['pathomechanism'][:40]}）")
-        else:
-            lines.append("  → 待定")
-
-    lines.append("**下焦（肾·膀胱·水液）**：")
-    if "真武汤" in [c[0] for c in convergence]:
-        lines.append("  → 真武汤 温阳利水（少阴水泛 ± 陈建国v4右尺指向）")
-    elif "肾气丸" in [c[0] for c in convergence]:
-        lines.append("  → 肾气丸 温补肾阳、化气行水")
-    elif "四逆汤" in [c[0] for c in convergence]:
-        lines.append("  → 四逆汤 回阳救逆（少阴寒化本证）")
-    else:
-        low_hits = [s for s in chen_scored[:10] if any(kw in s.get("pathomechanism", "") for kw in ("下焦", "阳虚", "肾"))]
-        if low_hits:
-            lines.append(f"  → {low_hits[0]['name']}（陈建国v4指向：{low_hits[0]['pathomechanism'][:40]}）")
-        else:
-            lines.append("  → 待定")
-
-    lines.append("")
-
-    # 症状输入
+    # 等待分析
     lines.append("---")
-    lines.append("## 症状输入")
+    lines.append(f"## {section_num}、待分析")
     lines.append("")
-    lines.append("、".join(symptoms) if symptoms else "（无）")
+    lines.append("以上为各体系独立输出。请结合临床四诊合参，逐条讨论。")
     lines.append("")
 
     # 底注
     lines.append("---")
-    lines.append("> **v4.0 升级要点**：签名库50方 → 277方（含附录270方），匹配维度趋势+层次+部位+脉质四维加权，Top10附脉证解读与鉴别原文引用。")
-    lines.append("> **双轨交叉验证规则**：八家（原文辨证）与陈建国（v4脉位签名）独立运行，仅在交叉验证阶段比较结论。")
-    lines.append("> 会合点=两轨一致指向（高确定性）；分叉点=八家支持但陈建国因脉位条件不满足否定；单向点=仅一轨给出。")
+    lines.append("> **v4.0 签名库**：277方（50方主节 + 鉴别段提取 + 附录），四维匹配（趋势+层次+部位+脉质）。")
+    lines.append("> **输出原则**：各体系独立辨证，不自动合并——合并分析由医者完成。")
 
     return "\n".join(lines)
 
@@ -980,9 +1024,10 @@ def main():
     print(f"  → {chen_path}")
 
     # === 交叉验证 v4 ===
-    print("[交叉] 生成双轨交叉验证 v4.0...")
-    cross_report = cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms)
-    cross_path = os.path.join(output_dir, f"cross_validate_v4_{now}.txt")
+    print("[交叉] 生成双轨独立辨证报告 v4.0...")
+    pulses_str = ", ".join(pulses) if pulses else ""
+    cross_report = cross_validate_v4(bajia_report, chen_report, chen_scored, symptoms, pulses_str)
+    cross_path = os.path.join(output_dir, f"bajia_chen_independent_v4_{now}.txt")
     with open(cross_path, "w") as f:
         f.write(cross_report)
     print(f"  → {cross_path}")

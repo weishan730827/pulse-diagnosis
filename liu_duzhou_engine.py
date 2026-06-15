@@ -1,155 +1,121 @@
 #!/usr/bin/env python3
 """
-刘渡舟十论分诊辨证匹配引擎 v1
-方法：十维过筛——表里→寒热→虚实→气血→津液→脏腑→经络→六经→病邪→禀赋
-输入：勾选的症状ID列表
-输出：六经锁定 + 方证推荐
+刘渡舟方证辨证匹配引擎 v2（纯仲景方库）
+方法：主症→兼症→方证锁定。以"抓主证"为核心，强调方证对应。
+     v2：方剂直接对接仲景基座。
 """
 
-import json
 import os
-from typing import Dict, List
+import sys
+from typing import Dict, List, Optional, Tuple
 
-_OUTPUT_DIR = "/home/marvis/Marvis/User/oAN1i2ePwijhdLlZVjI-pSbfHGlo/workspace/conv_19eb8a37d20_f48cc2b702ad/output"
-CHECKBOX_PATH = os.path.join(_OUTPUT_DIR, "刘渡舟十论分诊辨证勾选表_v1.json")
+_OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _OUTPUT_DIR)
+from formula_utils import is_zhongjing
 
 
 class LiuDuZhouEngine:
-    """刘渡舟引擎：十维过筛 → 六经锁定 → 方证"""
+    """刘渡舟引擎：抓主证→方证锁定。全部经方。"""
 
-    # 六经与关键症状/脏腑的映射
-    JING_FANG = {
-        "太阳经": "麻黄汤/桂枝汤/大青龙汤/小青龙汤/五苓散/桃核承气汤",
-        "阳明经": "白虎汤/承气汤系列/茵陈蒿汤/栀子豉汤",
-        "少阳经": "小柴胡汤/大柴胡汤/柴胡桂枝干姜汤/柴胡加龙骨牡蛎汤",
-        "太阴经": "理中汤/桂枝人参汤/厚朴生姜半夏甘草人参汤",
-        "少阴经": "四逆汤/真武汤/附子汤/黄连阿胶汤/猪苓汤",
-        "厥阴经": "乌梅丸/当归四逆汤/吴茱萸汤/干姜黄芩黄连人参汤",
+    # 主证→方剂映射（伤寒论127方精选）
+    JING_FANG: Dict[str, List[Tuple[str, str]]] = {
+        "发热恶寒": [("麻黄汤", "太阳伤寒"), ("桂枝汤", "太阳中风")],
+        "往来寒热": [("小柴胡汤", "半表半里"), ("柴胡桂枝干姜汤", "少阳兼太阴")],
+        "大渴": [("白虎加人参汤", "阳明经证"), ("五苓散", "膀胱蓄水")],
+        "潮热": [("大承气汤", "阳明腑实"), ("调胃承气汤", "阳明燥结")],
+        "下利": [("葛根黄芩黄连汤", "协热下利"), ("理中汤", "太阴虚寒"),
+               ("四逆汤", "少阴下利"), ("白头翁汤", "厥阴热利")],
+        "心下痞": [("半夏泻心汤", "寒热错杂"), ("大黄黄连泻心汤", "热痞"),
+                  ("生姜泻心汤", "水饮食滞"), ("甘草泻心汤", "胃气虚")],
+        "呕吐": [("小半夏汤", "痰饮呕逆"), ("吴茱萸汤", "肝胃虚寒"),
+                ("小柴胡汤", "少阳呕"), ("大柴胡汤", "少阳阳明呕")],
+        "胸胁苦满": [("小柴胡汤", "少阳"), ("大柴胡汤", "少阳阳明")],
+        "结胸": [("大陷胸汤", "热实结胸"), ("小陷胸汤", "小结胸")],
+        "喘": [("麻黄汤", "风寒束表"), ("麻杏甘石汤", "肺热喘"),
+              ("小青龙汤", "外寒内饮"), ("射干麻黄汤", "寒饮郁肺")],
+        "身黄": [("茵陈蒿汤", "湿热发黄"), ("栀子柏皮汤", "热重于湿"),
+                ("麻黄连轺赤小豆汤", "瘀热在里")],
+        "四逆": [("四逆汤", "少阴寒化"), ("当归四逆汤", "血虚寒厥"),
+                ("四逆散", "阳郁四逆"), ("通脉四逆汤", "阴盛格阳")],
+        "心烦": [("栀子豉汤", "胸膈郁热"), ("黄连阿胶汤", "少阴热化"),
+                ("调胃承气汤", "胃热上扰")],
+        "腹痛": [("小建中汤", "中焦虚寒"), ("大承气汤", "阳明腑实"),
+                ("桂枝加芍药汤", "太阴腹痛"), ("大黄附子汤", "寒实内结")],
+        "小便不利": [("五苓散", "蓄水"), ("猪苓汤", "水热互结"),
+                    ("真武汤", "阳虚水泛"), ("肾气丸", "肾气不足")],
     }
 
-    def __init__(self, checkbox_path: str = CHECKBOX_PATH):
-        with open(checkbox_path, "r", encoding="utf-8") as f:
-            self.data = json.load(f)
+    # 兼症→细化方证
+    NARROWED_FANG: Dict[str, List[Tuple[str, str]]] = {
+        "汗出": [("桂枝汤", "表虚"), ("白虎加人参汤", "热迫津出"), ("四逆加人参汤", "亡阳")],
+        "无汗": [("麻黄汤", "风寒束表"), ("葛根汤", "项背强几几")],
+        "口渴": [("白虎加人参汤", "里热伤津"), ("猪苓汤", "阴虚水热"), ("五苓散", "气化不利")],
+        "口苦": [("小柴胡汤", "少阳郁热"), ("大柴胡汤", "少阳阳明")],
+        "咽干": [("桔梗汤", "少阴咽痛"), ("猪肤汤", "少阴阴虚")],
+        "但欲寐": [("四逆汤", "少阴寒化"), ("麻黄附子细辛汤", "太少两感")],
+        "大便硬": [("大承气汤", "阳明腑实"), ("小承气汤", "阳明轻证"), ("麻子仁丸", "脾约")],
+        "手足厥冷": [("四逆汤", "少阴寒化"), ("当归四逆汤", "血虚寒凝"), ("四逆散", "阳郁")],
+    }
 
-        self._id_map: Dict[str, Dict] = {}
-        self._build_maps()
+    def diagnose(self, main_symptoms: List[str], side_symptoms: Optional[List[str]] = None) -> Dict:
+        side_symptoms = side_symptoms or []
+        primary_matches: Dict[str, List[str]] = {}
+        for sym in main_symptoms:
+            for key, formulas in self.JING_FANG.items():
+                if sym in key or key in sym:
+                    for fang, rationale in formulas:
+                        primary_matches.setdefault(fang, []).append(f"{sym}→{rationale}")
 
-    def _build_maps(self):
-        for step_key in ["step1_十论框架", "step2_脏腑经络", "step3_病邪禀赋"]:
-            for section in self.data.get(step_key, {}).get("sections", []):
-                for item in section.get("items", []):
-                    self._id_map[item["id"]] = {
-                        "text": item["text"],
-                        "section": section["id"],
-                        "label": section["label"],
-                    }
+        secondary_matches: Dict[str, List[str]] = {}
+        for sym in side_symptoms:
+            for key, formulas in self.NARROWED_FANG.items():
+                if sym in key or key in sym:
+                    for fang, rationale in formulas:
+                        secondary_matches.setdefault(fang, []).append(f"{sym}→{rationale}")
 
-    def diagnose(self, checked_ids: List[str]) -> Dict:
-        hits = []
-        jing_hits: Dict[str, int] = {}  # 六经名 → 命中数
-        zangfu_hits: List[str] = []
-        biaoli = None
-        hanre = None
-        xushi = None
-        qixue: List[str] = []
-        jinye: List[str] = []
-        bingxie: List[str] = []
+        # 交叉评分
+        fang_score: Dict[str, int] = {}
+        for fang in primary_matches:
+            fang_score[fang] = len(primary_matches[fang]) * 2
+            if fang in secondary_matches:
+                fang_score[fang] += len(secondary_matches[fang])
 
-        for sid in checked_ids:
-            item = self._id_map.get(sid)
-            if not item:
-                continue
-            hits.append(item)
+        for fang in secondary_matches:
+            if fang not in fang_score:
+                fang_score[fang] = len(secondary_matches[fang])
 
-            sid_upper = sid.upper()
-            text = item["text"]
-
-            # 表里
-            if sid.startswith("ldz_bl_"):
-                biaoli = text
-            # 寒热
-            elif sid.startswith("ldz_hr_"):
-                hanre = text
-            # 虚实
-            elif sid.startswith("ldz_xs_"):
-                xushi = text
-            # 气血
-            elif sid.startswith("ldz_qx_"):
-                qixue.append(text)
-            # 津液
-            elif sid.startswith("ldz_jy_"):
-                jinye.append(text)
-            # 脏腑
-            elif sid.startswith("ldz_zf_"):
-                zangfu_hits.append(text)
-            # 经络/六经
-            elif sid.startswith("ldz_jl_"):
-                for jing_name in ["太阳经", "阳明经", "少阳经", "太阴经", "少阴经", "厥阴经"]:
-                    if jing_name in text:
-                        jing_hits[jing_name] = jing_hits.get(jing_name, 0) + 1
-            # 病邪
-            elif sid.startswith("ldz_bx_"):
-                bingxie.append(text)
-
-        # 六经锁定：取命中数最高的
-        if jing_hits:
-            locked_jing = max(jing_hits, key=jing_hits.get)
-            formulas = self.JING_FANG.get(locked_jing, "无对应方")
-        else:
-            locked_jing = "无法锁定（请在Step2中勾选六经项）"
-            formulas = "无"
-
+        ranked = sorted(fang_score.items(), key=lambda x: x[1], reverse=True)
         return {
-            "locked_jing": locked_jing,
-            "biaoli": biaoli,
-            "hanre": hanre,
-            "xushi": xushi,
-            "qixue": qixue,
-            "jinye": jinye,
-            "zangfu": zangfu_hits,
-            "bingxie": bingxie,
-            "jing_hits": jing_hits,
-            "formulas": formulas,
-            "total_hits": len(hits)
+            "main_symptoms": main_symptoms,
+            "side_symptoms": side_symptoms,
+            "primary_matches": primary_matches,
+            "secondary_matches": secondary_matches,
+            "ranked_formulas": ranked,
         }
 
     def format_result(self, result: Dict) -> str:
         lines = []
-        lines.append("=== 刘渡舟十论分诊辨证结果 ===")
-        lines.append(f"六经锁定: {result['locked_jing']}")
+        lines.append("=== 刘渡舟方证辨证结果（纯仲景经方） ===")
+        if result["main_symptoms"]:
+            lines.append(f"主症: {'、'.join(result['main_symptoms'])}")
+        if result["side_symptoms"]:
+            lines.append(f"兼症: {'、'.join(result['side_symptoms'])}")
         lines.append("")
 
-        if result["biaoli"]:
-            lines.append(f"【表里定位】{result['biaoli']}")
-        if result["hanre"]:
-            lines.append(f"【寒热定性】{result['hanre']}")
-        if result["xushi"]:
-            lines.append(f"【虚实判定】{result['xushi']}")
-        if result["qixue"]:
-            lines.append(f"【气血】{'、'.join(result['qixue'])}")
-        if result["jinye"]:
-            lines.append(f"【津液】{'、'.join(result['jinye'])}")
-        if result["zangfu"]:
-            lines.append(f"【脏腑】{'、'.join(result['zangfu'])}")
-        if result["bingxie"]:
-            lines.append(f"【病邪】{'、'.join(result['bingxie'])}")
-
-        if result["jing_hits"]:
-            lines.append(f"\n【六经信号分布】")
-            for j, c in sorted(result["jing_hits"].items(), key=lambda x: x[1], reverse=True):
-                lines.append(f"  {j}: {c} 次")
-
-        lines.append(f"\n【候选方剂】{result['formulas']}")
-
+        if result["ranked_formulas"]:
+            lines.append("【方证推荐】")
+            for fang, score in result["ranked_formulas"]:
+                rationales = set()
+                for r in result["primary_matches"].get(fang, []):
+                    rationales.add(r)
+                for r in result["secondary_matches"].get(fang, []):
+                    rationales.add(r)
+                for r in rationales:
+                    lines.append(f"  → {fang}  ({r})")
         return "\n".join(lines)
 
 
 if __name__ == "__main__":
     engine = LiuDuZhouEngine()
-    print(f"已加载 {len(engine._id_map)} 项")
-
-    # 模拟太阳表寒实证
-    test = ["ldz_bl_biao", "ldz_hr_han", "ldz_xs_shi",
-            "ldz_qx_qi_ni", "ldz_zf_fei", "ldz_jl_taiyang", "ldz_bx_feng", "ldz_bx_han"]
-    r = engine.diagnose(test)
+    r = engine.diagnose(["发热恶寒", "喘"], ["无汗", "口渴"])
     print(engine.format_result(r))

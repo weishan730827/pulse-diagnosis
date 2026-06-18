@@ -18,7 +18,15 @@ python3 dual_track_pipeline.py --input chen_input.json
 
 | 医家 | 文件 | 核心方法 |
 |------|------|----------|
+| 张仲景 | [decision_trees/zhang_zhongjing_decision_tree.md](decision_trees/zhang_zhongjing_decision_tree.md) | 六经提纲→变证→方证（397法113方） |
+| 姚梅龄 | [decision_trees/yao_meiling_decision_tree.md](decision_trees/yao_meiling_decision_tree.md) | 脉诊六分法+独处藏奸（37脉） |
+| 胡希恕 | [decision_trees/hu_xishu_decision_tree.md](decision_trees/hu_xishu_decision_tree.md) | 八纲→六经→方证（103方） |
 | 张锡纯 | [decision_trees/zhang_xichun_decision_tree.md](decision_trees/zhang_xichun_decision_tree.md) | 气机升降+三部总看脉法+阴常不足病机观 |
+| 刘渡舟 | [decision_trees/liu_duzhou_decision_tree.md](decision_trees/liu_duzhou_decision_tree.md) | 主症→兼症→方证锁定（127方+十论） |
+| 曹颖甫 | [decision_trees/cao_yingfu_decision_tree.md](decision_trees/cao_yingfu_decision_tree.md) | 方证直接映射（92案，最简路径） |
+| 郑钦安 | [decision_trees/zheng_qinan_decision_tree.md](decision_trees/zheng_qinan_decision_tree.md) | 三问定阴阳（火神派） |
+| 黄元御 | [decision_trees/huang_yuanyu_decision_tree.md](decision_trees/huang_yuanyu_decision_tree.md) | 土枢四象·一气周流 |
+| 陈建国 | [decision_trees/chen_jianguo_decision_tree.md](decision_trees/chen_jianguo_decision_tree.md) | 实则左升右降（仲景阴阳脉法50方） |
 
 ## 完整链条
 

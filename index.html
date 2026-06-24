@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九家脉诊辨证系统</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background:#f5f0eb; color:#333; }
+.header { background:#2c1810; color:#f0d9b5; padding:20px 30px; display:flex; justify-content:space-between; align-items:center; }
+.header h1 { font-size:22px; }
+.subtitle { font-size:13px; color:#b8a080; }
+.container { max-width:1400px; margin:0 auto; padding:20px; }
+.form-panel { background:#fff; border-radius:8px; padding:24px; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin-bottom:20px; }
+.form-panel h3 { font-size:16px; color:#2c1810; margin-bottom:16px; border-bottom:2px solid #e8d5b7; padding-bottom:8px; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.form-group { margin-bottom:12px; }
+.form-group label { display:block; font-size:13px; font-weight:600; color:#555; margin-bottom:4px; }
+.form-group select, .form-group input { width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:4px; font-size:14px; background:#fafaf7; }
+.form-group select:focus { border-color:#8b6914; outline:none; }
+.channel-row { display:flex; gap:8px; align-items:center; }
+.channel-row span { width:50px; font-size:13px; color:#888; }
+.channel-row select { flex:1; }
+.btn-row { text-align:center; margin:20px 0 0; }
+.btn { background:#8b6914; color:#fff; border:none; padding:12px 40px; font-size:16px; border-radius:6px; cursor:pointer; font-weight:600; }
+.btn:hover { background:#a07e1f; }
+.btn-clear { background:#ccc; color:#555; margin-left:12px; }
+.results-panel { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.result-card { background:#fff; border-radius:8px; padding:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08); border-left:4px solid #ddd; min-height:180px; }
+.result-card h4 { font-size:14px; color:#2c1810; margin-bottom:8px; }
+.result-card .jingjie { font-size:13px; color:#555; margin-bottom:6px; }
+.result-card .faji { font-size:12px; color:#777; font-style:italic; margin-top:8px; line-height:1.6; }
+.result-card .warning { font-size:11px; color:#c0392b; margin-top:6px; font-weight:600; }
+.result-card .formula { background:#fdf6e3; padding:6px 10px; border-radius:4px; font-size:13px; margin-top:8px; }
+.result-card.null { opacity:0.5; }
+.result-card.match { border-left-color:#8b6914; background:#fdfbf7; }
+.legend { font-size:12px; color:#aaa; text-align:center; margin-top:10px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div><h1>九家脉诊辨证系统</h1><span class="subtitle">输入脉证 → 九家并行输出 → 对比参照</span></div>
+</div>
+
+<div class="container">
+
+<div class="form-panel">
+  <h3>脉证输入</h3>
+  <div class="form-grid">
+    <div>
+      <h4 style="font-size:14px;color:#2c1810;margin-bottom:12px;">左脉（寸 / 关 / 尺）</h4>
+      <div class="channel-row"><span>左寸</span>
+        <select id="lcun_shape"><option value="">脉形</option><option>浮</option><option>沉</option><option>弦</option><option>细</option><option>弱</option><option>微</option><option>洪</option><option>滑</option><option>数</option><option>迟</option><option>涩</option><option>紧</option><option>缓</option><option>大</option><option>硬</option><option>革</option></select>
+        <select id="lcun_strength"><option value="">力度</option><option>有力</option><option>无力</option><option>弦硬(假有力)</option><option>弦无力</option><option>按之即无</option></select>
+      </div>
+      <div class="channel-row"><span>左关</span>
+        <select id="lguan_shape"><option value="">脉形</option><option>弦</option><option>细</option><option>浮</option><option>沉</option><option>滑</option><option>洪</option><option>弱</option><option>微</option><option>数</option><option>迟</option><option>涩</option><option>紧</option><option>缓</option><option>大</option><option>硬</option></select>
+        <select id="lguan_strength"><option value="">力度</option><option>有力</option><option>无力</option><option>弦硬(假有力)</option><option>弦无力</option><option>重按微弦无力</option></select>
+      </div>
+      <div class="channel-row"><span>左尺</span>
+        <select id="lchi_shape"><option value="">脉形</option><option>沉</option><option>细</option><option>弱</option><option>微</option><option>滑</option><option>浮</option><option>弦</option><option>数</option><option>迟</option><option>涩</option><option>紧</option><option>缓</option><option>大</option></select>
+        <select id="lchi_strength"><option value="">力度</option><option>有力</option><option>无力</option><option>按之即无(无根)</option><option>甚弱</option></select>
+      </div>
+    </div>
+    <div>
+      <h4 style="font-size:14px;color:#2c1810;margin-bottom:12px;">右脉（寸 / 关 / 尺）</h4>
+      <div class="channel-row"><span>右寸</span>
+        <select id="rcun_shape"><option value="">脉形</option><option>浮</option><option>沉</option><option>弱</option><option>微</option><option>细</option><option>迟</option><option>弦</option><option>滑</option><option>洪</option><option>数</option><option>涩</option><option>紧</option><option>缓</option><option>大</option></select>
+        <select id="rcun_strength"><option value="">力度</option><option>有力</option><option>无力</option><option>微弱</option><option>沉迟微弱(关前尤甚)</option></select>
+      </div>
+      <div class="channel-row"><span>右关</span>
+        <select id="rguan_shape"><option value="">脉形</option><option>弦</option><option>弱</option><option>洪</option><option>滑</option><option>沉</option><option>细</option><option>浮</option><option>数</option><option>迟</option><option>涩</option><option>紧</option><option>缓</option><option>大</option><option>硬</option></select>
+        <select id="rguan_strength"><option value="">力度</option><option>有力</option><option>无力</option><option>弦硬</option><option>弦长(>左脉)</option></select>
+      </div>
+      <div class="channel-row"><span>右尺</span>
+        <select id="rchi_shape"><option value="">脉形</option><option>沉</option><option>弱</option><option>细</option><option>微</option><option>滑</option><option>浮</option><option>弦</option><option>数</option><option>迟</option><option>涩</option><option>紧</option><option>缓</option><option>大</option></select>
+        <select id="rchi_strength"><option value="">力度</option><option>有力</option><option>无力</option><option>按之即无(无根)</option></select>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:16px;">
+    <h4 style="font-size:14px;color:#2c1810;margin-bottom:8px;">症状勾选</h4>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <label class="sym-check"><input type="checkbox" id="sym_qi_short"> 气短</label>
+      <label class="sym-check"><input type="checkbox" id="sym_breath_out"> 呼气困难</label>
+      <label class="sym-check"><input type="checkbox" id="sym_breath_in"> 吸气困难</label>
+      <label class="sym-check"><input type="checkbox" id="sym_chest_full"> 胸满闷</label>
+      <label class="sym-check"><input type="checkbox" id="sym_qi_up"> 气上冲</label>
+      <label class="sym-check"><input type="checkbox" id="sym_hiccup"> 呃逆呕吐</label>
+      <label class="sym-check"><input type="checkbox" id="sym_dizzy"> 头目眩晕</label>
+      <label class="sym-check"><input type="checkbox" id="sym_fatigue"> 乏力倦怠</label>
+      <label class="sym-check"><input type="checkbox" id="sym_fever"> 发热</label>
+      <label class="sym-check"><input type="checkbox" id="sym_chill"> 恶寒</label>
+      <label class="sym-check"><input type="checkbox" id="sym_sweat"> 汗出</label>
+      <label class="sym-check"><input type="checkbox" id="sym_head_pain"> 头痛项强</label>
+      <label class="sym-check"><input type="checkbox" id="sym_bitter"> 口苦咽干</label>
+      <label class="sym-check"><input type="checkbox" id="sym_abd_full"> 腹满</label>
+      <label class="sym-check"><input type="checkbox" id="sym_diarrhea"> 下利</label>
+      <label class="sym-check"><input type="checkbox" id="sym_constip"> 大便燥结</label>
+      <label class="sym-check"><input type="checkbox" id="sym_insomnia"> 失眠</label>
+      <label class="sym-check"><input type="checkbox" id="sym_thirst"> 口渴</label>
+      <label class="sym-check"><input type="checkbox" id="sym_palp"> 心悸怔忡</label>
+      <label class="sym-check"><input type="checkbox" id="sym_xuli"> 虚里大动</label>
+      <label class="sym-check"><input type="checkbox" id="sym_shoulder"> 喘时耸肩</label>
+      <label class="sym-check"><input type="checkbox" id="sym_side_pain"> 胁痛</label>
+      <label class="sym-check"><input type="checkbox" id="sym_stomach_pain"> 胃脘痛</label>
+      <label class="sym-check"><input type="checkbox" id="sym_cold_limb"> 四肢厥冷</label>
+      <label class="sym-check"><input type="checkbox" id="sym_sleepy"> 但欲寐</label>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="diagnose()">开始辨证</button>
+    <button class="btn btn-clear" onclick="clearForm()">清空</button>
+  </div>
+</div>
+
+<div id="results" class="results-panel"></div>
+<div class="legend">点击"开始辨证"后九家并行输出。绿色左侧边框 = 核心辨证匹配。</div>
+</div>
+
+<script>
+function getVal(id){ return document.getElementById(id).value; }
+function hasSym(id){ return document.getElementById(id).checked; }
+
+function getPulseData(){
+  return {
+    L:{cun:{s:getVal('lcun_shape'),f:getVal('lcun_strength')},
+       guan:{s:getVal('lguan_shape'),f:getVal('lguan_strength')},
+       chi:{s:getVal('lchi_shape'),f:getVal('lchi_strength')}},
+    R:{cun:{s:getVal('rcun_shape'),f:getVal('rcun_strength')},
+       guan:{s:getVal('rguan_shape'),f:getVal('rguan_strength')},
+       chi:{s:getVal('rchi_shape'),f:getVal('rchi_strength')}}
+  };
+}
+
+function hasPulse(p,pos,shape,force){
+  var o = (pos[0]=='L')?p.L:p.R;
+  var c = (pos.slice(-1)=='1')?o.cun:(pos.slice(-1)=='2')?o.guan:o.chi;
+  var sm = (!shape || c.s==shape);
+  var fm = (!force || c.f==force);
+  return sm && fm;
+}
+
+function syms(){ return {
+  qi_short:hasSym('sym_qi_short'), breath_out:hasSym('sym_breath_out'),
+  breath_in:hasSym('sym_breath_in'), chest_full:hasSym('sym_chest_full'),
+  qi_up:hasSym('sym_qi_up'), hiccup:hasSym('sym_hiccup'),
+  dizzy:hasSym('sym_dizzy'), fatigue:hasSym('sym_fatigue'),
+  fever:hasSym('sym_fever'), chill:hasSym('sym_chill'), sweat:hasSym('sym_sweat'),
+  head_pain:hasSym('sym_head_pain'), bitter:hasSym('sym_bitter'),
+  abd_full:hasSym('sym_abd_full'), diarrhea:hasSym('sym_diarrhea'),
+  constip:hasSym('sym_constip'), insomnia:hasSym('sym_insomnia'),
+  thirst:hasSym('sym_thirst'), palp:hasSym('sym_palp'),
+  xuli:hasSym('sym_xuli'), shoulder:hasSym('sym_shoulder'),
+  side_pain:hasSym('sym_side_pain'), stomach_pain:hasSym('sym_stomach_pain'),
+  cold_limb:hasSym('sym_cold_limb'), sleepy:hasSym('sym_sleepy')
+};}
+
+// ===================== 九家引擎 =====================
+
+function zhang_xichun(p,s){
+  var out = {school:'张锡纯', framework:'气机升降 + 阴常不足'};
+  var match=false;
+
+  // 气机方向
+  var qi_down = s.qi_short || s.breath_out || s.fatigue;
+  var qi_up = s.qi_up || s.hiccup || s.dizzy;
+
+  // 大气下陷判断
+  var dxqx = (hasPulse(p,'R1','','沉迟微弱(关前尤甚)') || hasPulse(p,'R1','微','') || hasPulse(p,'R1','弱','微弱'))
+            && (qi_down || s.chest_full) && !s.shoulder;
+  if(dxqx){
+    out.jingjie='大气下陷';
+    out.faji='升陷汤。兼心肺阳虚→回阳升陷汤；兼气郁→理郁升陷汤；兼脾虚→醒脾升陷汤。';
+    out.formula='升陷汤：生黄芪18g 知母9g 柴胡4.5g 桔梗4.5g 升麻3g';
+    out.warning='禁用降气、理气。呼气困难+不耸肩是鉴别要点。';
+    match=true;
+  }
+
+  // 冲气上冲
+  var cqsc = (qi_up && (hasPulse(p,'R2','弦','弦长(>左脉)') || hasPulse(p,'R2','硬','弦硬')));
+  if(cqsc){
+    out.jingjie='冲气上冲';
+    var lxu = hasPulse(p,'L2','弦','弦硬(假有力)') || hasPulse(p,'L2','硬','');
+    out.faji= lxu ? '镇肝熄风汤（肝火+冲逆）' : '参赭镇气汤（阴分虚甚）';
+    out.formula= lxu ? '镇肝熄风汤：怀牛膝30g 代赭石30g 生龙骨15g 生牡蛎15g 生龟板15g 生杭芍15g 玄参15g 天冬15g 川楝子6g 生麦芽6g 茵陈6g 甘草4.5g' : '参赭镇气汤：野台参12g 生赭石18g 生芡实15g 生山药15g 山萸肉18g 生龙骨18g 生牡蛎18g 生杭芍12g 苏子6g';
+    match=true;
+  }
+
+  // 弦无力
+  if(!match && (hasPulse(p,'L2','','重按微弦无力') || hasPulse(p,'L2','弦','弦无力'))){
+    out.jingjie='弦无力——气化已衰';
+    out.faji='补气升提，忌破气攻下。升陷汤或补中益气汤方向。';
+    out.warning='禁止峻下、理气破气。脉弦无力是气化衰败之象，误攻则人更虚。';
+    match=true;
+  }
+
+  // 革脉
+  if(!match && hasPulse(p,'L2','革','') && s.xuli){
+    out.jingjie='革脉——阴阳离绝之险';
+    out.faji='急收敛固脱！山萸肉、生龙骨、生牡蛎、野台参。';
+    out.warning='禁攻！禁峻下！虽见便结腹满也绝不可攻。';
+    match=true;
+  }
+
+  // 弦硬假有力
+  if(!match && (hasPulse(p,'L2','弦','弦硬(假有力)')||hasPulse(p,'L2','硬','')) && (hasPulse(p,'R2','弦','弦硬')||hasPulse(p,'R2','硬',''))){
+    out.jingjie='弦硬假有力——阴虚阳浮';
+    out.faji='滋阴潜阳，镇肝熄风。切忌攻伐。';
+    out.warning='此非实热实证，有力是假象。弦直无洪滑即假有力。';
+    match=true;
+  }
+
+  // 右大于左冲气
+  if(!match && hasPulse(p,'R2','弦','弦长(>左脉)')){
+    out.jingjie='冲气上冲（右脉>左脉）';
+    out.faji='镇逆降胃——赭石为主。';
+    out.formula='镇逆汤：生赭石18g 青黛6g 龙胆草6g 生杭芍9g 半夏9g 生姜6g 野台参6g';
+    match=true;
+  }
+
+  // 浮脉桂枝汤证
+  if(!match && hasPulse(p,'L1','浮','') && hasPulse(p,'L3','','按之即无(无根)') && s.sweat){
+    out.jingjie='桂枝汤证——大气不足，风邪乘虚';
+    out.faji='桂枝汤加黄芪。关前浮而关后弱——浮是假象，弱脉是本。';
+    out.formula='桂枝汤+黄芪：桂枝9g 芍药9g 生姜9g 大枣12枚 炙甘草6g 生黄芪15g';
+    match=true;
+  }
+
+  // 促脉
+  if(!match && s.fever && !qi_up && !qi_down){
+    out.jingjie='需辨促脉——外热内陷';
+    out.faji='清热透表（芩连类）。促脉非死证，改步武而不止。';
+  }
+
+  // 尺部无根
+  if(!match && (hasPulse(p,'L3','','按之即无(无根)')||hasPulse(p,'R3','','按之即无(无根)'))){
+    out.jingjie='尺部无根——危候';
+    out.faji='急固脱——山萸肉、龙骨、牡蛎，不许犹豫。';
+    out.warning='阴阳不维，真气将脱。收敛固脱为第一要务。';
+    match=true;
+  }
+
+  if(!match){
+    if(qi_down){
+      out.jingjie='下陷路径——需进一步辨大气下陷/中气下陷';
+      out.faji='先排除大气下陷（摸寸关），再考虑补中益气。';
+    } else if(qi_up){
+      out.jingjie='上逆路径——需辨冲气上冲/肝阳上亢/六经';
+      out.faji='先排除冲气上冲（右脉弦长），再辨六经。';
+    } else {
+      out.jingjie='未匹配典型证型';
+      out.faji='请在脉证输入中补充更多信息，或参考决策树全文辨证。';
+    }
+  } else { out.match=true; }
+  return out;
+}
+
+function zhang_zhongjing(p,s){
+  var out = {school:'张仲景', framework:'六经辨证 397法113方'};
+  var match=false;
+
+  // 太阳
+  if((hasPulse(p,'L1','浮','')||hasPulse(p,'R1','浮','')) && s.chill && (s.head_pain||s.fever)){
+    out.jingjie='太阳病（表阳证）';
+    out.faji=s.sweat ? '桂枝汤（有汗）' : '麻黄汤（无汗）';
+    out.formula=s.sweat ? '桂枝汤：桂枝9g 芍药9g 生姜9g 大枣12枚 炙甘草6g' : '麻黄汤：麻黄9g 桂枝6g 杏仁9g 炙甘草3g';
+    out.warning='咽喉干燥者、淋家、疮家、衄家、亡血家、汗家不可发汗。';
+    match=true;
+  }
+
+  // 阳明
+  if(s.fever && !s.chill && s.sweat && (s.constip||s.thirst||s.abd_full)){
+    out.jingjie='阳明病（里阳证）';
+    out.faji=s.constip ? '承气汤类（下法）' : '白虎汤（清法）';
+    out.formula=s.constip ? '大承气汤：大黄12g 厚朴24g 枳实15g 芒硝9g' : '白虎汤：知母18g 石膏48g 炙甘草6g 粳米18g';
+    out.warning='呕多/心下硬满/面赤者不可攻下。表不解不可与白虎汤。';
+    match=true;
+  }
+
+  // 少阳
+  if(s.bitter && (s.dizzy||s.side_pain||s.chest_full)){
+    out.jingjie='少阳病（半表半里阳证）';
+    out.faji='小柴胡汤（和法）。禁汗吐下。';
+    out.formula='小柴胡汤：柴胡24g 黄芩9g 半夏9g 生姜9g 人参9g 炙甘草9g 大枣12枚';
+    match=true;
+  }
+
+  // 太阴
+  if(s.abd_full && s.diarrhea && !s.thirst){
+    out.jingjie='太阴病（里阴证）';
+    out.faji='理中汤/四逆辈（温法）。禁下。';
+    out.formula='理中汤：人参9g 干姜9g 白术9g 炙甘草9g';
+    match=true;
+  }
+
+  // 少阴
+  if((hasPulse(p,'L1','微','')||hasPulse(p,'R1','微','')||hasPulse(p,'L1','细','')) && s.sleepy){
+    out.jingjie='少阴病（表阴证）';
+    out.faji= s.cold_limb ? '四逆汤（寒化）' : '黄连阿胶汤（热化）';
+    out.formula= s.cold_limb ? '四逆汤：附子15g 干姜9g 炙甘草6g' : '黄连阿胶汤：黄连12g 黄芩6g 芍药6g 鸡子黄2枚 阿胶9g';
+    out.warning='脉暴出者死，微续者生。';
+    match=true;
+  }
+
+  // 厥阴
+  if(s.thirst && s.qi_up && s.palp){
+    out.jingjie='厥阴病（半表半里阴证）';
+    out.faji='乌梅丸。厥多热少病进，热多厥少病退。';
+    out.formula='乌梅丸：乌梅300枚 细辛18g 干姜30g 黄连48g 当归12g 附子18g 蜀椒12g 桂枝18g 人参18g 黄柏18g';
+    match=true;
+  }
+
+  if(!match){
+    if(s.fever && s.chill){ out.jingjie='太阳病可能——需确认脉浮、头项强痛'; }
+    else if(s.fever && !s.chill){ out.jingjie='阳明病可能——需确认胃家实、不恶寒反恶热'; }
+    else { out.jingjie='未达六经提纲标准——需补充更多脉证'; }
+  } else { out.match=true; }
+  return out;
+}
+
+function hu_xishu(p,s){
+  var out = {school:'胡希恕', framework:'八纲六经方证对应'};
+  var match=false;
+
+  // 胡希恕强调先辨阴阳（表里、寒热、虚实）
+  if(s.fever && s.chill && (hasPulse(p,'L1','浮','')||hasPulse(p,'R1','浮',''))){
+    out.jingjie='太阳病（表阳证）';
+    out.faji='解表发汗。有汗桂枝汤，无汗麻黄汤。';
+    out.formula=s.sweat ? '桂枝汤' : '麻黄汤';
+    match=true;
+  }
+  if(s.fever && !s.chill && s.sweat && s.constip){
+    out.jingjie='阳明病（里阳证）';
+    out.faji='承气汤下之或白虎汤清之。';
+    match=true;
+  }
+  if(s.bitter && s.dizzy && s.side_pain){
+    out.jingjie='少阳病（半表半里阳证）';
+    out.faji='小柴胡汤。胡老强调：少阳为半表半里，汗吐下皆禁。';
+    match=true;
+  }
+  if(s.cold_limb && s.diarrhea && (hasPulse(p,'R1','微','')||hasPulse(p,'R1','弱',''))){
+    out.jingjie='太阴/少阴病（阴证）';
+    out.faji='四逆汤类温阳。';
+    match=true;
+  }
+
+  if(!match){
+    out.jingjie='建议先辨阴阳——八纲总判后定六经，再方证对应';
+    out.faji='胡老辨证体系：先别阴阳（表里寒热虚实）→ 再定六经 → 最后方证对应';
+  } else { out.match=true; }
+  return out;
+}
+
+function liu_duzhou(p,s){
+  var out = {school:'刘渡舟', framework:'十论分诊 + 伤寒论讲稿'};
+  if(s.fever && s.chill && (hasPulse(p,'L1','浮','')||hasPulse(p,'R1','浮',''))){
+    out.jingjie='太阳表证'; out.faji='桂枝汤/麻黄汤。注意兼证：兼项背强几几→葛根汤。'; out.match=true;
+  } else if(s.bitter && s.dizzy){
+    out.jingjie='少阳病——口苦咽干目眩为提纲'; out.faji='小柴胡汤'; out.match=true;
+  } else {
+    out.jingjie='十论分诊：从主诉锁定病位→辨六经→定方证';
+    out.faji='刘老强调抓主证：但见一证便是，不必悉具。';
+  }
+  return out;
+}
+
+function huang_yuanyu(p,s){
+  var out = {school:'黄元御', framework:'一气周流 土枢四象'};
+  if(s.abd_full && s.diarrhea && !s.thirst){
+    out.jingjie='中土不运——脾湿胃逆'; out.faji='黄芽汤（人参、干姜、茯苓、甘草），运中培土。'; out.match=true;
+  } else if(s.dizzy && s.qi_up){
+    out.jingjie='肝木不升、胆火不降'; out.faji='桂枝苓胶汤加减，调肝升胆降。'; out.match=true;
+  } else {
+    out.jingjie='一气周流观：先问中土是否枢转，再看四象升降';
+    out.faji='黄氏核心：土湿为百病之源。左路不升责之肝脾，右路不降责之肺胃。';
+  }
+  return out;
+}
+
+function zheng_qinan(p,s){
+  var out = {school:'郑钦安', framework:'阴阳辨证 扶阳抑阴'};
+  if(s.cold_limb && s.sleepy && s.diarrhea && !s.thirst){
+    out.jingjie='阴证——阳虚阴盛'; out.faji='四逆汤/附子理中汤。郑氏核心：但见阳虚即大剂扶阳。'; out.match=true;
+  } else if(s.fever && s.thirst && !s.chill){
+    out.jingjie='阳证——热盛伤阴'; out.faji='白虎汤/承气汤。郑氏：阳证亦不可忽略。'; out.match=true;
+  } else {
+    out.jingjie='阴阳为总纲：先判阴阳——问渴不渴、喜冷喜热、精神好坏';
+    out.faji='郑氏三书（医理真传/医法圆通/伤寒恒论）的核心：万病不出阴阳二字。';
+  }
+  return out;
+}
+
+function cao_yingfu(p,s){
+  var out = {school:'曹颖甫', framework:'方证对应 经方实验录'};
+  if(s.fever && s.chill && s.sweat){
+    out.jingjie='桂枝汤证——曹氏经方实验录多用'; out.faji='桂枝汤。曹氏特色：从临床实验录验证经方。'; out.match=true;
+  } else if(s.constip && s.abd_full && s.fever){
+    out.jingjie='承气汤证'; out.faji='大承气汤/调胃承气汤'; out.match=true;
+  } else {
+    out.jingjie='方证对应：据证选方，不做过多理论演绎';
+    out.faji='曹氏风格：观其脉证，知犯何逆，随证治之。重在方证合拍。';
+  }
+  return out;
+}
+
+function chen_jianguo(p,s){
+  var out = {school:'陈建国', framework:'三部九候脉证经方 50方'};
+  // 陈建国强调三部九候 + 脉证对应50方
+  if(hasPulse(p,'L2','弦','') && s.side_pain){
+    out.jingjie='弦脉→肝郁/少阳→小柴胡汤证'; out.faji='小柴胡汤。陈氏从脉证直接锁定经方。'; out.match=true;
+  } else if(hasPulse(p,'R2','洪','') && s.thirst && s.fever){
+    out.jingjie='右关洪→阳明热→白虎汤证'; out.faji='白虎汤'; out.match=true;
+  } else {
+    out.jingjie='三部九候脉证对应——从脉象直接索引50方';
+    out.faji='陈氏体系：每一部候每一脏，脉证对应直出经方。先摸清楚六部，再查50方脉证表。';
+  }
+  return out;
+}
+
+function yao_meiling(p,s){
+  var out = {school:'姚梅龄', framework:'临证脉学十六讲 症候分类'};
+  if(hasPulse(p,'L2','弦','弦硬(假有力)') && s.dizzy){
+    out.jingjie='弦脉——姚氏强调弦脉分类：弦劲/弦滑/弦细等'; out.faji='弦劲者平肝潜阳（天麻钩藤饮方向）。'; out.match=true;
+  } else if(hasPulse(p,'L1','浮','')&&hasPulse(p,'L3','','按之即无(无根)')){
+    out.jingjie='浮脉无根——阳气欲脱'; out.faji='急固脱——参附汤/来复汤方向。'; out.match=true;
+  } else {
+    out.jingjie='从脉象特征入手，姚氏十六讲细分脉象鉴别';
+    out.faji='姚氏特色：每种脉象都细分出多个亚型，强调指下实际触感的精准描述。';
+  }
+  return out;
+}
+
+// ===================== 主函数 =====================
+function diagnose(){
+  var p = getPulseData();
+  var s = syms();
+
+  var engines = [
+    zhang_xichun, zhang_zhongjing, hu_xishu,
+    liu_duzhou, huang_yuanyu, zheng_qinan,
+    cao_yingfu, chen_jianguo, yao_meiling
+  ];
+
+  var results = engines.map(function(fn){ return fn(p,s); });
+
+  var html = '';
+  results.forEach(function(r){
+    var cls = r.match ? 'result-card match' : 'result-card';
+    html += '<div class="'+cls+'">';
+    html += '<h4>'+r.school+'</h4>';
+    html += '<div style="font-size:11px;color:#aaa;margin-bottom:4px;">'+r.framework+'</div>';
+    html += '<div class="jingjie"><strong>辨证：</strong>'+(r.jingjie||'—')+'</div>';
+    html += '<div class="faji"><strong>治法：</strong>'+(r.faji||'—')+'</div>';
+    if(r.formula) html += '<div class="formula">'+r.formula+'</div>';
+    if(r.warning) html += '<div class="warning">⚠ '+r.warning+'</div>';
+    html += '</div>';
+  });
+  document.getElementById('results').innerHTML = html;
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function clearForm(){
+  document.querySelectorAll('select').forEach(function(el){ el.value=''; });
+  document.querySelectorAll('input[type=checkbox]').forEach(function(el){ el.checked=false; });
+  document.getElementById('results').innerHTML = '';
+}
+</script>
+</body>
+</html>

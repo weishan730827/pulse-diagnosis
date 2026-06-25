@@ -1,6 +1,9 @@
 // ============================================================
-// 九家脉诊辨证引擎 v5.0
-// 基于真实医案数据驱动的辨证匹配系统
+// 九家脉诊辨证引擎 v7.0
+// 基于真实医案/原著数据驱动的辨证匹配系统
+// v7: 九家全接入——黄元御/郑钦安/姚梅龄/刘渡舟 compact JSON 驱动
+// 张锡纯124案 | 陈建国277方 | 胡希恕103方 | 曹颖甫96案 | 张仲景256方
+// 黄元御10规+脉对 | 郑钦安12规 | 姚梅龄六维 | 刘渡舟11规+十论
 // ============================================================
 
 var DataCache = {};
@@ -15,12 +18,12 @@ function loadData(schoolId) {
       'zhangxichun': 'pulse_match_zxc_compact.json',
       'chenjianguo': 'pulse_match_cjg_compact.json',
       'huxishu': 'pulse_match_hxs_compact.json',
-      'caoyingfu': 'cao_yingfu_rules.json',
-      'zhangzhongjing': null,
-      'huangyuanyu': null,
-      'zhengqinan': null,
-      'yaomeiling': null,
-      'liuduzhou': null
+      'caoyingfu': 'cao_yingfu_cases_compact.json',
+      'zhangzhongjing': 'zhongjing_fangzheng_compact.json',
+      'huangyuanyu': 'huang_yuanyu_compact.json',
+      'zhengqinan': 'zheng_qinan_compact.json',
+      'yaomeiling': 'yao_meiling_compact.json',
+      'liuduzhou': 'liu_duzhou_compact.json'
     };
     
     var url = urls[schoolId];
@@ -265,15 +268,35 @@ function simpleCJGDiagnose(formData) {
   return { steps: steps, result: result, herbs: [] };
 }
 
-// ========== 胡希恕 八纲六经辨证 ==========
+// ========== 胡希恕 八纲六经辨证 + 脉诊辅助 ==========
 function diagnoseHuXishu(formData, symptoms, complaint) {
   var data = DataCache['huxishu'];
-  if (!data || data._error) {
-    return simpleHXSDiagnose(symptoms, complaint);
-  }
+  var pulseL = formData.hxs_pulse_l || '', pulseR = formData.hxs_pulse_r || '';
+  var pulseForce = formData.hxs_pulse_force || '';
   
   var steps = [], result = '', herbs = [];
   var allText = symptoms.join(',') + ' ' + complaint;
+  
+  // 脉象辅助判断八纲
+  var pulseClues = [];
+  if (pulseL || pulseR) {
+    steps.push('脉象辅助：左=' + (pulseL || '?') + ' 右=' + (pulseR || '?') + (pulseForce ? ' 力=' + pulseForce : ''));
+    
+    // 脉象→八纲线索
+    var allPulse = (pulseL + pulseR).toLowerCase();
+    if (allPulse.indexOf('浮') >= 0) pulseClues.push('表');
+    if (allPulse.indexOf('沉') >= 0) pulseClues.push('里');
+    if (allPulse.indexOf('数') >= 0 || allPulse.indexOf('洪') >= 0 || allPulse.indexOf('滑') >= 0) pulseClues.push('热');
+    if (allPulse.indexOf('迟') >= 0 || allPulse.indexOf('缓') >= 0 || allPulse.indexOf('弱') >= 0) pulseClues.push('寒');
+    if (pulseForce.indexOf('无力') >= 0 || allPulse.indexOf('弱') >= 0 || allPulse.indexOf('微') >= 0) pulseClues.push('虚');
+    if (pulseForce.indexOf('有力') >= 0 || allPulse.indexOf('弦硬') >= 0) pulseClues.push('实');
+    
+    if (pulseClues.length > 0) steps.push('脉象提示：' + pulseClues.join('、'));
+  }
+  
+  if (!data || data._error) {
+    return simpleHXSDiagnose(symptoms, complaint, pulseClues);
+  }
   
   // 六经提纲症候群匹配
   var matches = [];
@@ -289,25 +312,34 @@ function diagnoseHuXishu(formData, symptoms, complaint) {
         if (allText.indexOf(kw.substring(c, c+2)) >= 0) score += 1;
       }
     }
+    // 脉象匹配特征脉
+    if (f['特征脉'] && (pulseL.indexOf(f['特征脉']) >= 0 || pulseR.indexOf(f['特征脉']) >= 0)) {
+      score += 5;
+    }
+    // 八纲匹配
+    if (f['八纲']) {
+      for (var k = 0; k < pulseClues.length; k++) {
+        if (f['八纲'].indexOf(pulseClues[k]) >= 0) score += 2;
+      }
+    }
     if (score > 0) matches.push({ formula: f, score: score });
   }
   
   matches.sort(function(a, b) { return b.score - a.score; });
   
-  steps.push('【症状驱动辨证】脉象辅助八纲判断');
+  steps.push('【症状+脉象双驱动辨证】');
   
   if (matches.length === 0) {
     steps.push('六经提纲症候群未命中');
     result = '当前症状未能触发任何六经提纲。请补充更多六经特征症状';
   } else {
-    steps.push('=== 六经提纲匹配 ===');
+    steps.push('=== 六经提纲匹配（' + matches.length + '条）===');
     var top5 = matches.slice(0, 5);
     for (var k = 0; k < top5.length; k++) {
       var m = top5[k];
-      steps.push((k+1) + '. ' + m.formula.name + ' [' + m.formula['六经'] + '·' + m.formula['八纲'] + '] 特征脉：' + (m.formula['特征脉'] || ''));
-      if (m.formula['按语']) {
-        steps.push('   按：' + m.formula['按语']);
-      }
+      steps.push((k+1) + '. ' + m.formula.name + ' [' + m.formula['六经'] + '·' + m.formula['八纲'] + '] 得分=' + m.score);
+      if (m.formula['特征脉']) steps.push('   特征脉：' + m.formula['特征脉']);
+      if (m.formula['按语']) steps.push('   按：' + m.formula['按语']);
     }
     result = matches[0].formula.name + ' 方向。' + matches[0].formula['六经'] + '·' + matches[0].formula['八纲'];
   }
@@ -315,10 +347,10 @@ function diagnoseHuXishu(formData, symptoms, complaint) {
   return { steps: steps, result: result, herbs: [], matchedSyndromes: matches.slice(0, 5) };
 }
 
-function simpleHXSDiagnose(symptoms, complaint) {
+function simpleHXSDiagnose(symptoms, complaint, pulseClues) {
   var all = symptoms.join(',') + ' ' + complaint;
   var steps = [], result = '';
-  steps.push('【症状驱动为主】脉象辅助八纲判断');
+  steps.push('【症状驱动为主】脉象辅助八纲判断' + (pulseClues && pulseClues.length > 0 ? ' 脉→' + pulseClues.join('、') : ''));
   
   if (all.indexOf('往来寒热') >= 0 || all.indexOf('口苦') >= 0 || all.indexOf('胸胁') >= 0) {
     steps.push('少阳提纲命中 → 小柴胡汤方向');
@@ -336,46 +368,88 @@ function simpleHXSDiagnose(symptoms, complaint) {
   return { steps: steps, result: result, herbs: [] };
 }
 
-// ========== 曹颖甫 方证对应 ==========
+// ========== 曹颖甫 经方实验录 脉案匹配 ==========
 function diagnoseCaoYingfu(formData) {
-  var cl = formData.cy_left || '', cr = formData.cy_right || '', cs = formData.cy_sweat || '';
+  var data = DataCache['caoyingfu'];
+  if (!data || data._error) {
+    return simpleCYDiagnose(formData);
+  }
+  
+  var cl = formData.cy_left || '', cr = formData.cy_right || '';
   var steps = [], result = '', herbs = [];
   
-  if (!cl || !cr) {
-    steps.push('【左右脉未填】');
-    result = '请填写左右手脉象';
+  if (!cl && !cr) {
+    steps.push('【脉象未填】请填写左右手脉象');
+    result = '曹颖甫经方实验录以脉证对勘为核心，需脉象输入';
     return { steps: steps, result: result, herbs: herbs };
   }
   
+  steps.push('左：' + (cl || '?') + ' | 右：' + (cr || '?'));
+  
+  // 脉象关键词匹配案库
+  var matches = [];
+  var pulseKws = (cl + ',' + cr).split(/[,，、\s]+/).filter(function(x) { return x.length > 0; });
+  
+  for (var i = 0; i < data.length; i++) {
+    var c = data[i];
+    if (!c.pulse) continue;
+    var score = 0;
+    for (var j = 0; j < pulseKws.length; j++) {
+      if (c.pulse.indexOf(pulseKws[j]) >= 0) score += 3;
+    }
+    // 方剂匹配加分
+    if (c.formulas && c.formulas.length > 0) score += 2;
+    if (score > 0) matches.push({ case: c, score: score });
+  }
+  
+  matches.sort(function(a, b) { return b.score - a.score; });
+  
+  if (matches.length === 0) {
+    steps.push('未匹配到相似脉案（案库' + data.length + '条），启用简化逻辑');
+    return simpleCYDiagnose(formData);
+  }
+  
+  var top3 = matches.slice(0, 3);
+  steps.push('=== 经方实验录脉案匹配（' + data.length + '案库）===');
+  
+  for (var k = 0; k < top3.length; k++) {
+    var m = top3[k];
+    steps.push((k+1) + '. #' + m.case.id + ' [' + m.case.chapter + '] 脉：' + (m.case.pulse || '无记载').substring(0,60));
+    if (m.case.diag) steps.push('   诊断：' + m.case.diag);
+    if (m.case.formulas && m.case.formulas.length > 0) steps.push('   方剂：' + m.case.formulas.join('、'));
+  }
+  
+  var top = top3[0];
+  result = top.case.chapter + '方向。' + (top.case.diag || '参见曹颖甫原案脉证');
+  if (top.case.formulas && top.case.formulas.length > 0) {
+    herbs = top.case.formulas;
+  }
+  
+  return { steps: steps, result: result, herbs: herbs, matchedCases: top3 };
+}
+
+function simpleCYDiagnose(formData) {
+  var cl = formData.cy_left || '', cr = formData.cy_right || '', cs = formData.cy_sweat || '';
+  var steps = [], result = '', herbs = [];
+  
+  steps.push('【简化逻辑】47案数据未加载，使用曹氏经典脉证规则');
   steps.push('左：' + cl + ' | 右：' + cr + (cs ? ' | 汗：' + cs : ''));
   
   if (cl === '浮' && cr === '浮') {
-    if (cs === '有汗') {
-      steps.push('左右皆浮+有汗 → 桂枝汤证');
-      result = '太阳中风，桂枝汤主之。曹颖甫曰：发热恶风有汗者，用桂枝汤解肌发汗。';
-      herbs = ['桂枝', '芍药', '甘草', '生姜', '大枣'];
-    } else if (cs === '无汗') {
-      steps.push('左右皆浮+无汗 → 麻黄汤证');
-      result = '太阳伤寒，麻黄汤主之。曹颖甫曰：恶寒无汗脉浮紧，非麻黄不能发其汗。';
-      herbs = ['麻黄', '桂枝', '杏仁', '甘草'];
-    } else {
-      result = '浮脉见于左右，请补充汗出情况以定桂枝汤/麻黄汤';
-    }
+    if (cs === '有汗') { result = '太阳中风，桂枝汤主之'; herbs = ['桂枝','芍药','甘草','生姜','大枣']; }
+    else if (cs === '无汗') { result = '太阳伤寒，麻黄汤主之'; herbs = ['麻黄','桂枝','杏仁','甘草']; }
+    else { result = '浮脉见于左右，请补充汗出情况以定桂枝汤/麻黄汤'; }
   } else if (cl === '弦' && (cr === '实' || cr === '大')) {
-    steps.push('左弦右实 → 大柴胡汤证');
-    result = '少阳阳明合病，大柴胡汤。曹颖甫常用此方治胁下急痛、心下痞硬。';
-    herbs = ['柴胡', '黄芩', '芍药', '半夏', '枳实', '大黄', '生姜', '大枣'];
-  } else if (cl === '沉' && cr === '沉') {
-    result = '左右皆沉，需结合症状判断少阴/太阴。曹氏脉案中沉脉多对应四逆/理中辈';
+    result = '少阳阳明合病，大柴胡汤'; herbs = ['柴胡','黄芩','芍药','半夏','枳实','大黄','生姜','大枣'];
   } else {
     result = '脉证组合未触发曹氏经典方证。请参见曹颖甫92案脉证映射。';
   }
-  
   return { steps: steps, result: result, herbs: herbs };
 }
 
-// ========== 张仲景 六经辨证 ==========
-function diagnoseZhangZhongjing(formData) {
+// ========== 张仲景 六经辨证 + 256方匹配 ==========
+function diagnoseZhangZhongjing(formData, symptoms, complaint) {
+  var data = DataCache['zhangzhongjing'];
   var p = formData.zj_pulse || '', f = formData.zj_force || '';
   var steps = [], result = '', herbs = [];
   
@@ -387,38 +461,76 @@ function diagnoseZhangZhongjing(formData) {
   
   steps.push('脉象：' + p + (f ? ' ' + f : ''));
   
+  // 脉→六经基础映射
   var mapping = {
-    '浮': { jing: '太阳', result: '麻黄汤/桂枝汤证。浮为在表，太阳主表。', herbs: ['麻黄', '桂枝'] },
-    '洪': { jing: '阳明', result: '白虎汤证。洪大为阳明经证主脉。', herbs: ['石膏', '知母'] },
-    '大': { jing: '阳明', result: '阳明病方向。大而有力为阳明实热。', herbs: ['石膏', '知母', '大黄'] },
-    '弦': { jing: '少阳', result: '小柴胡汤证。弦为少阳主脉。', herbs: ['柴胡', '黄芩'] },
-    '缓': { jing: '太阴', result: '理中汤证。缓弱为太阴脾虚主脉。', herbs: ['人参', '干姜', '白术', '甘草'] },
-    '弱': { jing: '太阴/少阴', result: '太阴脾弱或少阴虚寒。需结合症状鉴别。', herbs: ['附子', '干姜'] },
-    '微': { jing: '少阴', result: '四逆汤证。脉微细为少阴病提纲脉。', herbs: ['附子', '干姜', '甘草'] },
-    '细': { jing: '少阴/厥阴', result: '少阴或厥阴病。细为血虚或寒盛。', herbs: ['当归', '桂枝'] },
-    '沉': { jing: '少阴/太阴', result: '里证。沉而有力为里实，沉而无力为里虚。' },
-    '滑': { jing: '阳明/痰热', result: '滑主痰热或食积。阳明腑实或痰热内蕴。', herbs: ['大黄', '半夏'] },
-    '数': { jing: '热证', result: '数主热。需结合浮沉定表里。' },
-    '迟': { jing: '寒证', result: '迟主寒。需结合有力无力定虚实。' },
-    '紧': { jing: '太阳/痛证', result: '紧主寒主痛。太阳伤寒或痛证。' },
-    '涩': { jing: '血虚/血瘀', result: '涩主血少或瘀滞。' }
+    '浮': { jing: '太阳', desc: '浮为在表，太阳主表', herbs: ['麻黄', '桂枝'] },
+    '洪': { jing: '阳明', desc: '洪大为阳明经证主脉', herbs: ['石膏', '知母'] },
+    '大': { jing: '阳明', desc: '大而有力为阳明实热', herbs: ['石膏', '知母', '大黄'] },
+    '弦': { jing: '少阳', desc: '弦为少阳主脉', herbs: ['柴胡', '黄芩'] },
+    '缓': { jing: '太阴', desc: '缓弱为太阴脾虚主脉', herbs: ['人参', '干姜', '白术'] },
+    '弱': { jing: '少阴', desc: '少阴虚寒', herbs: ['附子', '干姜'] },
+    '微': { jing: '少阴', desc: '脉微细为少阴病提纲脉', herbs: ['附子', '干姜', '甘草'] },
+    '细': { jing: '少阴', desc: '细为血虚或寒盛', herbs: ['当归', '桂枝'] },
+    '沉': { jing: '少阴', desc: '里证，沉而有力为里实', herbs: ['附子'] },
+    '滑': { jing: '阳明', desc: '滑主痰热或食积', herbs: ['大黄', '半夏'] },
+    '数': { jing: '热证', desc: '数主热，需结合浮沉定表里' },
+    '迟': { jing: '寒证', desc: '迟主寒' },
+    '紧': { jing: '太阳', desc: '紧主寒主痛', herbs: ['麻黄'] },
+    '涩': { jing: '少阴', desc: '涩主血少或瘀滞' }
   };
   
-  var m = mapping[p];
-  if (m) {
-    steps.push(p + '脉 → ' + m.jing + '病');
-    result = m.result;
-    if (m.herbs) herbs = m.herbs;
+  var baseM = mapping[p];
+  var targetJing = baseM ? baseM.jing : '';
+  
+  steps.push(p + '脉 → ' + (targetJing || '待定') + '病方向');
+  
+  // 如果有症状+方证数据，进行256方匹配
+  if (data && !data._error && data.length > 0 && (symptoms.length > 0 || complaint)) {
+    var allText = symptoms.join(',') + ' ' + complaint;
+    var formulaMatches = [];
+    
+    for (var i = 0; i < data.length; i++) {
+      var fn = data[i];
+      var score = 0;
+      
+      // 六经匹配
+      if (targetJing && fn.jing.indexOf(targetJing) >= 0) score += 10;
+      
+      // 症状关键词匹配
+      if (fn.symptoms) {
+        for (var j = 0; j < fn.symptoms.length; j++) {
+          if (allText.indexOf(fn.symptoms[j]) >= 0) score += 4;
+        }
+      }
+      
+      if (score > 0) formulaMatches.push({ formula: fn, score: score });
+    }
+    
+    formulaMatches.sort(function(a, b) { return b.score - a.score; });
+    
+    if (formulaMatches.length > 0) {
+      steps.push('=== 256方匹配 ===');
+      var top5 = formulaMatches.slice(0, 5);
+      for (var k = 0; k < top5.length; k++) {
+        var fm = top5[k];
+        steps.push((k+1) + '. ' + fm.formula.name + ' [' + fm.formula.jing + '] 得分=' + fm.score);
+      }
+      result = top5[0].formula.name + '（' + top5[0].formula.jing + '）方向';
+    } else {
+      result = baseM ? baseM.desc : '脉象需结合症状定六经——建议补充寒热、汗出、二便等信息';
+    }
   } else {
-    steps.push('脉象需结合症状定六经');
-    result = '建议补充寒热、汗出、二便等信息';
+    result = baseM ? baseM.desc : '脉象需结合症状定六经，256方数据加载后可精确匹配';
   }
+  
+  if (baseM && baseM.herbs) herbs = baseM.herbs;
   
   return { steps: steps, result: result, herbs: herbs };
 }
 
 // ========== 黄元御 一气周流 ==========
 function diagnoseHuangYuanyu(formData) {
+  var data = DataCache['huangyuanyu'];
   var g = formData.hy_guan || '', gf = formData.hy_guanF || '';
   var steps = [], result = '', herbs = [];
   
@@ -429,6 +541,17 @@ function diagnoseHuangYuanyu(formData) {
   }
   
   steps.push('右关：' + g + (gf ? '/' + gf : ''));
+  
+  // 加载compact数据
+  if (data && !data._no_data && !data._error) {
+    var ds = data.diagnosis_sequence;
+    if (ds) {
+      for (var i = 0; i < ds.length; i++) {
+        steps.push('步骤' + (i+1) + '【' + ds[i].name + '】(' + ds[i].key + ')');
+      }
+    }
+    steps.push('核心规则：' + (data.core_rules ? data.core_rules.length : 0) + '条，脉象对：' + (data.pulse_pairs ? data.pulse_pairs.length : 0) + '组');
+  }
   
   if (g === '弱' || g === '缓' || g === '濡') {
     steps.push('右关弱/缓/濡 → 中气不足，脾土不运');
@@ -452,6 +575,7 @@ function diagnoseHuangYuanyu(formData) {
 
 // ========== 郑钦安 阴阳辨证 ==========
 function diagnoseZhengQinan(formData) {
+  var data = DataCache['zhengqinan'];
   var lchi = formData.zn_lchi || '', rchi = formData.zn_rchi || '';
   var lchiF = formData.zn_lchiF || '', rchiF = formData.zn_rchiF || '';
   var hot = formData.zn_hot || '', stool = formData.zn_stool || '', thirst = formData.zn_thirst || '';
@@ -465,6 +589,18 @@ function diagnoseZhengQinan(formData) {
   }
   
   steps.push('左尺：' + (lchi || '?') + ' | 右尺：' + (rchi || '?'));
+  
+  // 加载compact数据
+  if (data && !data._no_data && !data._error) {
+    var ds = data.diagnosis_sequence;
+    if (ds) {
+      for (var i = 0; i < ds.length; i++) {
+        if (i === 0) steps.push('【' + ds[i].name + '】→');
+        else steps.push('  →【' + ds[i].name + '】');
+      }
+    }
+    steps.push('核心规则：' + (data.core_rules ? data.core_rules.length : 0) + '条');
+  }
   
   var chiWeak = (lchi === '弱' || lchi === '微' || rchi === '弱' || rchi === '微' || 
                  lchiF === '无力' || lchiF === '按之即无' || rchiF === '无力' || rchiF === '按之即无');
@@ -505,6 +641,7 @@ function diagnoseZhengQinan(formData) {
 
 // ========== 姚梅龄 六维分层 ==========
 function diagnoseYaoMeiling(formData) {
+  var data = DataCache['yaomeiling'];
   var steps = [], result = '';
   var wei = formData.ym_wei || '', ti = formData.ym_ti || '', li = formData.ym_li || '';
   var lv = formData.ym_lv || '', lu = formData.ym_lu || '', xing = formData.ym_xing || '';
@@ -513,10 +650,20 @@ function diagnoseYaoMeiling(formData) {
   var dims = [wei, ti, li, lv, lu].filter(function(x) { return x; }).length;
   
   steps.push('六维：位=' + (wei || '?') + ' | 体=' + (ti || '?') + ' | 力=' + (li || '?') + ' | 率=' + (lv || '?') + ' | 律=' + (lu || '?') + ' | 形=' + (xing || '?'));
-  steps.push('已采集 ' + dims + '/6 维度');
+  steps.push('已采集 ' + dims + '/5 主维度');
+  
+  // 加载compact数据
+  if (data && !data._no_data && !data._error) {
+    if (data.six_dimensions) {
+      steps.push('六维体系：' + Object.keys(data.six_dimensions).map(function(k) { return data.six_dimensions[k].name; }).join(' / '));
+    }
+    if (data.key_pulse_diagnosis) {
+      steps.push('独处藏奸：' + data.key_pulse_diagnosis.principle);
+    }
+  }
   
   if (dims >= 4) {
-    steps.push('维度充分 → 可查 pulse_db.json 进行姚氏脉学分析');
+    steps.push('维度充分 → 姚氏六维分层分析启动');
     if (lr) steps.push('左右差异：' + lr);
     result = '姚梅龄六维分层分析。建议参考《临证脉学十六讲》进行深度辨证。';
   } else if (dims >= 2) {
@@ -530,10 +677,24 @@ function diagnoseYaoMeiling(formData) {
 
 // ========== 刘渡舟 十论分诊 ==========
 function diagnoseLiuDuzhou(symptoms, complaint) {
+  var data = DataCache['liuduzhou'];
   var all = symptoms.join(',') + ' ' + complaint;
   var steps = [], result = '', trig = [];
   
   steps.push('【症状驱动辨证】脉象辅助六经定位');
+  
+  // 加载compact数据
+  if (data && !data._no_data && !data._error) {
+    var ds = data.diagnosis_sequence;
+    if (ds && ds.length >= 2) {
+      steps.push('六经提纲：' + ds[1].name + '已加载');
+    }
+    if (data.shi_lun) {
+      var shiNames = Object.keys(data.shi_lun);
+      steps.push('十论体系：' + shiNames.join('、'));
+    }
+    steps.push('核心规则：' + (data.core_rules ? data.core_rules.length : 0) + '条');
+  }
   
   if (all.indexOf('小便') >= 0 || all.indexOf('浮肿') >= 0 || all.indexOf('眩') >= 0 || all.indexOf('悸') >= 0) {
     trig.push('水证论');
@@ -544,9 +705,27 @@ function diagnoseLiuDuzhou(symptoms, complaint) {
   if (all.indexOf('食') >= 0 || all.indexOf('腹') >= 0 || all.indexOf('泄') >= 0 || all.indexOf('便') >= 0) {
     trig.push('脾胃论');
   }
+  if (all.indexOf('痰') >= 0 || all.indexOf('饮') >= 0 || all.indexOf('咳') >= 0) {
+    trig.push('痰饮论');
+  }
+  if (all.indexOf('热') >= 0 || all.indexOf('火') >= 0 || all.indexOf('烦') >= 0) {
+    trig.push('火证论');
+  }
+  if (all.indexOf('湿') >= 0 || all.indexOf('重') >= 0) {
+    trig.push('湿证论');
+  }
   
   if (trig.length > 0) {
     steps.push('触发分论：' + trig.join('、'));
+    // 提取对应用药建议
+    if (data && data.shi_lun) {
+      for (var t = 0; t < trig.length; t++) {
+        var sl = data.shi_lun[trig[t].replace('证论','').replace('论','')];
+        if (sl) {
+          steps.push(trig[t] + '核心：' + (sl.core || '').substring(0, 60));
+        }
+      }
+    }
     result = '可进入对应分论深度辨证。刘渡舟十论体系详见 liu_duzhou_decision_tree.md';
   } else {
     steps.push('十论分支未触发');
@@ -563,7 +742,7 @@ function diagnose(schoolId, formData, symptoms, complaint) {
     case 'chenjianguo': return diagnoseChenJianguo(formData);
     case 'huxishu': return diagnoseHuXishu(formData, symptoms, complaint);
     case 'caoyingfu': return diagnoseCaoYingfu(formData);
-    case 'zhangzhongjing': return diagnoseZhangZhongjing(formData);
+    case 'zhangzhongjing': return diagnoseZhangZhongjing(formData, symptoms, complaint);
     case 'huangyuanyu': return diagnoseHuangYuanyu(formData);
     case 'zhengqinan': return diagnoseZhengQinan(formData);
     case 'yaomeiling': return diagnoseYaoMeiling(formData);

@@ -50,6 +50,16 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f7f4ed;c
 .chip-grid label.selected{background:#8b6914;color:#fff;border-color:#8b6914}
 .chip-grid label.required{border-color:#c0392b;background:#fdf2f2}
 
+/* 多选脉象 chip（胡希恕专用） */
+.pulse-chip-group{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.pulse-chip-group label{font-size:11px;padding:2px 8px;border:1px solid #d4c9b0;border-radius:3px;cursor:pointer;background:#fdfaf4;white-space:nowrap}
+.pulse-chip-group label:hover{border-color:#8b6914;background:#fdf3d5}
+.pulse-chip-group input[type=checkbox]{display:none}
+.pulse-chip-group input[type=checkbox]:checked + span{color:#fff}
+.pulse-chip-group label:has(input:checked){background:#8b6914;color:#fff;border-color:#8b6914}
+.hx-total-block{flex:1;min-width:180px;padding:8px 10px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8}
+.hx-step-label{font-size:10px;color:#8b6914;font-weight:700;margin:5px 0 2px}
+
 /* 结果区 */
 .result-box{margin:12px 0 0 34px;padding:14px;background:#fefdf9;border-left:4px solid #8b6914;border-radius:4px;display:none}
 .result-box h4{font-size:13px;color:#2c1810;margin-bottom:4px}
@@ -296,35 +306,89 @@ formHtml+='<div class="form-cell"><label>汗出</label><select id="cy_sweat"><op
 formHtml+='<div class="note">曹氏方证对应：左右皆浮+有汗=桂枝汤，左右皆浮+无汗=麻黄汤。左弦右实=大柴胡汤证。病汗药汗鉴别为曹氏特色。</div></div>';
 
 // --- 胡希恕：左右总按 + 六部分部（辅助参考） ---
+// 辅助函数：生成多选脉象chip组
+function hxChips(groupId, chips){
+  var h='<div class="pulse-chip-group" id="'+groupId+'">';
+  chips.forEach(function(c){
+    h+='<label><input type="checkbox" value="'+c+'"><span>'+c+'</span></label>';
+  });
+  return h+'</div>';
+}
+// 读取多选chip组的值数组
+function valsChip(groupId){
+  var arr=[];
+  var el=document.getElementById(groupId);
+  if(!el) return arr;
+  el.querySelectorAll('input[type=checkbox]:checked').forEach(function(cb){arr.push(cb.value);});
+  return arr;
+}
+
 formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 六经八纲脉证辨证 — 三步法定乾坤</h3>';
 
-// 左右手总按
-formHtml+='<p style="font-size:11px;font-weight:700;color:#2c1810;margin:0 0 4px">一、左右手总按（三步法）</p>';
-formHtml+='<div class="zong-an"><div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左手总按</div>';
-formHtml+='<select id="hx_Lfc"><option value="">--浮沉--</option><option value="浮">浮</option><option value="中">中</option><option value="沉">沉</option><option value="伏">伏</option></select>';
-formHtml+='<select id="hx_Lcs" style="margin-top:2px"><option value="">--迟数--</option><option value="数">数</option><option value="迟">迟</option><option value="缓">缓</option></select>';
-formHtml+='<select id="hx_Lld" style="margin-top:2px"><option value="">--力度--</option><option value="有力">有力</option><option value="无力">无力</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右手总按</div>';
-formHtml+='<select id="hx_Rfc"><option value="">--浮沉--</option><option value="浮">浮</option><option value="中">中</option><option value="沉">沉</option><option value="伏">伏</option></select>';
-formHtml+='<select id="hx_Rcs" style="margin-top:2px"><option value="">--迟数--</option><option value="数">数</option><option value="迟">迟</option><option value="缓">缓</option></select>';
-formHtml+='<select id="hx_Rld" style="margin-top:2px"><option value="">--力度--</option><option value="有力">有力</option><option value="无力">无力</option></select></div>';
-formHtml+='<div style="font-size:10px;color:#999;padding-top:6px">三步法定乾坤：浮=表，沉=里，中/不浮不沉=半表半里；数=热，迟=寒；有力=实，无力=虚。<br>阴阳在仲景脉法中有二义：外浮内沉（第12条阳浮阴弱）或尺寸分部（第3条阴阳俱紧），依条文语境择用。</div></div>';
+// 左右手总按 — 三步全部多选
+formHtml+='<p style="font-size:11px;font-weight:700;color:#2c1810;margin:0 0 6px">一、左右手总按（核心三步法）</p>';
+formHtml+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">';
 
-// 六部分部表（辅助参考）
-formHtml+='<p style="font-size:11px;font-weight:700;color:#999;margin:10px 0 4px">二、六部分部脉诊（辅助参考，非核心诊法）</p>';
-formHtml+='<table style="width:100%;font-size:10px;border-collapse:collapse;text-align:center">';
-formHtml+='<tr style="background:#fdfbf7"><th style="padding:4px;border:1px solid #e8d5b7;width:8%">部位</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左寸</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左关</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左尺</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右寸</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右关</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右尺</th></tr>';
-formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600">浮沉</td>';
+// 左手总按
+formHtml+='<div class="hx-total-block"><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左手总按</div>';
+formHtml+='<div class="hx-step-label">第一步·浮沉（病位）</div>';
+formHtml+=hxChips('hx_L_fc',['浮','中（不浮不沉）','沉','伏']);
+formHtml+='<div class="hx-step-label">第二步·迟数（病性寒热）</div>';
+formHtml+=hxChips('hx_L_cs',['数','迟','缓']);
+formHtml+='<div class="hx-step-label">第三步·力度（虚实）</div>';
+formHtml+=hxChips('hx_L_ld',['有力','无力']);
+formHtml+='<div class="hx-step-label">脉形（可多选）</div>';
+formHtml+=hxChips('hx_L_mx',['弦','细','弱','滑','涩','紧','大','微','洪','浮取弦','沉取弱']);
+formHtml+='</div>';
+
+// 右手总按
+formHtml+='<div class="hx-total-block"><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右手总按</div>';
+formHtml+='<div class="hx-step-label">第一步·浮沉（病位）</div>';
+formHtml+=hxChips('hx_R_fc',['浮','中（不浮不沉）','沉','伏']);
+formHtml+='<div class="hx-step-label">第二步·迟数（病性寒热）</div>';
+formHtml+=hxChips('hx_R_cs',['数','迟','缓']);
+formHtml+='<div class="hx-step-label">第三步·力度（虚实）</div>';
+formHtml+=hxChips('hx_R_ld',['有力','无力']);
+formHtml+='<div class="hx-step-label">脉形（可多选）</div>';
+formHtml+=hxChips('hx_R_mx',['弦','细','弱','滑','涩','紧','大','微','洪','浮取弦','沉取弱']);
+formHtml+='</div>';
+
+formHtml+='</div>';
+formHtml+='<div style="font-size:10px;color:#888;background:#fdfbf4;padding:6px 8px;border-radius:4px;margin-bottom:8px">三步法：<b>浮=表/沉=里/中=半表半里</b>（病位）→ <b>数=热/迟=寒</b>（病性）→ <b>有力=实/无力=虚</b>（虚实）。缓≠迟（缓=脉管弛缓，因汗出津伤，非速度慢）。阴阳在仲景脉法有二义：阳浮阴弱（外内）、阴阳俱紧（寸尺）。</div>';
+
+// 六部分部表（辅助参考）——脉形改为多选chip
+formHtml+='<p style="font-size:11px;font-weight:700;color:#999;margin:6px 0 4px">二、六部分部脉诊（辅助参考，非核心）<span style="font-weight:400;font-size:10px">——胡老："不要在寸关尺上绕圈子"</span></p>';
+formHtml+='<table style="width:100%;font-size:10px;border-collapse:collapse">';
+formHtml+='<tr style="background:#fdfbf7"><th style="padding:4px;border:1px solid #e8d5b7;width:7%">部位</th>';
+['左寸','左关','左尺','右寸','右关','右尺'].forEach(function(pos){
+  formHtml+='<th style="padding:4px;border:1px solid #e8d5b7;font-weight:600;color:#555">'+pos+'</th>';
+});
+formHtml+='</tr>';
+
+// 浮沉行（单选 select 保持简洁）
+formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center">浮沉</td>';
 ['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
-  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_fc" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>浮</option><option>中</option><option>沉</option><option>伏</option></select></td>';});
-formHtml+='</tr><tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600">脉形</td>';
+  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_fc" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>浮</option><option>中</option><option>沉</option><option>伏</option></select></td>';
+});
+formHtml+='</tr>';
+
+// 脉形行（多选chip）
+formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center;vertical-align:top">脉形</td>';
 ['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
-  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_mx" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>弦</option><option>细</option><option>滑</option><option>涩</option><option>紧</option><option>弱</option><option>大</option><option>微</option><option>洪</option></select></td>';});
-formHtml+='</tr><tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600">力度</td>';
+  formHtml+='<td style="padding:3px;border:1px solid #e8d5b7;vertical-align:top">';
+  formHtml+=hxChips('hx_'+id+'_mx',['弦','细','弱','滑','涩','紧','大','微','洪']);
+  formHtml+='</td>';
+});
+formHtml+='</tr>';
+
+// 力度行
+formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center">力度</td>';
 ['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
-  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_ld" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>有力</option><option>无力</option><option>弦硬</option></select></td>';});
+  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_ld" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>有力</option><option>无力</option><option>弦硬</option></select></td>';
+});
 formHtml+='</tr></table>';
-formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>辨病位→辨病性→辨方证。总按三步法（浮沉/迟数/力度）为核心诊法——定表里寒热虚实后对照六经提纲锁定方证。六部分部仅为辅助参考，胡老云"不要在寸关尺上绕圈子"。金匮胸痹"阳微阴弦"是尺寸分部的例外使用（上焦阳虚+下焦阴寒），非泛用六部配五脏。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉。缓≠慢（缓=脉管弛缓/张力低，因汗出津液丢失），迟才是速度慢。</div></div>';
+
+formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>辨病位→辨病性→辨方证。总按三步法为核心，六部分部仅辅助参考。金匮胸痹"阳微阴弦"是尺寸分部例外用法（上焦阳虚+下焦阴寒），非泛用五脏定位。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉精确匹配。</div></div>';
 
 // --- 刘渡舟：症状驱动 ---
 formHtml+='<div class="school-form" id="ldForm"><h3>刘渡舟 · 十论分诊 — 症状驱动</h3>';
@@ -428,13 +492,13 @@ function runAll(){
   formData.zn_lchi = val('zn_lchi'); formData.zn_rchi = val('zn_rchi'); formData.zn_lchiF = val('zn_lchiF'); formData.zn_rchiF = val('zn_rchiF');
   formData.zn_hot = val('zn_hot'); formData.zn_stool = val('zn_stool'); formData.zn_thirst = val('zn_thirst');
   formData.cy_left = val('cy_left'); formData.cy_right = val('cy_right'); formData.cy_sweat = val('cy_sweat');
-  // 胡希恕 左右总按
-  formData.hx_Lfc = val('hx_Lfc'); formData.hx_Lcs = val('hx_Lcs'); formData.hx_Lld = val('hx_Lld');
-  formData.hx_Rfc = val('hx_Rfc'); formData.hx_Rcs = val('hx_Rcs'); formData.hx_Rld = val('hx_Rld');
-  // 胡希恕 六部分部
+  // 胡希恕 左右总按（多选）
+  formData.hx_Lfc = valsChip('hx_L_fc'); formData.hx_Lcs = valsChip('hx_L_cs'); formData.hx_Lld = valsChip('hx_L_ld'); formData.hx_Lmx = valsChip('hx_L_mx');
+  formData.hx_Rfc = valsChip('hx_R_fc'); formData.hx_Rcs = valsChip('hx_R_cs'); formData.hx_Rld = valsChip('hx_R_ld'); formData.hx_Rmx = valsChip('hx_R_mx');
+  // 胡希恕 六部分部（脉形多选）
   ['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(p){
     formData['hx_'+p+'_fc'] = val('hx_'+p+'_fc');
-    formData['hx_'+p+'_mx'] = val('hx_'+p+'_mx');
+    formData['hx_'+p+'_mx'] = valsChip('hx_'+p+'_mx');
     formData['hx_'+p+'_ld'] = val('hx_'+p+'_ld');
   });
   

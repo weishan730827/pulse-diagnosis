@@ -269,37 +269,133 @@ function simpleCJGDiagnose(formData) {
   return { steps: steps, result: result, herbs: [] };
 }
 
-// ========== 胡希恕 八纲六经辨证 + 脉诊辅助 ==========
+// ========== 胡希恕 八纲六经辨证 + 三步法脉诊 ==========
 function diagnoseHuXishu(formData, symptoms, complaint) {
   var data = DataCache['huxishu'];
-  var pulseL = formData.hxs_pulse_l || '', pulseR = formData.hxs_pulse_r || '';
-  var pulseForce = formData.hxs_pulse_force || '';
+  
+  // ---- 读取三步法总按数据（多选数组）----
+  var Lfc = formData.hx_Lfc || [];   // 左手浮沉
+  var Lcs = formData.hx_Lcs || [];   // 左手迟数
+  var Lld = formData.hx_Lld || [];   // 左手力度
+  var Lmx = formData.hx_Lmx || [];   // 左手脉形
+  var Rfc = formData.hx_Rfc || [];   // 右手浮沉
+  var Rcs = formData.hx_Rcs || [];   // 右手迟数
+  var Rld = formData.hx_Rld || [];   // 右手力度
+  var Rmx = formData.hx_Rmx || [];   // 右手脉形
   
   var steps = [], result = '', herbs = [];
   var allText = symptoms.join(',') + ' ' + complaint;
+  var pulseClues = [];  // 八纲线索
   
-  // 脉象辅助判断八纲
-  var pulseClues = [];
-  if (pulseL || pulseR) {
-    steps.push('脉象辅助：左=' + (pulseL || '?') + ' 右=' + (pulseR || '?') + (pulseForce ? ' 力=' + pulseForce : ''));
+  var hasPulse = (Lfc.length + Lcs.length + Lld.length + Lmx.length + Rfc.length + Rcs.length + Rld.length + Rmx.length) > 0;
+  
+  // ---- 三步法辨证逻辑 ----
+  if (hasPulse) {
+    var allFC = Lfc.concat(Rfc).join(',');
+    var allCS = Lcs.concat(Rcs).join(',');
+    var allLD = Lld.concat(Rld).join(',');
+    var allMX = Lmx.concat(Rmx).join(',');
     
-    // 脉象→八纲线索
-    var allPulse = (pulseL + pulseR).toLowerCase();
-    if (allPulse.indexOf('浮') >= 0) pulseClues.push('表');
-    if (allPulse.indexOf('沉') >= 0) pulseClues.push('里');
-    if (allPulse.indexOf('数') >= 0 || allPulse.indexOf('洪') >= 0 || allPulse.indexOf('滑') >= 0) pulseClues.push('热');
-    if (allPulse.indexOf('迟') >= 0 || allPulse.indexOf('缓') >= 0 || allPulse.indexOf('弱') >= 0) pulseClues.push('寒');
-    if (pulseForce.indexOf('无力') >= 0 || allPulse.indexOf('弱') >= 0 || allPulse.indexOf('微') >= 0) pulseClues.push('虚');
-    if (pulseForce.indexOf('有力') >= 0 || allPulse.indexOf('弦硬') >= 0) pulseClues.push('实');
+    var LfcStr = Lfc.join('+') || '未选';
+    var RfcStr = Rfc.join('+') || '未选';
+    var LcsStr = Lcs.join('+') || '未选';
+    var RcsStr = Rcs.join('+') || '未选';
+    var LldStr = Lld.join('+') || '未选';
+    var RldStr = Rld.join('+') || '未选';
+    var LmxStr = Lmx.join('+') || '无';
+    var RmxStr = Rmx.join('+') || '无';
     
-    if (pulseClues.length > 0) steps.push('脉象提示：' + pulseClues.join('、'));
+    steps.push('【左手总按】浮沉:' + LfcStr + ' | 迟数:' + LcsStr + ' | 力度:' + LldStr + ' | 脉形:' + LmxStr);
+    steps.push('【右手总按】浮沉:' + RfcStr + ' | 迟数:' + RcsStr + ' | 力度:' + RldStr + ' | 脉形:' + RmxStr);
+    
+    // 第一步：浮沉定病位
+    var weiStr = '';
+    if (allFC.indexOf('浮') >= 0 && allFC.indexOf('沉') < 0 && allFC.indexOf('中') < 0) {
+      weiStr = '表证（浮主表）';
+      pulseClues.push('表');
+    } else if (allFC.indexOf('沉') >= 0 && allFC.indexOf('浮') < 0) {
+      weiStr = '里证（沉主里）';
+      pulseClues.push('里');
+    } else if (allFC.indexOf('中（不浮不沉）') >= 0 || (allFC.indexOf('浮') >= 0 && allFC.indexOf('沉') >= 0)) {
+      weiStr = '半表半里（不浮不沉）';
+      pulseClues.push('半表半里');
+    } else if (allFC.indexOf('伏') >= 0) {
+      weiStr = '里证深（伏脉，阳气极虚或邪闭）';
+      pulseClues.push('里');
+    }
+    if (weiStr) steps.push('第一步·病位 → ' + weiStr);
+    
+    // 第二步：迟数定寒热
+    var xingStr = '';
+    if (allCS.indexOf('数') >= 0 && allCS.indexOf('迟') < 0) {
+      xingStr = '热证（数主热）';
+      pulseClues.push('热');
+    } else if (allCS.indexOf('迟') >= 0 && allCS.indexOf('数') < 0) {
+      xingStr = '寒证（迟主寒）';
+      pulseClues.push('寒');
+    } else if (allCS.indexOf('缓') >= 0 && allCS.indexOf('迟') < 0 && allCS.indexOf('数') < 0) {
+      xingStr = '缓脉——注意：缓≠迟！缓=脉管弛缓（张力低，因汗出津伤），非速度慢';
+      pulseClues.push('缓');
+    } else if (allCS.indexOf('数') >= 0 && allCS.indexOf('迟') >= 0) {
+      xingStr = '左右寒热不一，需分侧分析';
+    }
+    if (xingStr) steps.push('第二步·寒热 → ' + xingStr);
+    
+    // 第三步：力度定虚实
+    var xsStr = '';
+    if (allLD.indexOf('有力') >= 0 && allLD.indexOf('无力') < 0) {
+      xsStr = '实证（有力主实）';
+      pulseClues.push('实');
+    } else if (allLD.indexOf('无力') >= 0 && allLD.indexOf('有力') < 0) {
+      xsStr = '虚证（无力主虚）';
+      pulseClues.push('虚');
+    } else if (allLD.indexOf('有力') >= 0 && allLD.indexOf('无力') >= 0) {
+      xsStr = '左右虚实夹杂，需分侧判断';
+    }
+    if (xsStr) steps.push('第三步·虚实 → ' + xsStr);
+    
+    // 综合三步法输出六经方向
+    if (pulseClues.length >= 2) {
+      var pos = pulseClues[0]; // 表/里/半表半里
+      var hot = pulseClues.filter(function(x){return x==='热'||x==='寒'||x==='缓';})[0] || '';
+      var xs  = pulseClues.filter(function(x){return x==='实'||x==='虚';})[0] || '';
+      
+      var jingDir = '';
+      if (pos === '表' && hot === '热' && xs === '实') jingDir = '太阳阳证（浮+热+实） → 麻黄汤/大青龙方向';
+      else if (pos === '表' && (hot === '寒' || hot === '缓') && xs === '虚') jingDir = '太阳/少阴并病倾向（浮弱或缓弱） → 桂枝汤/桂枝加附子汤方向';
+      else if (pos === '表' && xs === '虚') jingDir = '太阳表虚（浮无力） → 桂枝汤方向，注意汗出情况';
+      else if (pos === '表' && xs === '实') jingDir = '太阳表实（浮有力） → 麻黄汤/葛根汤方向，注意无汗';
+      else if (pos === '里' && hot === '热' && xs === '实') jingDir = '阳明里实（沉有力数） → 承气汤方向，看腑气通否';
+      else if (pos === '里' && hot === '热' && xs === '虚') jingDir = '阳明里热虚（沉数无力） → 白虎加人参汤方向';
+      else if (pos === '里' && hot === '寒' && xs === '虚') jingDir = '少阴寒化（沉微细无力） → 四逆汤/真武汤方向';
+      else if (pos === '里' && hot === '寒' && xs === '实') jingDir = '太阴里寒（沉迟有力） → 理中汤，腹满实痛可加大黄';
+      else if (pos === '半表半里' && hot === '热' && xs === '实') jingDir = '少阳阳证（弦有力数） → 小柴胡/大柴胡方向';
+      else if (pos === '半表半里' && hot === '热' && xs === '虚') jingDir = '少阳气虚（弦细数无力） → 小柴胡汤方向';
+      else if (pos === '半表半里' && (hot === '寒'||hot==='缓') && xs === '虚') jingDir = '厥阴寒化（弦细无力） → 乌梅丸/当归四逆汤方向';
+      else if (pulseClues.indexOf('虚') >= 0 && (allMX.indexOf('微') >= 0 || allMX.indexOf('细') >= 0)) jingDir = '少阴病（微细无力） → 四逆汤/真武汤，急温少阴';
+      
+      if (jingDir) steps.push('三步法综合 → ' + jingDir);
+    }
+    
+    // 脉形辅助提示
+    if (allMX) {
+      var mxHints = [];
+      if (allMX.indexOf('弦') >= 0) mxHints.push('弦：少阳/水饮/肝气郁滞');
+      if (allMX.indexOf('细') >= 0) mxHints.push('细：血虚/湿证/少阴');
+      if (allMX.indexOf('弱') >= 0) mxHints.push('弱：气血两虚');
+      if (allMX.indexOf('滑') >= 0) mxHints.push('滑：痰热/食积/阳明');
+      if (allMX.indexOf('涩') >= 0) mxHints.push('涩：血瘀/津亏/少阴');
+      if (allMX.indexOf('紧') >= 0) mxHints.push('紧：寒邪盛/太阳寒伤营');
+      if (allMX.indexOf('微') >= 0) mxHints.push('微：阳气极虚/少阴危象');
+      if (mxHints.length > 0) steps.push('脉形提示：' + mxHints.join('；'));
+    }
   }
   
   if (!data || data._error) {
-    return simpleHXSDiagnose(symptoms, complaint, pulseClues);
+    return simpleHXSDiagnose(symptoms, complaint, pulseClues, steps, result);
   }
   
-  // 六经提纲症候群匹配
+  // 六经提纲症候群匹配（症状+脉象双驱动）
   var matches = [];
   for (var i = 0; i < data.length; i++) {
     var f = data[i];
@@ -308,15 +404,13 @@ function diagnoseHuXishu(formData, symptoms, complaint) {
     for (var j = 0; j < syndrome.length; j++) {
       var kw = syndrome[j];
       if (allText.indexOf(kw) >= 0) score += 3;
-      // 部分匹配
       for (var c = 0; c < kw.length - 1; c++) {
         if (allText.indexOf(kw.substring(c, c+2)) >= 0) score += 1;
       }
     }
-    // 脉象匹配特征脉
-    if (f['特征脉'] && (pulseL.indexOf(f['特征脉']) >= 0 || pulseR.indexOf(f['特征脉']) >= 0)) {
-      score += 5;
-    }
+    // 特征脉匹配
+    var allMXstr = (formData.hx_Lmx || []).concat(formData.hx_Rmx || []).join(',');
+    if (f['特征脉'] && allMXstr.indexOf(f['特征脉']) >= 0) score += 5;
     // 八纲匹配
     if (f['八纲']) {
       for (var k = 0; k < pulseClues.length; k++) {
@@ -328,13 +422,17 @@ function diagnoseHuXishu(formData, symptoms, complaint) {
   
   matches.sort(function(a, b) { return b.score - a.score; });
   
-  steps.push('【症状+脉象双驱动辨证】');
+  if (hasPulse || symptoms.length > 0 || complaint) {
+    steps.push('【症候群匹配】');
+  }
   
   if (matches.length === 0) {
-    steps.push('六经提纲症候群未命中');
-    result = '当前症状未能触发任何六经提纲。请补充更多六经特征症状';
+    if (symptoms.length > 0 || complaint) {
+      steps.push('六经提纲症候群未命中，请补充六经特征症状');
+    }
+    result = pulseClues.length >= 2 ? ('脉象提示：' + pulseClues.join('/') + '。请结合症状触发103方症候群精确匹配。') : '请填写总按三步法脉象，并补充症状。';
   } else {
-    steps.push('=== 六经提纲匹配（' + matches.length + '条）===');
+    steps.push('=== 六经提纲匹配（共' + matches.length + '条）===');
     var top5 = matches.slice(0, 5);
     for (var k = 0; k < top5.length; k++) {
       var m = top5[k];
@@ -348,10 +446,12 @@ function diagnoseHuXishu(formData, symptoms, complaint) {
   return { steps: steps, result: result, herbs: [], matchedSyndromes: matches.slice(0, 5) };
 }
 
-function simpleHXSDiagnose(symptoms, complaint, pulseClues) {
+function simpleHXSDiagnose(symptoms, complaint, pulseClues, existingSteps, existingResult) {
   var all = symptoms.join(',') + ' ' + complaint;
-  var steps = [], result = '';
-  steps.push('【症状驱动为主】脉象辅助八纲判断' + (pulseClues && pulseClues.length > 0 ? ' 脉→' + pulseClues.join('、') : ''));
+  var steps = existingSteps || [];
+  var result = existingResult || '';
+  
+  steps.push('【症状驱动为主】数据文件未加载，使用规则匹配');
   
   if (all.indexOf('往来寒热') >= 0 || all.indexOf('口苦') >= 0 || all.indexOf('胸胁') >= 0) {
     steps.push('少阳提纲命中 → 小柴胡汤方向');
@@ -359,10 +459,10 @@ function simpleHXSDiagnose(symptoms, complaint, pulseClues) {
   } else if ((all.indexOf('腹满') >= 0 || all.indexOf('吐') >= 0 || all.indexOf('下利') >= 0)) {
     steps.push('太阴提纲倾向 → 理中汤方向');
     result = '理中汤/四逆汤辈';
-  } else if (all.indexOf('恶寒') >= 0 || all.indexOf('脉浮') >= 0) {
+  } else if (all.indexOf('恶寒') >= 0 || (pulseClues && pulseClues.indexOf('表') >= 0)) {
     steps.push('太阳提纲倾向 → 桂麻方向');
     result = '建议补充汗出情况以定桂麻';
-  } else {
+  } else if (!result) {
     steps.push('六经提纲未命中');
     result = '需更完整症状描述以启动103方症候群精确匹配';
   }

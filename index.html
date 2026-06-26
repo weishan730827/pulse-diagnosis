@@ -295,17 +295,36 @@ formHtml+='<div class="form-cell"><label>右手脉</label><select id="cy_right">
 formHtml+='<div class="form-cell"><label>汗出</label><select id="cy_sweat"><option value="">--</option><option>有汗</option><option>无汗</option></select></div></div>';
 formHtml+='<div class="note">曹氏方证对应：左右皆浮+有汗=桂枝汤，左右皆浮+无汗=麻黄汤。左弦右实=大柴胡汤证。病汗药汗鉴别为曹氏特色。</div></div>';
 
-// --- 胡希恕：三步法脉诊 + 六经提纲 ---
-formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 六经八纲脉证辨证 — 三步法定乾坤</h3>';
-formHtml+='<div class="zong-an"><div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第一步：定病位</div>';
-formHtml+='<select id="hx_fuchen"><option value="">--浮沉--</option><option value="浮">浮（表证）</option><option value="沉">沉（里证）</option><option value="不浮不沉">不浮不沉（半表半里）</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第二步：定寒热</div>';
-formHtml+='<select id="hx_chishu"><option value="">--迟数--</option><option value="数">数（热证）</option><option value="迟">迟（寒证）</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第三步：定虚实</div>';
-formHtml+='<select id="hx_lishi"><option value="">--沉取力度--</option><option value="有力">沉取有力（实证）</option><option value="无力">沉取无力（虚证）</option></select></div></div>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>具体脉象（可选）</label><select id="hx_pulse"><option value="">--</option><option>浮紧</option><option>浮缓</option><option>浮弱</option><option>弦</option><option>弦细</option><option>弦数</option><option>洪大</option><option>沉实</option><option>沉微</option><option>微细</option><option>细欲绝</option><option>结代</option><option>浮滑</option><option>沉紧</option><option>数</option><option>迟</option><option>滑</option><option>涩</option></select></div>';
-formHtml+='<div class="form-cell"><label>兼脉（可多写）</label><input type="text" id="hx_jianmai" placeholder="如：寸浮关弦尺弱"></div></div>';
-formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>脉诊是最后一步、最关键一关。三步合一锁定六经归属——浮+数+有力=太阳（表阳实），浮+迟+无力=少阴（表阴虚），沉+数+有力=阳明（里阳实），沉+迟+无力=太阴（里阴虚）。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉精确匹配。请在第三步勾选相关六经提纲症状。</div></div>';
+// --- 胡希恕：左右总按 + 六部分部 + 三步法 ---
+formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 六经八纲脉证辨证 — 三部九候八纲分诊</h3>';
+
+// 左右手总按
+formHtml+='<p style="font-size:11px;font-weight:700;color:#2c1810;margin:0 0 4px">一、左右手总按（三步法）</p>';
+formHtml+='<div class="zong-an"><div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左手总按</div>';
+formHtml+='<select id="hx_Lfc"><option value="">--浮沉--</option><option value="浮">浮</option><option value="中">中</option><option value="沉">沉</option><option value="伏">伏</option></select>';
+formHtml+='<select id="hx_Lcs" style="margin-top:2px"><option value="">--迟数--</option><option value="数">数</option><option value="迟">迟</option><option value="缓">缓</option></select>';
+formHtml+='<select id="hx_Lld" style="margin-top:2px"><option value="">--力度--</option><option value="有力">有力</option><option value="无力">无力</option></select></div>';
+formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右手总按</div>';
+formHtml+='<select id="hx_Rfc"><option value="">--浮沉--</option><option value="浮">浮</option><option value="中">中</option><option value="沉">沉</option><option value="伏">伏</option></select>';
+formHtml+='<select id="hx_Rcs" style="margin-top:2px"><option value="">--迟数--</option><option value="数">数</option><option value="迟">迟</option><option value="缓">缓</option></select>';
+formHtml+='<select id="hx_Rld" style="margin-top:2px"><option value="">--力度--</option><option value="有力">有力</option><option value="无力">无力</option></select></div>';
+formHtml+='<div style="font-size:10px;color:#999;padding-top:6px">三步法定乾坤：浮=表，沉=里，中/不浮不沉=半表半里；数=热，迟=寒；有力=实，无力=虚。</div></div>';
+
+// 六部分部表
+formHtml+='<p style="font-size:11px;font-weight:700;color:#2c1810;margin:10px 0 4px">二、六部分部脉诊</p>';
+formHtml+='<table style="width:100%;font-size:10px;border-collapse:collapse;text-align:center">';
+formHtml+='<tr style="background:#fdfbf7"><th style="padding:4px;border:1px solid #e8d5b7;width:8%">部位</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左寸</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左关</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左尺</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右寸</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右关</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右尺</th></tr>';
+formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600">浮沉</td>';
+['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
+  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_fc" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>浮</option><option>中</option><option>沉</option><option>伏</option></select></td>';});
+formHtml+='</tr><tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600">脉形</td>';
+['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
+  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_mx" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>弦</option><option>细</option><option>滑</option><option>涩</option><option>紧</option><option>弱</option><option>大</option><option>微</option><option>洪</option></select></td>';});
+formHtml+='</tr><tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600">力度</td>';
+['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
+  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_ld" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>有力</option><option>无力</option><option>弦硬</option></select></td>';});
+formHtml+='</tr></table>';
+formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>辨病位→辨病性→辨方证。浮沉辨表里半表半里（病位），迟数辨寒热（病性），力度辨虚实（正邪消长）。六部细化：左寸候心与表、右寸候肺、左关候肝胆、右关候脾胃（中气）、左尺候肾阴、右尺候肾阳。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉。</div></div>';
 
 // --- 刘渡舟：症状驱动 ---
 formHtml+='<div class="school-form" id="ldForm"><h3>刘渡舟 · 十论分诊 — 症状驱动</h3>';
@@ -409,8 +428,15 @@ function runAll(){
   formData.zn_lchi = val('zn_lchi'); formData.zn_rchi = val('zn_rchi'); formData.zn_lchiF = val('zn_lchiF'); formData.zn_rchiF = val('zn_rchiF');
   formData.zn_hot = val('zn_hot'); formData.zn_stool = val('zn_stool'); formData.zn_thirst = val('zn_thirst');
   formData.cy_left = val('cy_left'); formData.cy_right = val('cy_right'); formData.cy_sweat = val('cy_sweat');
-  formData.hx_fuchen = val('hx_fuchen'); formData.hx_chishu = val('hx_chishu'); formData.hx_lishi = val('hx_lishi');
-  formData.hx_jianmai = val('hx_jianmai');
+  // 胡希恕 左右总按
+  formData.hx_Lfc = val('hx_Lfc'); formData.hx_Lcs = val('hx_Lcs'); formData.hx_Lld = val('hx_Lld');
+  formData.hx_Rfc = val('hx_Rfc'); formData.hx_Rcs = val('hx_Rcs'); formData.hx_Rld = val('hx_Rld');
+  // 胡希恕 六部分部
+  ['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(p){
+    formData['hx_'+p+'_fc'] = val('hx_'+p+'_fc');
+    formData['hx_'+p+'_mx'] = val('hx_'+p+'_mx');
+    formData['hx_'+p+'_ld'] = val('hx_'+p+'_ld');
+  });
   
   // 需要数据的学校列表
   var needsData = ['zhangxichun', 'chenjianguo', 'huxishu'];

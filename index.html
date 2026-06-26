@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>九家并列脉诊辨证体系 v5</title>
+<title>九家并列脉诊辨证体系 v6</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f7f4ed;color:#3a2a1a;line-height:1.7}
@@ -148,9 +148,9 @@ var schools = [
     formId:'zjForm'
   },
   {
-    id:'huxishu', name:'胡希恕', system:'八纲六经辨证', era:'近代',
-    pulseFields:'symptom-driven',
-    description:'核心：症状驱动为主，脉象辅助八纲判断。需完整六经提纲症状词组。',
+    id:'huxishu', name:'胡希恕', system:'六经八纲脉证辨证', era:'近代',
+    pulseFields:'three-step-bagang',
+    description:'核心：脉诊三步法定乾坤——浮沉定病位、迟数定寒热、沉取有力无力定虚实。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉精确匹配。',
     formId:'hxForm'
   },
   {
@@ -295,11 +295,17 @@ formHtml+='<div class="form-cell"><label>右手脉</label><select id="cy_right">
 formHtml+='<div class="form-cell"><label>汗出</label><select id="cy_sweat"><option value="">--</option><option>有汗</option><option>无汗</option></select></div></div>';
 formHtml+='<div class="note">曹氏方证对应：左右皆浮+有汗=桂枝汤，左右皆浮+无汗=麻黄汤。左弦右实=大柴胡汤证。病汗药汗鉴别为曹氏特色。</div></div>';
 
-// --- 胡希恕：症状为主 ---
-formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 八纲六经 — 症状驱动为主</h3>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>脉象（辅助）</label><select id="hx_pulse"><option value="">--</option><option>浮</option><option>沉</option><option>弦</option><option>细</option><option>弱</option><option>大</option><option>滑</option><option>数</option><option>迟</option></select></div>';
-formHtml+='<div class="form-cell"><label>八纲阴阳</label><select id="hx_yy"><option value="">--</option><option>阳证</option><option>阴证</option></select></div></div>';
-formHtml+='<div class="note">胡氏体系以六经提纲症状为第一驱动，脉象辅助判断八纲（阴阳/表里/寒热/虚实）。需在第三步填写完整六经提纲症状（往来寒热/胸胁苦满/口苦咽干/默默不欲等）。103方症候群精确匹配。</div></div>';
+// --- 胡希恕：三步法脉诊 + 六经提纲 ---
+formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 六经八纲脉证辨证 — 三步法定乾坤</h3>';
+formHtml+='<div class="zong-an"><div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第一步：定病位</div>';
+formHtml+='<select id="hx_fuchen"><option value="">--浮沉--</option><option value="浮">浮（表证）</option><option value="沉">沉（里证）</option><option value="不浮不沉">不浮不沉（半表半里）</option></select></div>';
+formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第二步：定寒热</div>';
+formHtml+='<select id="hx_chishu"><option value="">--迟数--</option><option value="数">数（热证）</option><option value="迟">迟（寒证）</option></select></div>';
+formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第三步：定虚实</div>';
+formHtml+='<select id="hx_lishi"><option value="">--沉取力度--</option><option value="有力">沉取有力（实证）</option><option value="无力">沉取无力（虚证）</option></select></div></div>';
+formHtml+='<div class="form-row"><div class="form-cell"><label>具体脉象（可选）</label><select id="hx_pulse"><option value="">--</option><option>浮紧</option><option>浮缓</option><option>浮弱</option><option>弦</option><option>弦细</option><option>弦数</option><option>洪大</option><option>沉实</option><option>沉微</option><option>微细</option><option>细欲绝</option><option>结代</option><option>浮滑</option><option>沉紧</option><option>数</option><option>迟</option><option>滑</option><option>涩</option></select></div>';
+formHtml+='<div class="form-cell"><label>兼脉（可多写）</label><input type="text" id="hx_jianmai" placeholder="如：寸浮关弦尺弱"></div></div>';
+formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>脉诊是最后一步、最关键一关。三步合一锁定六经归属——浮+数+有力=太阳（表阳实），浮+迟+无力=少阴（表阴虚），沉+数+有力=阳明（里阳实），沉+迟+无力=太阴（里阴虚）。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉精确匹配。请在第三步勾选相关六经提纲症状。</div></div>';
 
 // --- 刘渡舟：症状驱动 ---
 formHtml+='<div class="school-form" id="ldForm"><h3>刘渡舟 · 十论分诊 — 症状驱动</h3>';
@@ -403,6 +409,8 @@ function runAll(){
   formData.zn_lchi = val('zn_lchi'); formData.zn_rchi = val('zn_rchi'); formData.zn_lchiF = val('zn_lchiF'); formData.zn_rchiF = val('zn_rchiF');
   formData.zn_hot = val('zn_hot'); formData.zn_stool = val('zn_stool'); formData.zn_thirst = val('zn_thirst');
   formData.cy_left = val('cy_left'); formData.cy_right = val('cy_right'); formData.cy_sweat = val('cy_sweat');
+  formData.hx_fuchen = val('hx_fuchen'); formData.hx_chishu = val('hx_chishu'); formData.hx_lishi = val('hx_lishi');
+  formData.hx_jianmai = val('hx_jianmai');
   
   // 需要数据的学校列表
   var needsData = ['zhangxichun', 'chenjianguo', 'huxishu'];

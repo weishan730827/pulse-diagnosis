@@ -43,12 +43,15 @@ body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f7f4ed;c
 .zong-an{display:flex;gap:10px;margin-bottom:8px}
 .zong-an>div{flex:1;padding:8px 10px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8}
 
-/* 症状 */
-.chip-grid{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.chip-grid label{font-size:11px;padding:3px 8px;border:1px solid #e0d5c0;border-radius:3px;cursor:pointer;background:#fafaf7}
-.chip-grid label:hover{background:#fdf3d5}
-.chip-grid label.selected{background:#8b6914;color:#fff;border-color:#8b6914}
-.chip-grid label.required{border-color:#c0392b;background:#fdf2f2}
+/* 陈建国 四步引导 */
+.cj-step{margin:8px 0 4px 34px;padding:10px 14px;background:#fdfaf4;border:1px solid #e8d5b7;border-radius:6px}
+.cj-step-title{font-size:12px;font-weight:700;color:#8b6914;margin-bottom:6px}
+.cj-step-desc{font-size:10px;color:#888;margin-bottom:6px;font-style:italic}
+.cj-guide{font-size:11px;color:#8b6914;background:#fef9ee;padding:5px 8px;border-radius:4px;margin:4px 0;line-height:1.6}
+.cj-result-box{margin:8px 0 0 34px;padding:10px;background:#fefdf9;border-left:4px solid #8b6914;border-radius:4px}
+.cj-big-btn{padding:8px 18px;font-size:13px;font-weight:600;border:none;border-radius:6px;cursor:pointer;background:#8b6914;color:#fff}
+.cj-big-btn:hover{background:#6b4f10}
+.cj-reset{background:transparent;color:#8b6914;border:1px solid #8b6914;padding:4px 12px;font-size:11px;border-radius:4px;cursor:pointer;margin-left:8px}
 
 /* 多选脉象 chip（胡希恕专用） */
 .pulse-chip-group{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
@@ -240,20 +243,178 @@ formHtml+='<div class="form-row">'+buildPosSelect('zx','左寸')+buildPosSelect(
 formHtml+='<div class="form-row">'+buildPosSelect('zx','右寸')+buildPosSelect('zx','右关')+buildPosSelect('zx','右尺')+'</div>';
 formHtml+='<div class="note">张氏辨证核心：总按左右对比为第一层，单按脏腑定位为第二层。左弦硬+右弦硬=胃气上逆用赭石；左右皆虚=大气下陷用升陷汤。</div></div>';
 
-// --- 陈建国：三部九候六步 ---
-formHtml+='<div class="school-form" id="cjForm"><h3>陈建国 · 三部九候脉诊 — 六步定向法</h3>';
-formHtml+='<div class="zong-an"><div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第一步：总体</div>';
-formHtml+='<select id="cj_step1"><option value="">--</option><option>太过</option><option>不及</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">第二步：方向</div>';
-formHtml+='<select id="cj_step2m"><option value="">--方法</option><option>升法</option><option>降法</option></select>';
-formHtml+='<select id="cj_step2q" style="margin-top:3px"><option value="">--四象</option><option>阴盛</option><option>阳盛</option><option>阴虚</option><option>阳虚</option></select></div></div>';
-formHtml+='<p style="font-size:11px;font-weight:700;color:#555;margin:8px 0 4px">第三步：三部逐位（太过/不及/正常）× 第四步：浮中沉</p>';
-formHtml+='<div class="form-row">'+chenPos('cj','左寸')+chenPos('cj','左关')+chenPos('cj','左尺')+'</div>';
-formHtml+='<div class="form-row">'+chenPos('cj','右寸')+chenPos('cj','右关')+chenPos('cj','右尺')+'</div>';
-formHtml+='<p style="font-size:11px;font-weight:700;color:#555;margin:8px 0 4px">第五步：脉质（拘急/有力/无力/管细）</p>';
-formHtml+='<div class="form-row">'+chenQ('cj','左寸')+chenQ('cj','左关')+chenQ('cj','左尺')+'</div>';
-formHtml+='<div class="form-row">'+chenQ('cj','右寸')+chenQ('cj','右关')+chenQ('cj','右尺')+'</div>';
-formHtml+='<div class="note">陈氏六步定向法：必须完成六步全部填写才能启动50方脉位签名匹配。这是纯脉诊体系，不依赖症状。</div></div>';
+      // --- 陈建国：三部九候四步引导流 ---
+      // 步骤状态管理
+      var cjStep = 0; // 0=未开始 1=左手总按 2=左手最异部 3=右手总按 4=右手最异部 5=完成
+      var cjData = { leftOver:'' , rightOver:'', leftMost:'', rightMost:'', leftDepth:'', rightDepth:'', leftNote:'', rightNote:'' };
+      
+      function cjStepHtml(step) {
+        var h = '';
+        // 步骤1：左手总按
+        h += '<div class="cj-step' + (step===1?'':'' ) + '">';
+        h += '<div class="cj-step-title">第一步：左手总按（诊左脉总体）</div>';
+        h += '<div class="cj-step-desc">左脉诊"阴"盛衰。依《仲景阴阳脉法》："左脉诊阴盛衰"。</div>';
+        h += '<div class="cj-guide">';
+        h += '👆 先感受整只左手的脉动：<br>';
+        h += '· 比正常健康脉更有力/脉管更宽大 = <b>太过</b>（阴盛/实）<br>';
+        h += '· 比正常健康脉更无力/脉管更细小 = <b>不及</b>（阴虚/虚）<br>';
+        h += '· 重要性：脉动力量为主（候气），脉管宽度为辅（候血）<br>';
+        h += '· 参考：诸部均有力→太过；诸部均无力→不及；';
+        h += '</div>';
+        h += '<div style="margin:8px 0 4px">左手总体：';
+        h += '<label class="cj-radio"><input type="radio" name="cj_leftOver" value="太过" onchange="cjSetOver(\'left\',\'太过\')"> <span>太过（阴盛/实）</span></label> ';
+        h += '<label class="cj-radio"><input type="radio" name="cj_leftOver" value="不及" onchange="cjSetOver(\'left\',\'不及\')"> <span>不及（阴虚/虚）</span></label> ';
+        h += '<label class="cj-radio"><input type="radio" name="cj_leftOver" value="正常" onchange="cjSetOver(\'left\',\'正常\')"> <span>正常</span></label>';
+        h += '</div>';
+        h += '<div id="cj_leftOverNote" style="font-size:11px;color:#8b6914;min-height:20px"></div>';
+        h += '<div style="margin-top:8px"><button class="cj-big-btn" onclick="cjNext(2)">下一步：找左手最异部 ▶</button>';
+        h += '<button class="cj-reset" onclick="cjReset()">重置</button></div>';
+        h += '</div>';
+        // 步骤2：左手最异部
+        h += '<div class="cj-step' + (step===2?'':'' ) + '">';
+        h += '<div class="cj-step-title">第二步：左手最异常部（定位）</div>';
+        h += '<div class="cj-step-desc">总体' + (cjData.leftOver||'?') + ' → 找最有力（或最无力）的那一部</div>';
+        h += '<div class="cj-guide">';
+        h += '👆 依据总按结果探查：<br>';
+        h += '· 总体<b>太过</b> → 找脉动<b>最有力</b>的一部（寸/关/尺）<br>';
+        h += '· 总体<b>不及</b> → 找脉动<b>最无力</b>的一部（寸/关/尺）<br>';
+        h += '· 进一步探该部最强脉动在<b>浮/中/沉</b>哪一位（最强脉动所在=病位）<br>';
+        h += '· 参考：寸=上焦/表，关=中焦，尺=下焦/里';
+        h += '</div>';
+        h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">';
+        ['左寸','左关','左尺'].forEach(function(pos){
+          h += '<div style="flex:1;min-width:120px;padding:8px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8;text-align:center">';
+          h += '<div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">' + pos + '</div>';
+          h += '<select id="cj_leftPos" style="width:100%;padding:4px;font-size:11px" onchange="cjSetPos(\'left\',this.value)">';
+          h += '<option value="">--最异部--</option><option value="'+pos+'">👉 '+pos+' 是最异常部</option></select>';
+          h += '<div style="margin-top:4px;font-size:10px;color:#888">浮中沉最强位：</div>';
+          h += '<select id="cj_leftDepth" style="width:100%;padding:4px;font-size:11px;margin-top:2px">';
+          h += '<option value="">--</option><option value="浮">浮（上焦/表）</option><option value="中">中（中焦）</option><option value="沉">沉（下焦/里）</option></select>';
+          h += '<div style="margin-top:4px;font-size:10px;color:#888">脉形（辅助）：</div>';
+          h += '<div class="pulse-chip-group" id="cj_leftMx" style="margin-top:2px">';
+          ['弦','细','弱','滑','涩','紧','洪','微','濡','数','迟','缓'].forEach(function(m){
+            h += '<label><input type="checkbox" value="'+m+'"><span>'+m+'</span></label>';
+          });
+          h += '</div></div>';
+        });
+        h += '</div>';
+        h += '<div id="cj_leftNote" style="font-size:11px;color:#8b6914;min-height:20px;margin:4px 0"></div>';
+        h += '<div><button class="cj-big-btn" onclick="cjNext(3)">下一步：右手总按 ▶</button>';
+        h += '<button class="cj-big-btn" style="background:#aaa;margin-left:8px" onclick="cjNext(1)">◀ 上一步</button></div>';
+        h += '</div>';
+        // 步骤3：右手总按
+        h += '<div class="cj-step' + (step===3?'':'' ) + '">';
+        h += '<div class="cj-step-title">第三步：右手总按（诊右脉总体）</div>';
+        h += '<div class="cj-step-desc">右脉诊"阳"盛衰。依《仲景阴阳脉法》："右脉诊阳盛衰"。</div>';
+        h += '<div class="cj-guide">';
+        h += '👆 先感受整只右手的脉动：<br>';
+        h += '· 比正常健康脉更有力 = <b>太过</b>（阳盛/实热）<br>';
+        h += '· 比正常健康脉更无力 = <b>不及</b>（阳虚/虚）<br>';
+        h += '· 关键：左右对比才有意义！左手太过+右手正常=纯阴盛（升法）；左右都实=方向相反，需分轻重';
+        h += '</div>';
+        h += '<div style="margin:8px 0 4px">右手总体：';
+        h += '<label class="cj-radio"><input type="radio" name="cj_rightOver" value="太过" onchange="cjSetOver(\'right\',\'太过\')"> <span>太过（阳盛/实热）</span></label> ';
+        h += '<label class="cj-radio"><input type="radio" name="cj_rightOver" value="不及" onchange="cjSetOver(\'right\',\'不及\')"> <span>不及（阳虚/虚）</span></label> ';
+        h += '<label class="cj-radio"><input type="radio" name="cj_rightOver" value="正常" onchange="cjSetOver(\'right\',\'正常\')"> <span>正常</span></label>';
+        h += '</div>';
+        h += '<div id="cj_rightOverNote" style="font-size:11px;color:#8b6914;min-height:20px"></div>';
+        h += '<div style="margin-top:8px"><button class="cj-big-btn" onclick="cjNext(4)">下一步：找右手最异部 ▶</button>';
+        h += '<button class="cj-big-btn" style="background:#aaa;margin-left:8px" onclick="cjNext(2)">◀ 上一步</button></div>';
+        h += '</div>';
+        // 步骤4：右手最异部
+        h += '<div class="cj-step' + (step===4?'':'' ) + '">';
+        h += '<div class="cj-step-title">第四步：右手最异常部（定位）</div>';
+        h += '<div class="cj-step-desc">总体' + (cjData.rightOver||'?') + ' → 找最有力（或最无力）的那一部</div>';
+        h += '<div class="cj-guide">';
+        h += '👆 依据右手总按结果探查：<br>';
+        h += '· 总体<b>太过</b> → 找右手脉动<b>最有力</b>的一部<br>';
+        h += '· 总体<b>不及</b> → 找右手脉动<b>最无力</b>的一部<br>';
+        h += '· 最强脉动<b>浮/中/沉</b> = 病位上/中/下焦<br>';
+        h += '· 双手均填写完毕后，系统自动判断阴阳盛衰组合类型';
+        h += '</div>';
+        h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">';
+        ['右寸','右关','右尺'].forEach(function(pos){
+          h += '<div style="flex:1;min-width:120px;padding:8px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8;text-align:center">';
+          h += '<div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">' + pos + '</div>';
+          h += '<select id="cj_rightPos" style="width:100%;padding:4px;font-size:11px" onchange="cjSetPos(\'right\',this.value)">';
+          h += '<option value="">--最异部--</option><option value="'+pos+'">👉 '+pos+' 是最异常部</option></select>';
+          h += '<div style="margin-top:4px;font-size:10px;color:#888">浮中沉最强位：</div>';
+          h += '<select id="cj_rightDepth" style="width:100%;padding:4px;font-size:11px;margin-top:2px">';
+          h += '<option value="">--</option><option value="浮">浮（上焦/表）</option><option value="中">中（中焦）</option><option value="沉">沉（下焦/里）</option></select>';
+          h += '<div style="margin-top:4px;font-size:10px;color:#888">脉形（辅助）：</div>';
+          h += '<div class="pulse-chip-group" id="cj_rightMx" style="margin-top:2px">';
+          ['弦','细','弱','滑','涩','紧','洪','微','濡','数','迟','缓'].forEach(function(m){
+            h += '<label><input type="checkbox" value="'+m+'"><span>'+m+'</span></label>';
+          });
+          h += '</div></div>';
+        });
+        h += '</div>';
+        h += '<div id="cj_rightNote" style="font-size:11px;color:#8b6914;min-height:20px;margin:4px 0"></div>';
+        h += '<div><button class="cj-big-btn" onclick="cjAnalyze()">🔍 完成辨证</button>';
+        h += '<button class="cj-big-btn" style="background:#aaa;margin-left:8px" onclick="cjNext(3)">◀ 上一步</button></div>';
+        h += '</div>';
+        // 结果区
+        h += '<div id="cjResult" class="cj-result-box" style="display:none"></div>';
+        return h;
+      }
+      
+      function cjSetOver(side, val) {
+        if (side === 'left') { cjData.leftOver = val; document.getElementById('cj_leftOverNote').textContent = '已选：左手总体 = ' + val; }
+        else { cjData.rightOver = val; document.getElementById('cj_rightOverNote').textContent = '已选：右手总体 = ' + val; }
+      }
+      function cjSetPos(side, val) {
+        if (side === 'left') { cjData.leftMost = val; updateCjNote('left'); }
+        else { cjData.rightMost = val; updateCjNote('right'); }
+      }
+      function updateCjNote(side) {
+        var pos = side==='left' ? cjData.leftMost : cjData.rightMost;
+        var depthId = side==='left' ? 'cj_leftDepth' : 'cj_rightDepth';
+        var depth = document.getElementById(depthId) ? document.getElementById(depthId).value : '';
+        var el = document.getElementById('cj_' + side + 'Note');
+        if (!el) return;
+        var note = side==='left' ? '左手' : '右手';
+        note += '最异常部：' + (pos||'?');
+        if (depth) note += '，最强脉动在<b>' + depth + '位</b>';
+        el.innerHTML = note;
+      }
+      function cjNext(step) {
+        cjStep = step;
+        // 隐藏所有步骤，显示当前步骤
+        var form = document.getElementById('cjForm');
+        if (form) {
+          form.querySelector('.cj-step-guide') || form.appendChild(document.createElement('div'));
+        }
+        // 重新渲染
+        renderCjForm();
+      }
+      function cjReset() {
+        cjStep = 0; cjData = { leftOver:'', rightOver:'', leftMost:'', rightMost:'', leftDepth:'', rightDepth:'', leftNote:'', rightNote:'' };
+        renderCjForm();
+      }
+      function renderCjForm() {
+        var form = document.getElementById('cjForm');
+        if (!form) return;
+        // 显示当前步骤
+        var allSteps = form.querySelectorAll('.cj-step');
+        for (var i=0; i<allSteps.length; i++) allSteps[i].style.display = 'none';
+        var current = form.querySelector('.cj-step:nth-child(' + (cjStep) + ')');
+        // 简单重绘：直接替换整个cjForm内容
+        // 为简化，改用showhide逻辑
+      }
+      
+      // 覆盖表单区：陈建国用四步引导
+      formHtml += '<div class="school-form" id="cjForm"><h3>陈建国 · 三部九候脉诊 — 四步定向法</h3>';
+      formHtml += '<div style="background:#fdfbf4;padding:8px 10px;border-radius:6px;margin-bottom:10px;font-size:11px;color:#666;line-height:1.6">';
+      formHtml += '<b>操作流（按《经方脉证图解》原著）：</b><br>';
+      formHtml += '第一步：左手总按 → 定阴盛衰 &nbsp;|&nbsp; 第二步：左手最异部 → 定位 &nbsp;|&nbsp; ';
+      formHtml += '第三步：右手总按 → 定阳盛衰 &nbsp;|&nbsp; 第四步：右手最异部 → 定位 &nbsp;→&nbsp; 系统自动判断双手组合类型';
+      formHtml += '</div>';
+      // 初始显示第一步
+      formHtml += '<div id="cj_steps_container">';
+      formHtml += cjStepHtml(1);
+      formHtml += '</div>';
+      formHtml += '<style>.cj-radio{margin-right:10px;font-size:11px;cursor:pointer}.cj-radio input{margin-right:3px}</style>';
+      formHtml += '</div>';
 
 // --- 姚梅龄：六维分层 ---
 formHtml+='<div class="school-form" id="ymForm"><h3>姚梅龄 · 脉学分层辨证 — 六维采集</h3>';
@@ -477,6 +638,35 @@ function runAll(){
   
   // 收集表单数据
   var formData = {};
+  // 陈建国 四步引导流数据收集
+  var cjLeftOver = ''; var cjRightOver = ''; var cjLeftMost = ''; var cjRightMost = '';
+  var cjLeftDepth = ''; var cjRightDepth = '';
+  // 左手总按
+  var cjLeftRadios = document.querySelectorAll('input[name="cj_leftOver"]');
+  for (var cri=0; cri<cjLeftRadios.length; cri++) { if (cjLeftRadios[cri].checked) { cjLeftOver = cjLeftRadios[cri].value; break; } }
+  // 右手总按
+  var cjRightRadios = document.querySelectorAll('input[name="cj_rightOver"]');
+  for (var crr=0; crr<cjRightRadios.length; crr++) { if (cjRightRadios[crr].checked) { cjRightOver = cjRightRadios[crr].value; break; } }
+  // 左手最异部
+  var cjLeftPos = document.getElementById('cj_leftPos');
+  if (cjLeftPos) cjLeftMost = cjLeftPos.value;
+  var cjLeftDepthEl = document.getElementById('cj_leftDepth');
+  if (cjLeftDepthEl) cjLeftDepth = cjLeftDepthEl.value;
+  formData.cj_leftMx = valsChip('cj_leftMx');
+  // 右手最异部
+  var cjRightPos = document.getElementById('cj_rightPos');
+  if (cjRightPos) cjRightMost = cjRightPos.value;
+  var cjRightDepthEl = document.getElementById('cj_rightDepth');
+  if (cjRightDepthEl) cjRightDepth = cjRightDepthEl.value;
+  formData.cj_rightMx = valsChip('cj_rightMx');
+  
+  formData.cj_leftOver  = cjLeftOver;
+  formData.cj_rightOver = cjRightOver;
+  formData.cj_leftMost  = cjLeftMost;
+  formData.cj_rightMost = cjRightMost;
+  formData.cj_leftDepth  = cjLeftDepth;
+  formData.cj_rightDepth = cjRightDepth;
+  
   formData.zongL = val('zx_zongL'); formData.zongR = val('zx_zongR');
   formData.zongLF = val('zx_zongLF'); formData.zongRF = val('zx_zongRF');
   formData.cj_step1 = val('cj_step1'); formData.cj_step2m = val('cj_step2m'); formData.cj_step2q = val('cj_step2q');

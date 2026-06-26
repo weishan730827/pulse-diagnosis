@@ -1,0 +1,244 @@
+[
+  {
+    "name": "陈建国三部九候脉诊签名库（50方）",
+    "version": "1.0",
+    "source": "《经方脉证图解》陈建国 著，50方原文逐条提取",
+    "theory": {
+      "overview": "左脉诊'阴'盛衰，右脉诊'阳'盛衰。实则左升右降，虚则右升左降。",
+      "step1": "总按定左右总体：左手总体太过/不及 → 阴盛/阳虚；右手总体太过/不及 → 阳盛/阴虚",
+      "step2": "总体太过→找最有力的一部（寸/关/尺）；总体不及→找最无力的一部",
+      "step3": "最强脉动所在位置的浮/中/沉 → 定病位上中下焦",
+      "step4": "双手组合判断12种病机类型，锁定治法方向"
+    },
+    "signatures": [
+      /* ===== 第一章 单手太过不及 ===== */
+      /* 第一节 阴盛（升法、实寒）*/
+      {
+        "id": "CJ_001", "formula": "麻黄汤", "chapter": "第一章第一节",
+        "yinyang": "阴盛", "zhifa": "升法（汗法）",
+        "bingji": "实寒证（上焦/表）",
+        "left_overall": "太过", "right_overall": "正常或不及",
+        "most_abnormal_side": "左",
+        "most_abnormal_position": "左寸",
+        "strongest_depth": "浮位",
+        "pulse_note": "左寸浮位最有力，脉管壁拘急（紧）。左手寸关尺均偏浮紧，但左寸最突出。双侧对比左较右有力。",
+        "key_symptom": ["发热","恶寒","头痛","身痛","无汗"]
+      },
+      {
+        "id": "CJ_002", "formula": "小柴胡汤", "chapter": "第一章第一节",
+        "yinyang": "阴盛", "zhifa": "升法（行气解结）",
+        "bingji": "气滞证（中焦）",
+        "left_overall": "太过", "right_overall": "正常或不及",
+        "most_abnormal_side": "左",
+        "most_abnormal_position": "左关",
+        "strongest_depth": "中位",
+        "pulse_note": "左关中位最有力，范围局限如'绿豆'，应指向上弹手（弦）。左寸、尺反而较无力，似气血汇聚于关部。",
+        "key_symptom": ["口苦","咽干","目眩","胸胁苦满","默默不欲饮食","心烦喜呕"]
+      },
+      {
+        "id": "CJ_003", "formula": "麻黄细辛附子汤", "chapter": "第一章第一节",
+        "yinyang": "阴盛", "zhifa": "升法（温散）",
+        "bingji": "实寒证（下焦）",
+        "left_overall": "太过（诸脉沉而无力，唯左尺沉位有力）", "right_overall": "不及",
+        "most_abnormal_side": "左",
+        "most_abnormal_position": "左尺",
+        "strongest_depth": "沉位",
+        "pulse_note": "左手总体沉而无力，但左尺沉位触及一个显著有力的太过脉（沉紧/沉弦）。右手总体不及。",
+        "key_symptom": ["恶寒","疲倦","腰痛","下肢冷凉"]
+      },
+      {
+        "id": "CJ_004", "formula": "瓜蒂散", "chapter": "第一章第一节",
+        "yinyang": "阴盛", "zhifa": "升法（吐法）",
+        "bingji": "食积/水饮证（上焦）",
+        "left_overall": "太过", "right_overall": "正常",
+        "most_abnormal_side": "左",
+        "most_abnormal_position": "左寸",
+        "strongest_depth": "浮位+中位均有",
+        "pulse_note": "左手寸部浮位、中位均有力太过（滑/数/紧）。浮位及中位均有力，从浮到中依次减弱。",
+        "key_symptom": ["心烦","腹胀","恶心","胸满"]
+      },
+      /* 第二节 阳盛（降法、实热）*/
+      {
+        "id": "CJ_005", "formula": "栀子豉汤", "chapter": "第一章第二节",
+        "yinyang": "阳盛", "zhifa": "降法（清降）",
+        "bingji": "实热证（上焦）",
+        "left_overall": "正常或不及", "right_overall": "太过",
+        "most_abnormal_side": "右",
+        "most_abnormal_position": "右寸",
+        "strongest_depth": "浮位/中位",
+        "pulse_note": "右手寸部太过脉，可以表现为溢脉（超出腕横纹）。右寸浮位/中位最有力。",
+        "key_symptom": ["虚烦不得眠","心中懊憹","胸中窒","心中结痛"]
+      },
+      {
+        "id": "CJ_006", "formula": "白虎汤", "chapter": "第一章第二节",
+        "yinyang": "阳盛", "zhifa": "降法（清下）",
+        "bingji": "实热证（中焦）",
+        "left_overall": "正常或不及（偏细）", "right_overall": "太过",
+        "most_abnormal_side": "右",
+        "most_abnormal_position": "右关",
+        "strongest_depth": "中位（最强），浮位次之",
+        "pulse_note": "右手关部中位最有力（滑数）。右手寸关尺均太过，但以右关中位最突出。浮位也能触及，但中位更有力。",
+        "key_symptom": ["大热","多汗","口渴","心烦"]
+      },
+      {
+        "id": "CJ_007", "formula": "大承气汤", "chapter": "第一章第二节",
+        "yinyang": "阳盛", "zhifa": "降法（攻下）",
+        "bingji": "实热证（下焦）",
+        "left_overall": "不及（初触似微）", "right_overall": "太过",
+        "most_abnormal_side": "右",
+        "most_abnormal_position": "右尺",
+        "strongest_depth": "沉位",
+        "pulse_note": "右手关/尺部沉位最有力（沉紧/沉数/沉滑）。初触似微脉（邪深），重按至骨方得有力沉位脉动。双侧对比右较左远为有力。",
+        "key_symptom": ["潮热","谵语","腹满硬痛","不大便"]
+      },
+      {
+        "id": "CJ_008", "formula": "抵当汤", "chapter": "第一章第二节",
+        "yinyang": "阳盛", "zhifa": "降法（攻瘀）",
+        "bingji": "血瘀证（下焦）",
+        "left_overall": "不及", "right_overall": "太过",
+        "most_abnormal_side": "右",
+        "most_abnormal_position": "右尺",
+        "strongest_depth": "沉位",
+        "pulse_note": "右手尺部沉位太过脉，脉象沉涩（指下沙粒感）。双侧尺部均可触及，右尺更有力。",
+        "key_symptom": ["少腹胀满","如狂","大便色黑","月经瘀阻"]
+      },
+      /* 第三节 阴虚（降法、虚热）*/
+      {
+        "id": "CJ_009", "formula": "麦门冬汤", "chapter": "第一章第三节",
+        "yinyang": "阴虚", "zhifa": "降法（养阴降逆）",
+        "bingji": "阴虚/津液虚证（上焦）",
+        "left_overall": "不及（脉细，左寸尤甚）", "right_overall": "正常或不及",
+        "most_abnormal_side": "左",
+        "most_abnormal_position": "左寸",
+        "strongest_depth": "浮位（最无力）",
+        "pulse_note": "左手总体不及，左寸部如'塌陷'感（最无力）。可伴左寸溢脉（细而无力）。左寸<左关<左尺（力度递减）。",
+        "key_symptom": ["咳嗽","口干","咽干","咽喉不利","面红"]
+      },
+      {
+        "id": "CJ_010", "formula": "甘麦大枣汤", "chapter": "第一章第三节",
+        "yinyang": "阴虚", "zhifa": "降法（养阴安神）",
+        "bingji": "血虚证（中焦）",
+        "left_overall": "不及（左关尤甚）", "right_overall": "正常或不及",
+        "most_abnormal_side": "左",
+        "most_abnormal_position": "左关",
+        "strongest_depth": "中位（最无力）",
+        "pulse_note": "左手总体不及，左关中位如'塌陷'感。血虚则左手脉细。",
+        "key_symptom": ["容易紧张","喜悲伤欲哭","数欠伸"]
+      },
+      {
+        "id": "CJ_011", "formula": "百合地黄汤", "chapter": "第一章第三节",
+        "yinyang": "阴虚", "zhifa": "降法（养阴清热）",
+        "bingji": "阴虚/津液虚证（下焦）",
+        "left_overall": "不及（脉细，左尺尤甚）", "right_overall": "正常或不及",
+        "most_abnormal_side": "左",
+        "most_abnormal_position": "左尺",
+        "strongest_depth": "沉位（最无力）",
+        "pulse_note": "左手总体不及，左尺沉位最无力（如塌陷）。可伴左寸浮脉/溢脉（虚热上扰），但寸部力量未超过正常健康脉。",
+        "key_symptom": ["失眠","口苦","口干","小便黄"]
+      },
+      {
+        "id": "CJ_012", "formula": "乌梅丸", "chapter": "第一章第三节",
+        "yinyang": "阴虚", "zhifa": "降中有升（解结）",
+        "bingji": "气滞证（中焦，阴虚基础上）",
+        "left_overall": "不及", "right_overall": "不及",
+        "most_abnormal_side": "左（相对有力）",
+        "most_abnormal_position": "左关",
+        "strongest_depth": "中位（相对最有力但未超过正常）",
+        "pulse_note": "双手总体不及，左关中位相对最有力（但未超过正常健康脉）。也可双侧关部均相对明显，但左关 > 右关。",
+        "key_symptom": ["胃脘满闷","呕吐","烦躁","失眠","腹泻"]
+      },
+      /* 第四节 阳虚（升法、虚寒）*/
+      {
+        "id": "CJ_013", "formula": "甘草干姜汤", "chapter": "第一章第四节",
+        "yinyang": "阳虚", "zhifa": "升法（温补）",
+        "bingji": "气虚/阳虚证（上焦）",
+        "left_overall": "正常或不及", "right_overall": "不及（右寸尤甚）",
+        "most_abnormal_side": "右",
+        "most_abnormal_position": "右寸",
+        "strongest_depth": "浮位/中位（最无力）",
+        "pulse_note": "右手总体不及，右寸部如'塌陷'感（最无力）。关/尺部可正常或轻微不及。",
+        "key_symptom": ["遗尿","小便数","腹部恶寒","便溏"]
+      },
+      {
+        "id": "CJ_014", "formula": "理中汤", "chapter": "第一章第四节",
+        "yinyang": "阳虚", "zhifa": "升法（温补）",
+        "bingji": "阳虚/气虚证（中焦）",
+        "left_overall": "不及", "right_overall": "不及（右关尤甚）",
+        "most_abnormal_side": "右",
+        "most_abnormal_position": "右关",
+        "strongest_depth": "中位（最无力）",
+        "pulse_note": "右手总体不及，右关中位最无力。若兼水饮，右关可相对最有力（但仍≤正常健康脉），脉管边界不清（濡）或弦。",
+        "key_symptom": ["心下痞","大便溏","胸痹","喜唾"]
+      },
+      {
+        "id": "CJ_015", "formula": "四逆汤", "chapter": "第一章第四节",
+        "yinyang": "阳虚", "zhifa": "升法（温补）",
+        "bingji": "阳虚证（下焦）",
+        "left_overall": "不及", "right_overall": "不及（右尺尤甚）",
+        "most_abnormal_side": "右",
+        "most_abnormal_position": "右尺",
+        "strongest_depth": "沉位（最无力）",
+        "pulse_note": "右手总体不及，右尺沉位最无力（如塌陷），部分患者几乎探查不到右尺脉动。重按亦无力。",
+        "key_symptom": ["恶寒","下利","手足厥冷","但欲寐"]
+      },
+      /* ===== 第二章 双手太过不及组合 ===== */
+      /* 第一节 一实一虚，方向相同 */
+      {
+        "id": "CJ_016", "formula": "桂枝加附子汤", "chapter": "第二章第一节",
+        "combo_type": "左手太过 + 右手不及（阴盛为主，阳虚为次）",
+        "yinyang": "阴盛+阳虚", "zhifa": "升法（温散+温补）",
+        "bingji": "实寒兼阳虚（表兼下焦）",
+        "left_overall": "太过（左寸浮缓）", "right_overall": "不及（右尺尤甚）",
+        "key_symptom": ["汗漏不止","恶风","小便难","四肢拘急","四肢厥冷"]
+      },
+      {
+        "id": "CJ_017", "formula": "桂枝人参汤", "chapter": "第二章第一节",
+        "combo_type": "右手不及 + 左手太过（阳虚为主，阴盛为次）",
+        "yinyang": "阳虚+阴盛", "zhifa": "升法（温补+温散）",
+        "bingji": "阳虚兼实寒（中焦兼表）",
+        "left_overall": "太过（左寸浮）", "right_overall": "不及（右关尤甚）",
+        "key_symptom": ["腹利","心下痞硬","表证未解"]
+      },
+      {
+        "id": "CJ_018", "formula": "麻子仁丸", "chapter": "第二章第一节",
+        "combo_type": "右手太过 + 左手不及（阳盛为主，阴虚为次）",
+        "yinyang": "阳盛+阴虚", "zhifa": "降法（润肠攻下）",
+        "bingji": "实热兼阴虚（下焦）",
+        "left_overall": "不及（左尺细）", "right_overall": "太过（右尺沉滑）",
+        "key_symptom": ["大便硬","小便数","趺阳脉浮涩"]
+      },
+      {
+        "id": "CJ_019", "formula": "黄连阿胶汤", "chapter": "第二章第一节",
+        "combo_type": "左手不及 + 右手太过（阴虚为主，阳盛为次）",
+        "yinyang": "阴虚+阳盛", "zhifa": "降法（养阴清热）",
+        "bingji": "阴虚兼实热（下焦）",
+        "left_overall": "不及（左尺细）", "right_overall": "太过（右寸/关数）",
+        "key_symptom": ["心中烦","不得卧","手足心热"]
+      },
+      /* 第二节 左右都实，方向相反 */
+      {
+        "id": "CJ_020", "formula": "大柴胡汤", "chapter": "第二章第二节",
+        "combo_type": "左右都实，方向相反（左关实+右关实）",
+        "yinyang": "阴盛+阳盛", "zhifa": "升降并行（和解+攻下）",
+        "bingji": "气滞兼实热（中焦+下焦）",
+        "left_overall": "太过（左关中位弦）", "right_overall": "太过（右关/尺沉位有力）",
+        "key_symptom": ["呕不止","心下急","郁郁微烦","不大便"]
+      },
+      /* 第三节 左右都虚，方向相反 */
+      {
+        "id": "CJ_021", "formula": "肾气丸", "chapter": "第二章第三节",
+        "combo_type": "左右都虚，方向相反（左尺虚+右尺虚，但右尺相对更无力）",
+        "yinyang": "阴虚+阳虚", "zhifa": "升降并用（温补下焦+化气利小便）",
+        "bingji": "阴虚兼阳虚（下焦）",
+        "left_overall": "不及（左尺细）", "right_overall": "不及（右尺微）",
+        "key_symptom": ["腰痛","小便不利","消渴","畏寒肢冷"]
+      },
+      /* 注：原文50方尚未完全读完，以上为已读部分的完整签名。
+             剩余方剂将按相同格式补充。*/
+      /* ===== 暂用规则引擎覆盖的方剂（待补充完整脉证签名）===== */
+      {
+        "id": "CJ_050", "formula": "待补充", "note": "《经方脉证图解》原文 reading 进行中，剩余方剂将逐条补充至此文件。"
+      }
+    ]
+  }
+]

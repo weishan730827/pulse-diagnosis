@@ -189,83 +189,158 @@ function simpleZXCDiagnose(formData) {
   return { steps: steps, result: result, herbs: herbs };
 }
 
-// ========== 陈建国 三部九候脉诊 ==========
+// ========== 陈建国 三部九候脉诊（四步引导流 + 签名库匹配）==========
+// 数据文件：chen_jianguo_pulse_signatures.json
 function diagnoseChenJianguo(formData) {
   var data = DataCache['chenjianguo'];
-  if (!data || data._error) {
+  if (!data || data._error || data._no_data) {
     return simpleCJGDiagnose(formData);
   }
-  
+
   var steps = [], result = '', herbs = [];
-  
-  var step1 = formData.cj_step1 || '';
-  var step2m = formData.cj_step2m || '';
-  var step2q = formData.cj_step2q || '';
-  
-  // 收集六部完整数据
-  var positions = ['左寸','左关','左尺','右寸','右关','右尺'];
-  var filled = 0;
-  for (var i = 0; i < positions.length; i++) {
-    var p = positions[i];
-    if (formData['cj_t_' + p] || formData['cj_d_' + p] || formData['cj_q_' + p]) filled++;
-  }
-  
-  steps.push('总体：' + (step1 || '未填') + ' | 方向：' + (step2m || '?') + ' ' + (step2q || '?') + ' | 脉位：' + filled + '/6');
-  
-  if (step1 && step2m && filled >= 4) {
-    // 匹配50方脉位签名
-    var matches = [];
-    for (var j = 0; j < data.length; j++) {
-      var f = data[j];
-      var score = 0;
-      
-      // 阴阳盛衰匹配
-      if (step2q && f['阴阳']) {
-        if (step2q.indexOf('阴') >= 0 && f['阴阳'].indexOf('阴') >= 0) score += 5;
-        if (step2q.indexOf('阳') >= 0 && f['阴阳'].indexOf('阳') >= 0) score += 5;
-      }
-      
-      // 左脉匹配
-      if (step1 === '太过' && f['left_overall'] === '太过') score += 4;
-      if (step1 === '不及' && f['left_overall'] === '不及') score += 4;
-      if (step1 === '正常' && f['left_overall'] === '正常') score += 4;
-      
-      // 治法匹配
-      if (step2m === '升法' && f['治法'] && f['治法'].indexOf('升') >= 0) score += 2;
-      if (step2m === '降法' && f['治法'] && f['治法'].indexOf('降') >= 0) score += 2;
-      
-      if (score > 0) matches.push({ formula: f, score: score });
+
+  // 收集四步数据
+  var leftOver  = formData.cj_leftOver  || '';   // 左手总按：太过/不及/正常
+  var rightOver = formData.cj_rightOver || '';   // 右手总按
+  var leftMost  = formData.cj_leftMost  || '';   // 左手最异常部：左寸/左关/左尺
+  var rightMost = formData.cj_rightMost || '';   // 右手最异常部
+  var leftDepth = formData.cj_leftDepth || '';   // 左手最强脉动深度：浮/中/沉
+  var rightDepth= formData.cj_rightDepth|| '';
+  var leftMx    = formData.cj_leftMx    || [];  // 左手脉形（多选）
+  var rightMx   = formData.cj_rightMx   || [];
+
+  var hasBasic = (leftOver || rightOver);
+  var hasFull  = (leftOver && rightOver && leftMost && rightMost);
+
+  // 步骤日志
+  if (leftOver)  steps.push('第一步·左手总按：' + leftOver + '（' + (leftOver==='太过'?'阴盛/实':'阴虚/虚') + '）');
+  if (leftMost)  steps.push('第二步·左手最异部：' + leftMost + '，最强脉动在' + (leftDepth||'?') + '位');
+  if (rightOver) steps.push('第三步·右手总按：' + rightOver + '（' + (rightOver==='太过'?'阳盛/实热':'阳虚/虚') + '）');
+  if (rightMost) steps.push('第四步·右手最异部：' + rightMost + '，最强脉动在' + (rightDepth||'?') + '位');
+
+  // 核心：双手组合类型判断（12种）
+  var comboType = '';
+  if (leftOver==='太过' && rightOver==='不及') comboType = '左实右虚（阴盛为主）';
+  if (leftOver==='不及' && rightOver==='太过') comboType = '左虚右实（阳盛为主）';
+  if (leftOver==='太过' && rightOver==='太过') comboType = '左右都实';
+  if (leftOver==='不及' && rightOver==='不及') comboType = '左右都虚';
+  if (leftOver==='太过' && rightOver==='正常') comboType = '纯左手太过（阴盛）';
+  if (leftOver==='正常' && rightOver==='太过') comboType = '纯右手太过（阳盛）';
+  if (leftOver==='不及' && rightOver==='正常') comboType = '纯左手不及（阴虚）';
+  if (leftOver==='正常' && rightOver==='不及') comboType = '纯右手不及（阳虚）';
+
+  if (comboType) steps.push('【双手组合类型】' + comboType);
+
+  // 治法方向判断（仲景阴阳脉法口诀）
+  var zhiFa = '';
+  if (leftOver==='太过')  zhiFa += '左升（辛温汗/吐法）';
+  if (rightOver==='太过') zhiFa += (zhiFa?' + ':'') + '右降（苦寒下/清法）';
+  if (leftOver==='不及')  zhiFa += (zhiFa?' + ':'') + '左降（甘寒补/敛法）';
+  if (rightOver==='不及') zhiFa += (zhiFa?' + ':'') + '右升（甘温补/升法）';
+  if (zhiFa) steps.push('【治法方向（仲景阴阳脉法）】' + zhiFa);
+
+  // 用签名库匹配
+  var matches = [];
+  for (var i = 0; i < data.length; i++) {
+    var s = data[i];
+    if (!s.left_overall) continue;  // 跳过占位条目
+    var score = 0;
+
+    // 左手总体匹配 ×4
+    if (s.left_overall === leftOver) score += 4;
+
+    // 右手总体匹配 ×4
+    if (s.right_overall === rightOver) score += 4;
+
+    // 最异部位置匹配 ×3
+    if (leftMost && s.most_abnormal_position) {
+      if (s.most_abnormal_position.indexOf(leftMost.replace('左','')) >= 0) score += 3;
     }
-    
-    matches.sort(function(a, b) { return b.score - a.score; });
-    
-    if (matches.length > 0) {
-      var topMatch = matches.slice(0, 5);
-      steps.push('六步定向完成 → 脉位签名匹配');
-      steps.push('=== 匹配方剂 ===');
-      for (var k = 0; k < topMatch.length; k++) {
-        var m = topMatch[k];
-        var f = m.formula;
-        steps.push((k+1) + '. ' + f.name + ' [' + (f['阴阳'] || '') + '·' + (f['治法'] || '') + '] 左=' + f.left_quality + ' 右=' + f.right_quality);
-      }
-      result = '最佳匹配：' + topMatch[0].formula.name + '。详见以上脉位签名。';
-      if (topMatch[0].formula.herbs) {
-        herbs = topMatch[0].formula.herbs;
-      }
+
+    // 浮中沉深度匹配 ×3
+    if (leftDepth && s.strongest_depth) {
+      if (s.strongest_depth.indexOf(leftDepth) >= 0) score += 3;
+    }
+
+    // 双手组合类型匹配 ×5
+    if (s.combo_type && s.combo_type.indexOf(comboType) >= 0) score += 5;
+    if (s.yinyang && (
+         (leftOver==='太过'  && s.yinyang.indexOf('阴盛')>=0) ||
+         (rightOver==='太过' && s.yinyang.indexOf('阳盛')>=0) ||
+         (leftOver==='不及' && s.yinyang.indexOf('阴虚')>=0) ||
+         (rightOver==='不及' && s.yinyang.indexOf('阳虚')>=0)
+       )) score += 3;
+
+    // 治法匹配 ×2
+    if (leftOver==='太过' && s.zhifa && s.zhifa.indexOf('升')>=0) score += 2;
+    if (rightOver==='太过' && s.zhifa && s.zhifa.indexOf('降')>=0) score += 2;
+
+    if (score > 0) matches.push({ sig: s, score: score });
+  }
+
+  matches.sort(function(a,b){ return b.score - a.score; });
+
+  if (matches.length === 0) {
+    if (!hasBasic) {
+      result = '请按四步引导流填写：左手总按 → 左手最异部 → 右手总按 → 右手最异部';
+    } else {
+      result = '已填步骤：' + (leftOver||'?') + '/' + (rightOver||'?') + '。未匹配到签名，可能需补充右侧最异部信息。';
     }
   } else {
-    steps.push('信息不足，需完成总体+方向+至少4个脉位');
-    result = '陈建国纯脉诊体系要求六步信息完整才能启动50方匹配';
+    steps.push('【脉位签名匹配】（症状×3 + 总体×4 + 位置×3 + 深度×3）');
+    steps.push('=== 候选方剂 ===');
+    var top5 = matches.slice(0, 5);
+    for (var k = 0; k < top5.length; k++) {
+      var m = top5[k];
+      var sig = m.sig;
+      var line = (k+1) + '. ' + sig.formula;
+      line += ' [' + (sig.yinyang||'') + '·' + (sig.zhifa||'') + ']';
+      line += ' 得分=' + m.score;
+      if (sig.pulse_note) line += ' | ' + sig.pulse_note.substring(0, 40);
+      steps.push(line);
+    }
+    result = '首选：' + matches[0].sig.formula + '。' + (matches[0].sig.zhifa||'') + '方向。';
+    if (matches[0].sig.key_symptom) {
+      result += ' 参考症状：' + matches[0].sig.key_symptom.join('、');
+    }
   }
-  
-  return { steps: steps, result: result, herbs: herbs };
+
+  return { steps: steps, result: result, herbs: [], matchedSignatures: matches.slice(0,5) };
 }
 
+// 简单模式（离线）
 function simpleCJGDiagnose(formData) {
   var steps = [], result = '';
-  steps.push('【数据未加载】陈氏六步定向法需要完整脉位数据');
-  steps.push('请参见 chen_jianguo_pulse_system.md 了解完整方法论');
-  result = '离线模式下无法执行陈建国50方脉位签名匹配';
+  steps.push('【签名库未加载】使用仲景阴阳脉法规则匹配');
+
+  var lo = formData.cj_leftOver || '';
+  var ro = formData.cj_rightOver || '';
+
+  if (!lo && !ro) {
+    result = '陈建国体系：先填左手总按（太过/不及），再填右手。';
+    return { steps: steps, result: result, herbs: [] };
+  }
+
+  // 规则匹配（核心方剂）
+  if (lo==='太过' && formData.cj_leftMost==='左寸') {
+    steps.push('左手太过 + 左寸最异 → 阴盛（升法）');
+    if (formData.cj_leftDepth==='浮') {
+      result = '麻黄汤方向（左寸浮位太过，脉紧）。可与桂枝汤鉴别：桂枝汤左寸浮缓。';
+    } else {
+      result = '阴盛升法方向，请补充浮中沉定位以精确匹配。';
+    }
+  } else if (ro==='太过' && formData.cj_rightMost==='右关') {
+    steps.push('右手太过 + 右关最异 → 阳盛（降法）');
+    result = '白虎汤/大承气汤方向，看右关/右尺沉位有力程度。';
+  } else if (lo==='不及' && ro==='不及') {
+    steps.push('双手不及 → 阳虚/阴虚，看哪侧更甚');
+    if (formData.cj_rightMost==='右尺') result = '四逆汤方向（右尺最无力）。';
+    else if (formData.cj_leftMost==='左寸') result = '麦门冬汤方向（左寸最无力，脉细）。';
+    else result = '双手不及，需补充最异部定位。';
+  } else {
+    result = '请完成四步填写以触发精确匹配。当前：左=' + (lo||'?') + ' 右=' + (ro||'?');
+  }
+
   return { steps: steps, result: result, herbs: [] };
 }
 

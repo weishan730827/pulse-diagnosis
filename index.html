@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>九家并列脉诊辨证体系 v6</title>
+<title>九家并列脉诊辨证体系 v7</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f7f4ed;color:#3a2a1a;line-height:1.7}
@@ -150,7 +150,7 @@ var schools = [
   {
     id:'huxishu', name:'胡希恕', system:'六经八纲脉证辨证', era:'近代',
     pulseFields:'three-step-bagang',
-    description:'核心：脉诊三步法定乾坤——浮沉定病位、迟数定寒热、沉取有力无力定虚实。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉精确匹配。',
+    description:'核心：脉诊三步法定乾坤——浮沉定病位、迟数定寒热、沉取有力无力定虚实。缓≠慢（缓=因汗出脉管弛缓），26脉象三分法，103方症候群+特征脉精确匹配。总按为核心诊法，六部分部为辅助参考。',
     formId:'hxForm'
   },
   {
@@ -295,8 +295,8 @@ formHtml+='<div class="form-cell"><label>右手脉</label><select id="cy_right">
 formHtml+='<div class="form-cell"><label>汗出</label><select id="cy_sweat"><option value="">--</option><option>有汗</option><option>无汗</option></select></div></div>';
 formHtml+='<div class="note">曹氏方证对应：左右皆浮+有汗=桂枝汤，左右皆浮+无汗=麻黄汤。左弦右实=大柴胡汤证。病汗药汗鉴别为曹氏特色。</div></div>';
 
-// --- 胡希恕：左右总按 + 六部分部 + 三步法 ---
-formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 六经八纲脉证辨证 — 三部九候八纲分诊</h3>';
+// --- 胡希恕：左右总按 + 六部分部（辅助参考） ---
+formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 六经八纲脉证辨证 — 三步法定乾坤</h3>';
 
 // 左右手总按
 formHtml+='<p style="font-size:11px;font-weight:700;color:#2c1810;margin:0 0 4px">一、左右手总按（三步法）</p>';
@@ -308,10 +308,10 @@ formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-
 formHtml+='<select id="hx_Rfc"><option value="">--浮沉--</option><option value="浮">浮</option><option value="中">中</option><option value="沉">沉</option><option value="伏">伏</option></select>';
 formHtml+='<select id="hx_Rcs" style="margin-top:2px"><option value="">--迟数--</option><option value="数">数</option><option value="迟">迟</option><option value="缓">缓</option></select>';
 formHtml+='<select id="hx_Rld" style="margin-top:2px"><option value="">--力度--</option><option value="有力">有力</option><option value="无力">无力</option></select></div>';
-formHtml+='<div style="font-size:10px;color:#999;padding-top:6px">三步法定乾坤：浮=表，沉=里，中/不浮不沉=半表半里；数=热，迟=寒；有力=实，无力=虚。</div></div>';
+formHtml+='<div style="font-size:10px;color:#999;padding-top:6px">三步法定乾坤：浮=表，沉=里，中/不浮不沉=半表半里；数=热，迟=寒；有力=实，无力=虚。<br>阴阳在仲景脉法中有二义：外浮内沉（第12条阳浮阴弱）或尺寸分部（第3条阴阳俱紧），依条文语境择用。</div></div>';
 
-// 六部分部表
-formHtml+='<p style="font-size:11px;font-weight:700;color:#2c1810;margin:10px 0 4px">二、六部分部脉诊</p>';
+// 六部分部表（辅助参考）
+formHtml+='<p style="font-size:11px;font-weight:700;color:#999;margin:10px 0 4px">二、六部分部脉诊（辅助参考，非核心诊法）</p>';
 formHtml+='<table style="width:100%;font-size:10px;border-collapse:collapse;text-align:center">';
 formHtml+='<tr style="background:#fdfbf7"><th style="padding:4px;border:1px solid #e8d5b7;width:8%">部位</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左寸</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左关</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">左尺</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右寸</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右关</th><th style="padding:4px;border:1px solid #e8d5b7;width:15%">右尺</th></tr>';
 formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600">浮沉</td>';
@@ -324,7 +324,7 @@ formHtml+='</tr><tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:
 ['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
   formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_ld" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>有力</option><option>无力</option><option>弦硬</option></select></td>';});
 formHtml+='</tr></table>';
-formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>辨病位→辨病性→辨方证。浮沉辨表里半表半里（病位），迟数辨寒热（病性），力度辨虚实（正邪消长）。六部细化：左寸候心与表、右寸候肺、左关候肝胆、右关候脾胃（中气）、左尺候肾阴、右尺候肾阳。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉。</div></div>';
+formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>辨病位→辨病性→辨方证。总按三步法（浮沉/迟数/力度）为核心诊法——定表里寒热虚实后对照六经提纲锁定方证。六部分部仅为辅助参考，胡老云"不要在寸关尺上绕圈子"。金匮胸痹"阳微阴弦"是尺寸分部的例外使用（上焦阳虚+下焦阴寒），非泛用六部配五脏。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉。缓≠慢（缓=脉管弛缓/张力低，因汗出津液丢失），迟才是速度慢。</div></div>';
 
 // --- 刘渡舟：症状驱动 ---
 formHtml+='<div class="school-form" id="ldForm"><h3>刘渡舟 · 十论分诊 — 症状驱动</h3>';

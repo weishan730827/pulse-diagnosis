@@ -391,6 +391,29 @@ formHtml+='<div class="note">张氏辨证核心：总按左右对比为第一层
         cjStep = 0; cjData = { leftOver:'', rightOver:'', leftMost:'', rightMost:'', leftDepth:'', rightDepth:'', leftNote:'', rightNote:'' };
         renderCjForm();
       }
+      // 完成辨证：收集四步数据 → 调用 runAll()
+      function cjAnalyze() {
+        // 收集 cjData 和 DOM 数据
+        var fd = {};
+        // 从 cjData 读取总按
+        fd.cj_leftOver = cjData.leftOver || '';
+        fd.cj_rightOver = cjData.rightOver || '';
+        // 从 DOM 读取最异部/深度/脉形
+        var lp = document.getElementById('cj_leftPos');
+        fd.cj_leftMost = lp ? lp.value : (cjData.leftMost || '');
+        var ld = document.getElementById('cj_leftDepth');
+        fd.cj_leftDepth = ld ? ld.value : (cjData.leftDepth || '');
+        fd.cj_leftMx = valsChip('cj_leftMx');
+        var rp = document.getElementById('cj_rightPos');
+        fd.cj_rightMost = rp ? rp.value : (cjData.rightMost || '');
+        var rd = document.getElementById('cj_rightDepth');
+        fd.cj_rightDepth = rd ? rd.value : (cjData.rightDepth || '');
+        fd.cj_rightMx = valsChip('cj_rightMx');
+        // 合并到全局 formData（让 runAll 能读到）
+        for (var k in fd) formData[k] = fd[k];
+        // 直接调用 runAll 完成辨证
+        runAll();
+      }
       function renderCjForm() {
         var form = document.getElementById('cjForm');
         if (!form) return;

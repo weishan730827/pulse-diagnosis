@@ -1046,6 +1046,297 @@
         "汗出"
       ],
       "combo_type": "右手太过 + 右手不及（阳盛+阳虚）"
+    },
+    {
+      "id": "CJ_D001",
+      "formula": "大青龙汤",
+      "chapter": "鉴别方（麻黄汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（汗法·重剂）",
+      "bingji": "实寒证（表）",
+      "left_overall": "太过（左寸浮紧，范围更广）",
+      "right_overall": "正常或微太过",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸、左关/尺",
+      "strongest_depth": "浮位",
+      "pulse_note": "左侧寸关尺均浮紧，范围比麻黄汤更广，左关/尺浮紧更明显。脉象更数急躁动。右手脉也可有力（溢饮）。与麻黄汤鉴别：麻黄汤仅左寸最突出，大青龙汤左关/尺也更浮紧。",
+      "key_symptom": [
+        "发热",
+        "恶寒",
+        "身痛",
+        "无汗",
+        "烦躁",
+        "身重"
+      ]
+    },
+    {
+      "id": "CJ_D002",
+      "formula": "桂枝加桂汤",
+      "chapter": "鉴别方（桂枝汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（温阳化气）",
+      "bingji": "实寒证（表兼气上冲）",
+      "left_overall": "太过（左寸浮，关部也浮）",
+      "right_overall": "正常",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸、左关",
+      "strongest_depth": "浮位（寸关之间）",
+      "pulse_note": "左寸太过脉，浮脉出现在寸关之间或关部，应指较浮缓的桂枝汤更拘急有力。提示邪气位置更偏里但仍用升法。未必有典型'奔豚'，但脉证符合即可用。",
+      "key_symptom": [
+        "气上冲",
+        "心悸",
+        "腹痛"
+      ]
+    },
+    {
+      "id": "CJ_D003",
+      "formula": "柴胡加龙骨牡蛎汤",
+      "chapter": "鉴别方（小柴胡汤类）",
+      "yinyang": "阴盛+阳盛",
+      "zhifa": "升降并用（和解+重镇）",
+      "bingji": "气滞兼实热（中焦+上焦）",
+      "left_overall": "太过（左关）",
+      "right_overall": "太过（右寸/关）",
+      "most_abnormal_side": "左+右",
+      "most_abnormal_position": "左关+右寸/关",
+      "strongest_depth": "中位",
+      "pulse_note": "除具有小柴胡汤的左手脉特征（左关中位太过）以外，右手关部、寸部也出现应指有力的太过脉。双手均实，方向相反。与小柴胡汤鉴别：小柴胡汤仅左手太过。",
+      "key_symptom": [
+        "胸满",
+        "烦惊",
+        "小便不利",
+        "谵语",
+        "一身尽重"
+      ]
+    },
+    {
+      "id": "CJ_D004",
+      "formula": "柴胡桂枝干姜汤",
+      "chapter": "鉴别方（小柴胡汤类）",
+      "yinyang": "阴盛+阳虚",
+      "zhifa": "升法（和解+温阳）",
+      "bingji": "气滞证（中焦）兼阳虚（下焦）",
+      "left_overall": "太过（左关）",
+      "right_overall": "不及（右尺尤甚）",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左关",
+      "strongest_depth": "中位",
+      "pulse_note": "除具有小柴胡汤的左手脉特征（左关中位太过）以外，伴有右手尺部显著无力的不及脉。与小柴胡汤鉴别：小柴胡汤右手正常，柴胡桂枝干姜汤右尺不及（阳虚）。",
+      "key_symptom": [
+        "胸胁满",
+        "微结",
+        "小便不利",
+        "渴而不呕",
+        "头汗出"
+      ]
+    },
+    {
+      "id": "CJ_D005",
+      "formula": "射干麻黄汤",
+      "chapter": "鉴别方（小青龙汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（辛温散邪·兼治喘）",
+      "bingji": "实寒证、水饮证（上焦、中焦）",
+      "left_overall": "太过（左寸、左关）",
+      "right_overall": "正常或不及",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸、左关",
+      "strongest_depth": "浮位（寸）、中位（关）",
+      "pulse_note": "左寸太过脉（浮）兼左关太过脉（中位，弦），但左关太过脉的力量小于小青龙汤。与小青龙汤鉴别：小青龙汤左关太过更拘急，此方相对缓和。",
+      "key_symptom": [
+        "咳喘",
+        "咽喉不利",
+        "痰鸣"
+      ]
+    },
+    {
+      "id": "CJ_D006",
+      "formula": "厚朴麻黄汤",
+      "chapter": "鉴别方（小青龙汤类）",
+      "yinyang": "阴盛+阳盛",
+      "zhifa": "升降并用（辛温散邪+清降）",
+      "bingji": "实寒证、水饮证（上焦、中焦）",
+      "left_overall": "太过（左寸、左关）",
+      "right_overall": "太过（右关）",
+      "most_abnormal_side": "左+右",
+      "most_abnormal_position": "左寸/关+右关",
+      "strongest_depth": "浮位、中位",
+      "pulse_note": "左手寸关太过，右手关部亦太过。左右均实，但右手力量更大。与小青龙汤鉴别：小青龙汤仅左手太过，此方双手均太过。",
+      "key_symptom": [
+        "咳喘",
+        "胸满"
+      ]
+    },
+    {
+      "id": "CJ_D007",
+      "formula": "茯苓桂枝甘草大枣汤",
+      "chapter": "鉴别方（苓桂术甘汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（辛温散水）",
+      "bingji": "水饮证（下焦）",
+      "left_overall": "太过（左尺）",
+      "right_overall": "正常或不及",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左尺",
+      "strongest_depth": "沉位",
+      "pulse_note": "左侧尺部太过脉（沉位，水饮）。与苓桂术甘汤鉴别：苓桂术甘汤左关太过（中位/沉位），此方左尺太过（沉位）。",
+      "key_symptom": [
+        "脐下悸",
+        "欲作奔豚",
+        "小便不利"
+      ]
+    },
+    {
+      "id": "CJ_D008",
+      "formula": "茯苓甘草汤",
+      "chapter": "鉴别方（苓桂术甘汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（辛温散水）",
+      "bingji": "水饮证（中焦）",
+      "left_overall": "太过（左关）",
+      "right_overall": "正常",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左关",
+      "strongest_depth": "中位",
+      "pulse_note": "左关太过脉（中位，水饮），应指比苓桂术甘汤更有力。与苓桂术甘汤鉴别：苓桂术甘汤左关中沉位太过，此方左关中位太过更突出。",
+      "key_symptom": [
+        "心下悸",
+        "口不渴",
+        "小便清"
+      ]
+    },
+    {
+      "id": "CJ_D009",
+      "formula": "茯苓泽泻汤",
+      "chapter": "鉴别方（苓桂术甘汤类）",
+      "yinyang": "阴盛+阳盛",
+      "zhifa": "升降并用（散水+降水）",
+      "bingji": "水饮证（中焦+下焦）",
+      "left_overall": "太过（左关、左尺）",
+      "right_overall": "太过（右关、右尺）",
+      "most_abnormal_side": "左+右",
+      "most_abnormal_position": "左关/尺+右关/尺",
+      "strongest_depth": "沉位",
+      "pulse_note": "寸关尺三部的沉位均有力（水饮）。与苓桂术甘汤鉴别：苓桂术甘汤仅左关太过，此方寸关尺沉位均有力。",
+      "key_symptom": [
+        "呕吐",
+        "口渴",
+        "小便不利"
+      ]
+    },
+    {
+      "id": "CJ_D010",
+      "formula": "防己茯苓汤",
+      "chapter": "鉴别方（防己黄芪汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（汗法·散水湿·重剂）",
+      "bingji": "水饮证、湿证（表、上焦）",
+      "left_overall": "太过（左寸）",
+      "right_overall": "正常或不及",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸",
+      "strongest_depth": "浮位",
+      "pulse_note": "左手寸部浮位太过脉（浮濡），比防己黄芪汤的脉动更有力。与防己黄芪汤鉴别：两者均左寸太过，但此方浮位更有力。",
+      "key_symptom": [
+        "水肿",
+        "身重",
+        "汗出恶风"
+      ]
+    },
+    {
+      "id": "CJ_D011",
+      "formula": "麻黄加术汤",
+      "chapter": "鉴别方（麻黄汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（汗法·祛湿）",
+      "bingji": "实寒证（表）兼湿证",
+      "left_overall": "太过（左寸浮紧）",
+      "right_overall": "正常或不及",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸",
+      "strongest_depth": "浮位",
+      "pulse_note": "左寸浮紧（拘急），浮位的脉象更拘急。与大青龙汤鉴别：大青龙汤左关/尺也浮紧，此方仅左寸浮紧。与越婢加术汤鉴别：越婢加术汤脉浮濡（水湿），此方浮紧（风寒湿）。",
+      "key_symptom": [
+        "身重",
+        "一身尽痛",
+        "无汗"
+      ]
+    },
+    {
+      "id": "CJ_D012",
+      "formula": "炙甘草汤",
+      "chapter": "鉴别方（麦门冬汤类）",
+      "yinyang": "阴虚",
+      "zhifa": "降法（养阴·重型）",
+      "bingji": "阴虚/津液虚证（上焦、中焦）",
+      "left_overall": "不及（左寸细）",
+      "right_overall": "正常或不及",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸",
+      "strongest_depth": "浮位（最无力）",
+      "pulse_note": "左手寸部不及脉（细、结代）。与麦门冬汤鉴别：两者均左寸不及，但炙甘草汤脉结代（心律不齐），麦门冬汤脉仅细。",
+      "key_symptom": [
+        "心动悸",
+        "脉结代",
+        "虚羸"
+      ]
+    },
+    {
+      "id": "CJ_D013",
+      "formula": "桂枝新加汤",
+      "chapter": "鉴别方（桂枝汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（汗法·补中）",
+      "bingji": "实寒证（表）兼中焦虚",
+      "left_overall": "太过（左关、左尺）",
+      "right_overall": "正常或不及",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左关、左尺",
+      "strongest_depth": "中位、沉位",
+      "pulse_note": "左关太过脉（中位、沉位）。位置比小柴胡汤更深，应指力量小于小柴胡汤。脉象较缓而非拘急。与桂枝汤鉴别：桂枝汤在寸（浮位），此方在关/尺（中沉位）。",
+      "key_symptom": [
+        "发热",
+        "身痛",
+        "脉沉迟"
+      ]
+    },
+    {
+      "id": "CJ_D014",
+      "formula": "栝楼桂枝汤",
+      "chapter": "鉴别方（桂枝汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（汗法·养阴）",
+      "bingji": "实寒证（表）兼津液虚",
+      "left_overall": "太过（左寸浮）",
+      "right_overall": "不及（左尺细）",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸",
+      "strongest_depth": "浮位",
+      "pulse_note": "左手寸部太过脉（浮），兼脉管细。与桂枝汤鉴别：桂枝汤脉浮缓（松软），此方脉浮而细。与麻黄汤鉴别：麻黄汤拘急（浮紧），此方细。",
+      "key_symptom": [
+        "项背拘急",
+        "发热",
+        "汗出"
+      ]
+    },
+    {
+      "id": "CJ_D015",
+      "formula": "桂枝加黄芪汤",
+      "chapter": "鉴别方（桂枝汤类）",
+      "yinyang": "阴盛",
+      "zhifa": "升法（汗法·益气）",
+      "bingji": "实寒证（表）兼气虚",
+      "left_overall": "太过（左寸浮缓）",
+      "right_overall": "不及（更无力）",
+      "most_abnormal_side": "左",
+      "most_abnormal_position": "左寸",
+      "strongest_depth": "浮位",
+      "pulse_note": "左寸浮缓，但脉动较桂枝汤更无力。右手亦不及。与桂枝汤鉴别：桂枝汤左寸浮缓有力，此方左寸浮缓无力。",
+      "key_symptom": [
+        "恶风",
+        "汗出",
+        "身重"
+      ]
     }
   ]
 }

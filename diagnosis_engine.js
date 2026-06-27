@@ -41,151 +41,226 @@ function loadData(schoolId) {
   });
 }
 
-// ========== 张锡纯 气机升降辨证 ==========
+// ========== 张锡纯 气机升降辨证（v8：三步漏斗 + 原著脉案匹配）==========
+// 数据文件：pulse_match_zxc_compact_v2.json（172方，从原著提取）
+// 辨证流程：Step1方向 → Step2方剂 → Step3脉诊确认
 function diagnoseZhangXichun(formData) {
   var data = DataCache['zhangxichun'];
   if (!data || data._no_data || data._error) {
-    return simpleZXCDiagnose(formData);
+    // 数据未加载，尝试加载v2
+    var v2 = DataCache['zxc_v2'];
+    if (v2 && !v2._error) data = v2;
+    else return simpleZXCDiagnose(formData);
   }
-  
-  // 从表单提取脉象特征
-  var userFeatures = extractZXCFeatures(formData);
-  
-  // 匹配案例
-  var matches = [];
-  for (var i = 0; i < data.length; i++) {
-    var c = data[i];
-    var score = matchZXCCase(c, userFeatures);
-    if (score > 0) matches.push({ case: c, score: score });
-  }
-  
-  matches.sort(function(a, b) { return b.score - a.score; });
-  
+
   var result = { steps: [], result: '', herbs: [], matchedCases: [] };
-  
-  result.steps.push('左手总按：' + (formData.zongL || '未填') + (formData.zongLF ? '/' + formData.zongLF : ''));
-  result.steps.push('右手总按：' + (formData.zongR || '未填') + (formData.zongRF ? '/' + formData.zongRF : ''));
-  
-  if (matches.length === 0) {
-    result.steps.push('未匹配到相似脉案，启用简化逻辑');
-    return simpleZXCDiagnose(formData);
-  }
-  
-  // 取Top3
-  var top3 = matches.slice(0, 3);
-  result.matchedCases = top3;
-  
-  var top = top3[0];
-  result.steps.push('最佳匹配（得分' + top.score.toFixed(1) + '）：#' + top.case.id + ' ' + top.case.title);
-  result.steps.push('原文脉象：' + top.case.pulse_raw);
-  result.result = top.case.diag || ('参见医案#' + top.case.id);
-  if (top.case.herbs) {
-    result.herbs = top.case.herbs.split(/[、，\s]+/).filter(function(x) { return x.length > 0; });
-  }
-  
-  if (top3.length > 1) {
-    for (var j = 1; j < top3.length; j++) {
-      result.steps.push('次匹配（得分' + top3[j].score.toFixed(1) + '）：#' + top3[j].case.id + ' ' + top3[j].case.title);
+
+  // Step1：方向（大气下陷 / 气机上逆 / 直走门类）
+  var direction = formData.zx_direction || '';
+  var formula    = formData.zx_formula   || '';
+  var section    = formData.zx_section   || '';
+
+  if (direction) result.steps.push('【方向】' + (direction==='sink'?'大气下陷（短气/努力呼吸）':direction==='up'?'气机上逆（喘逆/呕恶/胸膈满闷）':'直走门类（33门）'));
+
+  // Step2：方剂
+  if (formula) {
+    result.steps.push('【方剂】' + formula);
+    result.result = formula;
+    // 尝试在data中找该方剂的组成
+    var matchedFormula = null;
+    for (var f = 0; f < data.length; f++) {
+      if (data[f].formula === formula || (data[f].title && data[f].title.indexOf(formula) >= 0)) {
+        matchedFormula = data[f];
+        break;
+      }
+    }
+    if (matchedFormula) {
+      if (matchedFormula.ingredients && matchedFormula.ingredients.length > 0) {
+        result.herbs = matchedFormula.ingredients;
+      }
+      if (matchedFormula.indication) {
+        result.steps.push('【主治】' + matchedFormula.indication.substring(0, 100));
+      }
     }
   }
-  
+
+  // Step3：脉诊确认（左右总按对比）
+  var zL  = formData.zx_zongL  || '';
+  var zLF = formData.zx_zongLF || '';
+  var zR  = formData.zx_zongR  || '';
+  var zRF = formData.zx_zongRF || '';
+
+  if (zL || zR) {
+    result.steps.push('【脉诊确认】左=' + (zL||'?') + (zLF?'/'+zLF:'') + ' | 右=' + (zR||'?') + (zRF?'/'+zRF:''));
+    
+    // 用脉诊数据做二次匹配（找到最相似的医案）
+    var userFeats = extractZXCFeatures(formData);
+    var matches = [];
+    for (var i = 0; i < data.length; i++) {
+      var sc = matchZXCCase(data[i], userFeats);
+      if (sc > 0) matches.push({ case: data[i], score: sc });
+    }
+    matches.sort(function(a,b){ return b.score - a.score; });
+    
+    if (matches.length > 0 && matches[0].score >= 3) {
+      var best = matches[0].case;
+      result.steps.push('【脉案参照】#' + best.id + ' ' + (best.formula||best.title||'') + '（得分' + matches[0].score.toFixed(1) + '）');
+      if (best.pulse_raw) result.steps.push('  原文脉象：' + best.pulse_raw.substring(0, 80));
+      // 如果Step2没有选方剂，用脉案匹配结果填充
+      if (!formula) {
+        result.result = best.formula || (best.title||'');
+        if (best.ingredients) result.herbs = best.ingredients;
+      }
+      result.matchedCases = matches.slice(0, 3);
+    }
+  }
+
+  // 如果方向是大气下陷但没选方剂，给默认建议
+  if (direction === 'sink' && !formula) {
+    if (!result.result) result.result = '升陷汤（纯大气下陷）';
+    result.steps.push('【建议】大气下陷方向 → 升陷汤：生黄芪六钱、知母三钱、柴胡一钱五分、桔梗一钱五分、升麻一钱');
+    result.herbs = ['生黄芪','知母','柴胡','桔梗','升麻'];
+  }
+  if (direction === 'up' && !formula) {
+    if (!result.result) result.result = '参赭镇气汤（阴阳两虚喘逆）';
+    result.steps.push('【建议】气机上逆方向 → 先辨阴阳虚实，参赭镇气汤/镇摄汤/寒降汤选一');
+  }
+
+  if (result.steps.length === 0) {
+    return simpleZXCDiagnose(formData);
+  }
+
   return result;
 }
 
 function extractZXCFeatures(formData) {
   var feats = { left: [], right: [], force: '', speed: '' };
+  var zL  = formData.zx_zongL  || '';
+  var zLF = formData.zx_zongLF || '';
+  var zR  = formData.zx_zongR  || '';
+  var zRF = formData.zx_zongRF || '';
+
+  var terms = ['弦硬','弦细','弦数','弦长','弦浮','弦滑','弦大','弦','细','弱','浮','沉','洪','滑','涩','大','硬','微','数','迟','紧','缓','散','濡','芤','结','代'];
   
-  // 左手
-  if (formData.zongL) {
-    var terms = ['弦硬','弦细','弦数','弦浮','弦滑','弦大','弦','细','弱','浮','沉','洪','滑','涩','大','硬','微','数','迟','紧','缓','散','濡','芤'];
+  if (zL) {
     for (var i = 0; i < terms.length; i++) {
-      if (formData.zongL.indexOf(terms[i]) >= 0) feats.left.push(terms[i]);
+      if (zL.indexOf(terms[i]) >= 0) feats.left.push(terms[i]);
     }
   }
-  if (formData.zongLF) {
-    if (formData.zongLF.indexOf('无力') >= 0 || formData.zongLF === '弦无力') feats.force = '虚';
-    else if (formData.zongLF.indexOf('有力') >= 0 || formData.zongLF === '弦硬') feats.force = '实';
+  if (zLF) {
+    if (zLF.indexOf('无力') >= 0 || zLF === '弦无力' || zLF === '按之即无') feats.force = '虚';
+    else if (zLF.indexOf('有力') >= 0 || zLF === '弦硬') feats.force = '实';
   }
-  
-  // 右手
-  if (formData.zongR) {
-    var terms2 = ['弦硬','弦细','弦数','弦浮','弦滑','弦大','弦','细','弱','浮','沉','洪','滑','涩','大','硬','微','数','迟','紧','缓','散','濡','芤'];
-    for (var j = 0; j < terms2.length; j++) {
-      if (formData.zongR.indexOf(terms2[j]) >= 0) feats.right.push(terms2[j]);
+
+  if (zR) {
+    for (var j = 0; j < terms.length; j++) {
+      if (zR.indexOf(terms[j]) >= 0) feats.right.push(terms[j]);
     }
   }
-  
+  if (zRF) {
+    if (zRF.indexOf('无力') >= 0 || zRF === '弦无力' || zRF === '按之即无') feats.force = feats.force || '虚';
+    else if (zRF.indexOf('有力') >= 0 || zRF === '弦硬') feats.force = '实';
+  }
+
+  // 速率
+  if (zL && zL.indexOf('数') >= 0) feats.speed = '数';
+  else if (zL && zL.indexOf('迟') >= 0) feats.speed = '迟';
+  else if (zR && zR.indexOf('数') >= 0) feats.speed = '数';
+  else if (zR && zR.indexOf('迟') >= 0) feats.speed = '迟';
+
   return feats;
 }
 
 function matchZXCCase(caseData, userFeats) {
   var score = 0;
-  var cf = caseData.feats;
-  
-  // 左脉匹配
+  var cf = caseData.feats || {};
+
+  // 左脉匹配（权重×3）
   for (var i = 0; i < userFeats.left.length; i++) {
-    if (cf['左'].indexOf(userFeats.left[i]) >= 0) score += 3;
+    if (cf['左'] && cf['左'].indexOf(userFeats.left[i]) >= 0) score += 3;
   }
-  // 右脉匹配
+  // 右脉匹配（权重×3）
   for (var j = 0; j < userFeats.right.length; j++) {
-    if (cf['右'].indexOf(userFeats.right[j]) >= 0) score += 3;
+    if (cf['右'] && cf['右'].indexOf(userFeats.right[j]) >= 0) score += 3;
   }
-  // 总体脉匹配（回退）
+  // 总体脉匹配（回退，权重×1）
   for (var k = 0; k < userFeats.left.length; k++) {
-    if (cf['总体'].indexOf(userFeats.left[k]) >= 0) score += 1;
+    if (cf['总体'] && cf['总体'].indexOf(userFeats.left[k]) >= 0) score += 1;
   }
   for (var l = 0; l < userFeats.right.length; l++) {
-    if (cf['总体'].indexOf(userFeats.right[l]) >= 0) score += 1;
+    if (cf['总体'] && cf['总体'].indexOf(userFeats.right[l]) >= 0) score += 1;
   }
-  
-  // 力度匹配
+  // 力度匹配（权重×5）
   if (userFeats.force && cf['力度'] === userFeats.force) score += 5;
-  
-  // 速度匹配
+  // 速率匹配（权重×2）
   if (userFeats.speed && cf['速率'] === userFeats.speed) score += 2;
-  
+
   return score;
 }
 
 // 张锡纯简化逻辑（JSON不可用时的回退）
+// 读取新字段名（zx_zongL等）
 function simpleZXCDiagnose(formData) {
-  var zl = formData.zongL, zr = formData.zongR;
-  var zlf = formData.zongLF, zrf = formData.zongRF;
+  var zl = formData.zx_zongL  || '';
+  var zr = formData.zx_zongR  || '';
+  var zlf = formData.zx_zongLF || '';
+  var zrf = formData.zx_zongRF || '';
+  // 回退：也读旧字段名
+  if (!zl) zl = formData.zongL || '';
+  if (!zr) zr = formData.zongR || '';
+  if (!zlf) zlf = formData.zongLF || '';
+  if (!zrf) zrf = formData.zongRF || '';
+
   var steps = [], result = '', herbs = [];
-  
+
   if (!zl && !zr) {
-    steps.push('【总按未填】总按为张氏辨证第一层入口');
-    result = '请填写左右手总按脉象';
+    // 尝试用方向数据给建议
+    var dir = formData.zx_direction || '';
+    if (dir === 'sink') {
+      steps.push('【方向】大气下陷（短气/努力呼吸）');
+      steps.push('【建议】升陷汤：生黄芪六钱、知母三钱、柴胡一钱五分、桔梗一钱五分、升麻一钱');
+      result = '升陷汤（纯大气下陷）';
+      herbs = ['生黄芪','知母','柴胡','桔梗','升麻'];
+    } else if (dir === 'up') {
+      steps.push('【方向】气机上逆（喘逆/呕恶/胸膈满闷）');
+      steps.push('【建议】先辨阴阳虚实，选参赭镇气汤/镇摄汤/寒降汤之一');
+      result = '参赭镇气汤或镇摄汤（气机上逆）';
+      herbs = ['人参','代赭石','生芡实','生山药'];
+    } else {
+      steps.push('【总按未填】总按为张氏辨证第一层入口');
+      result = '请填写左手/右手总按脉象，或先在第一步选择方向';
+    }
     return { steps: steps, result: result, herbs: herbs };
   }
-  
-  var le = ['洪','大','硬','革','滑','紧','弦'].indexOf(zl) >= 0 || (zlf && (zlf.indexOf('有力') >= 0 || zlf === '弦硬'));
-  var re = ['洪','大','硬','革','滑','紧','弦'].indexOf(zr) >= 0 || (zrf && (zrf.indexOf('有力') >= 0 || zrf === '弦硬'));
-  
-  steps.push('左手总按：' + zl + (zlf ? '/' + zlf : '') + '（' + (le ? '实' : '虚') + '）');
-  steps.push('右手总按：' + zr + (zrf ? '/' + zrf : '') + '（' + (re ? '实' : '虚') + '）');
-  
+
+  // 脉诊判断（实/虚）
+  var le = (zl && ['洪','大','硬','滑','紧','弦','弦硬','弦长'].some(function(t){ return zl.indexOf(t)>=0; })) || (zlf && (zlf.indexOf('有力')>=0 || zlf==='弦硬'));
+  var re = (zr && ['洪','大','硬','滑','紧','弦','弦硬','弦长'].some(function(t){ return zr.indexOf(t)>=0; })) || (zrf && (zrf.indexOf('有力')>=0 || zrf==='弦硬'));
+
+  steps.push('左手总按：' + zl + (zlf ? '/'+zlf : '') + '（' + (le?'实（太过）':'虚（不及）') + '）');
+  steps.push('右手总按：' + zr + (zrf ? '/'+zrf : '') + '（' + (re?'实（太过）':'虚（不及）') + '）');
+
   if (le && re) {
-    steps.push('左右皆实 → 白虎/承气方向');
-    result = '实热内盛，清下并行。参考：白虎汤、承气汤辈';
-    herbs = ['石膏', '知母', '大黄', '芒硝'];
+    steps.push('左右皆实 → 阳热内盛，清下并行');
+    result = '实热内盛证。参考：白虎汤、承气汤辈（张氏常用知母、石膏、大黄）';
+    herbs = ['石膏','知母','大黄','芒硝'];
   } else if (!le && !re) {
     steps.push('左右皆虚 → 大气下陷，升陷汤主之');
     result = '大气下陷证。升陷汤：生黄芪六钱、知母三钱、柴胡一钱五分、桔梗一钱五分、升麻一钱';
-    herbs = ['生黄芪', '知母', '柴胡', '桔梗', '升麻'];
-    if (zl === '弦' && zlf === '弦无力') {
-      steps.push('⚠ 左弦无力非实证，乃大气虚极之假象！');
+    herbs = ['生黄芪','知母','柴胡','桔梗','升麻'];
+    if (zl && zl.indexOf('弦')>=0 && zlf && zlf.indexOf('无力')>=0) {
+      steps.push('⚠ 左弦无力非实证，乃大气虚极之假象！忌用破气攻伐之品');
     }
   } else if (!le && re) {
     steps.push('左虚右实 → 胃气不降，冲气上逆');
-    result = '胃气不降证。赭石为主药，合龙骨牡蛎镇冲降逆';
-    herbs = ['生赭石', '生龙骨', '生牡蛎', '生山药'];
+    result = '胃气不降/冲气上逆证。赭石为主药，合龙骨牡蛎镇冲降逆';
+    herbs = ['生赭石','生龙骨','生牡蛎','生山药'];
   } else {
-    steps.push('左实右虚 → 升清降浊，肝郁脾弱');
-    result = '升陷汤合降胃法。黄芪升陷，赭石降胃';
-    herbs = ['生黄芪', '生赭石', '柴胡', '升麻'];
+    steps.push('左实右虚 → 肝脾郁热，肺肾两虚');
+    result = '升清降浊法。黄芪升陷，赭石降胃，柴胡升清，白芍敛阴';
+    herbs = ['生黄芪','生赭石','柴胡','生白芍'];
   }
-  
+
   return { steps: steps, result: result, herbs: herbs };
 }
 

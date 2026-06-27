@@ -1048,68 +1048,6 @@
       "combo_type": "右手太过 + 右手不及（阳盛+阳虚）"
     },
     {
-      "id": "CJ_D001",
-      "formula": "大青龙汤",
-      "chapter": "鉴别方（麻黄汤类）",
-      "yinyang": "阴盛",
-      "zhifa": "升法（汗法·重剂）",
-      "bingji": "实寒证（表）",
-      "left_overall": "太过（左寸浮紧，范围更广）",
-      "right_overall": "正常或微太过",
-      "most_abnormal_side": "左",
-      "most_abnormal_position": "左寸、左关/尺",
-      "strongest_depth": "浮位",
-      "pulse_note": "左侧寸关尺均浮紧，范围比麻黄汤更广，左关/尺浮紧更明显。脉象更数急躁动。右手脉也可有力（溢饮）。与麻黄汤鉴别：麻黄汤仅左寸最突出，大青龙汤左关/尺也更浮紧。",
-      "key_symptom": [
-        "发热",
-        "恶寒",
-        "身痛",
-        "无汗",
-        "烦躁",
-        "身重"
-      ]
-    },
-    {
-      "id": "CJ_D002",
-      "formula": "桂枝加桂汤",
-      "chapter": "鉴别方（桂枝汤类）",
-      "yinyang": "阴盛",
-      "zhifa": "升法（温阳化气）",
-      "bingji": "实寒证（表兼气上冲）",
-      "left_overall": "太过（左寸浮，关部也浮）",
-      "right_overall": "正常",
-      "most_abnormal_side": "左",
-      "most_abnormal_position": "左寸、左关",
-      "strongest_depth": "浮位（寸关之间）",
-      "pulse_note": "左寸太过脉，浮脉出现在寸关之间或关部，应指较浮缓的桂枝汤更拘急有力。提示邪气位置更偏里但仍用升法。未必有典型'奔豚'，但脉证符合即可用。",
-      "key_symptom": [
-        "气上冲",
-        "心悸",
-        "腹痛"
-      ]
-    },
-    {
-      "id": "CJ_D003",
-      "formula": "柴胡加龙骨牡蛎汤",
-      "chapter": "鉴别方（小柴胡汤类）",
-      "yinyang": "阴盛+阳盛",
-      "zhifa": "升降并用（和解+重镇）",
-      "bingji": "气滞兼实热（中焦+上焦）",
-      "left_overall": "太过（左关）",
-      "right_overall": "太过（右寸/关）",
-      "most_abnormal_side": "左+右",
-      "most_abnormal_position": "左关+右寸/关",
-      "strongest_depth": "中位",
-      "pulse_note": "除具有小柴胡汤的左手脉特征（左关中位太过）以外，右手关部、寸部也出现应指有力的太过脉。双手均实，方向相反。与小柴胡汤鉴别：小柴胡汤仅左手太过。",
-      "key_symptom": [
-        "胸满",
-        "烦惊",
-        "小便不利",
-        "谵语",
-        "一身尽重"
-      ]
-    },
-    {
       "id": "CJ_D004",
       "formula": "柴胡桂枝干姜汤",
       "chapter": "鉴别方（小柴胡汤类）",

@@ -658,6 +658,72 @@ function isExcess(zongShape, zongForce, cun, guan, chi){
   return hasExcess || hasForce;
 }
 
+// ========== v7 案匹配引擎 ==========
+var v7CasesCache = null;
+var v7Loaded = false;
+
+function loadV7Cases(cb){
+  if(v7CasesCache){ cb(v7CasesCache); return; }
+  if(v7Loaded) return; // 正在加载中
+  v7Loaded = true;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET','https://raw.githubusercontent.com/weishan730827/pulse-diagnosis/main/zhang_xichun_v7_cases.json',true);
+  xhr.timeout = 8000;
+  xhr.onload = function(){
+    if(xhr.status===200){
+      try { v7CasesCache = JSON.parse(xhr.responseText); }
+      catch(e){
+        // try JSONL
+        var lines = xhr.responseText.trim().split(/\n/);
+        var arr = [];
+        for(var i=0;i<lines.length;i++){
+          try { var o=JSON.parse(lines[i]); if(o)arr.push(o); } catch(e2){}
+        }
+        v7CasesCache = arr.length>0 ? arr : null;
+      }
+    }
+    v7Loaded = false;
+    if(cb) cb(v7CasesCache);
+  };
+  xhr.onerror = function(){ v7Loaded=false; if(cb)cb(null); };
+  xhr.ontimeout = function(){ v7Loaded=false; if(cb)cb(null); };
+  xhr.send();
+}
+
+function matchV7Cases(d){
+  if(!v7CasesCache || !v7CasesCache.length) return [];
+  var results = [];
+  for(var i=0;i<v7CasesCache.length;i++){
+    var c = v7CasesCache[i];
+    var score = 0;
+    var details = [];
+    // 匹配脉象字段：shape/force 在左/右/寸/关/尺
+    var inputFields = {
+      '左寸':[d.leftCun.shape,d.leftCun.force], '左关':[d.leftGuan.shape,d.leftGuan.force], '左尺':[d.leftChi.shape,d.leftChi.force],
+      '右寸':[d.rightCun.shape,d.rightCun.force], '右关':[d.rightGuan.shape,d.rightGuan.force], '右尺':[d.rightChi.shape,d.rightChi.force],
+      '总按左':[d.zongLeft.shape,d.zongLeft.force], '总按右':[d.zongRight.shape,d.zongRight.force]
+    };
+    var caseText = (c.text||c.description||c.pulse||'').toString();
+    // 在每个输入字段中查找匹配
+    for(var k in inputFields){
+      var sv = inputFields[k][0]; var fv = inputFields[k][1];
+      if(sv && caseText.indexOf(sv)>=0){ score+=2; details.push(k+'形:'+sv); }
+      if(fv && caseText.indexOf(fv)>=0){ score+=1; details.push(k+'力:'+fv); }
+    }
+    // 兼证匹配
+    if(d.symptoms && d.symptoms.length){
+      for(var s=0;s<d.symptoms.length;s++){
+        if(caseText.indexOf(d.symptoms[s])>=0){ score+=1; details.push('证:'+d.symptoms[s]); }
+      }
+    }
+    if(score>0){
+      results.push({case:c, score:score, details:details});
+    }
+  }
+  results.sort(function(a,b){return b.score-a.score;});
+  return results.slice(0,5);
+}
+
 // ========== 主诊断函数 ==========
 function diagnose(){
   var d = collectPulseData();
@@ -705,6 +771,12 @@ function diagnose(){
       html += '<div style="margin-top:4px;font-size:10px;color:#8b6914">参考用药：'+analysis.herbs.join('、')+'</div>';
     }
     
+    // v7 案匹配挂载点（仅 ZXC）
+    if(sid==='zhangxichun'){
+      html += '<div class="v7-match-panel" id="v7Matches" style="margin-top:6px;padding:8px;background:#f6f3e8;border-radius:4px;font-size:10px;display:none">';
+      html += '<b style="color:#8b6914">📋 相似医案（原著772案匹配）</b><div id="v7MatchList" style="margin-top:4px"></div></div>';
+    }
+    
     html += '</div></div></div>';
   }
   
@@ -729,6 +801,33 @@ function diagnose(){
   }
   
   resultsDiv.innerHTML = html;
+
+  // ZXC 案匹配（异步加载 v7 数据）
+  if((activeSchools==='all'||activeSchools==='zhangxichun') && 
+     (d.zongLeft.shape||d.zongRight.shape||d.leftCun.shape||d.rightCun.shape)){
+    loadV7Cases(function(cases){
+      if(!cases) return;
+      var matches = matchV7Cases(d);
+      var panel = document.getElementById('v7Matches');
+      var list = document.getElementById('v7MatchList');
+      if(!panel||!list) return;
+      if(matches.length===0){
+        list.innerHTML = '<span style="color:#999">未匹配到相似医案</span>';
+      }else{
+        var mhtml = '';
+        for(var i=0;i<matches.length;i++){
+          var c = matches[i].case;
+          mhtml += '<div style="margin:3px 0;padding:4px;background:#fff;border-radius:3px;border-left:3px solid #8b6914">';
+          mhtml += '<span style="font-weight:bold;color:#333">#'+(i+1)+' 匹配度:'+matches[i].score+'</span> ';
+          mhtml += '<span style="color:#555">'+(c.name||c.title||'')+'</span>';
+          mhtml += '<br><span style="color:#777">'+(c.text||c.description||'').substring(0,120)+(c.text&&c.text.length>120?'...':'')+'</span>';
+          mhtml += '</div>';
+        }
+        list.innerHTML = mhtml;
+      }
+      panel.style.display = 'block';
+    });
+  }
 }
 </script>
 </body>

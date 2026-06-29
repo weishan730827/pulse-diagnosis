@@ -326,9 +326,11 @@ function analyzeZhangXichun(d){
     }
     if(text.indexOf('迟')>=0) steps.push('  └ 迟而无力 → 大气下陷；迟而有力 → 寒积');
     
-    // 力度量尺：寸部评估
-    var cunLevel=getCunForceLevel(d);
-    if(cunLevel>=3) steps.push('  └ 寸部力度量尺：level '+cunLevel+'（≥微弱）→ 达到升陷汤命中阈值');
+    // 力度量尺：寸部评估（右寸优先）
+    var cunLevels=getCunForceLevels(d);
+    if(cunLevels.right>=3) steps.push('  └ 右寸力度量尺：level '+cunLevels.right+'（≥微弱）→ 大气下陷标准脉象（右寸关沉迟微弱）');
+    else if(cunLevels.right>=2 && cunLevels.left>=2) steps.push('  └ 两寸皆弱：右level '+cunLevels.right+' 左level '+cunLevels.left+'（均≥无力）→ 关前尤甚，支持升陷');
+    else if(cunLevels.left>=3) steps.push('  └ 左寸力度：level '+cunLevels.left+'（≥微弱），但右寸非弱 → 需结合症状确认');
   }
   
   // ===== 第三步：左右对比定脏腑 =====
@@ -397,8 +399,8 @@ function analyzeZhangXichun(d){
   
   // ===== 第五步：方证锁定 =====
   var formulas=[];
-  var cunLevel=getCunForceLevel(d);
-  var hasCunWeak=cunLevel>=3||text.indexOf('寸部微弱')>=0||text.indexOf('两寸微弱')>=0||
+  var cunLevels=getCunForceLevels(d);
+  var hasCunWeak=cunLevels.right>=3||text.indexOf('寸部微弱')>=0||text.indexOf('两寸微弱')>=0||
                  text.indexOf('关前尤甚')>=0;
   
   // 升陷汤系列
@@ -463,22 +465,22 @@ function analyzeZhangXichun(d){
   return {steps:steps, result:result, herbs:herbs, warn:warn||''};
 }
 
-// 力度量尺：评估寸部虚陷程度
-function getCunForceLevel(d){
+// 力度量尺：评估寸部虚陷程度（左右分离，右寸优先）
+function getCunForceLevels(d){
   var forces=[d.leftCun.force,d.rightCun.force];
   var shapes=[d.leftCun.shape,d.rightCun.shape];
-  var maxLevel=0;
+  var levels=[0,0];
   for(var i=0;i<2;i++){
     var f=forces[i];
-    if(f==='按之即无') maxLevel=Math.max(maxLevel,4);
-    else if(f==='弦无力') maxLevel=Math.max(maxLevel,3);
-    else if(f==='无力'||f==='重按始得') maxLevel=Math.max(maxLevel,2);
+    if(f==='按之即无') levels[i]=Math.max(levels[i],4);
+    else if(f==='弦无力') levels[i]=Math.max(levels[i],3);
+    else if(f==='无力'||f==='重按始得') levels[i]=Math.max(levels[i],2);
     var s=shapes[i];
-    if(s==='微'||s==='极微弱') maxLevel=Math.max(maxLevel,4);
-    else if(s==='弱'||s==='微弱') maxLevel=Math.max(maxLevel,3);
-    else if(s==='细') maxLevel=Math.max(maxLevel,2);
+    if(s==='微'||s==='极微弱') levels[i]=Math.max(levels[i],4);
+    else if(s==='弱'||s==='微弱') levels[i]=Math.max(levels[i],3);
+    else if(s==='细') levels[i]=Math.max(levels[i],2);
   }
-  return maxLevel;
+  return {left:levels[0], right:levels[1], max:Math.max(levels[0],levels[1])};
 }
 
 function analyzeZhangZhongjing(d){

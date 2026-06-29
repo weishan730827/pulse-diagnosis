@@ -3,981 +3,833 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>九家并列脉诊辨证体系 v7</title>
+<title>九家并列脉诊辨证工具 v3</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f7f4ed;color:#3a2a1a;line-height:1.7}
-.header{background:linear-gradient(135deg,#1a0f0a,#3d2014);color:#e8d5b0;padding:24px 20px;text-align:center}
-.header h1{font-size:22px;letter-spacing:3px}
-.header .sub{font-size:11px;color:#b8a080;margin-top:4px}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f0eb;color:#333;line-height:1.6}
+.header{background:#2c1810;color:#f0d9b5;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.header h1{font-size:18px}.sub{font-size:11px;color:#b8a080}
+.container{max-width:1500px;margin:0 auto;padding:14px}
 
-.container{max-width:1400px;margin:0 auto;padding:16px}
+/* 医家选择器 */
+.school-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;padding:10px;background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.06);align-items:center}
+.school-selector .label{font-size:12px;font-weight:700;color:#555;margin-right:4px;white-space:nowrap}
+.school-btn{padding:5px 12px;font-size:11px;border:1px solid #d4c4a0;border-radius:4px;background:#fdfbf7;color:#5a4840;cursor:pointer;transition:.2s;white-space:nowrap}
+.school-btn:hover{background:#f0e6d2}
+.school-btn.active{background:#8b6914;color:#fff;border-color:#8b6914;font-weight:600}
+.school-btn.all{background:#2c1810;color:#f0d9b5;border-color:#2c1810}
 
-/* 步骤 */
-.step{background:#fff;border-radius:10px;padding:18px 22px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.step-num{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:#8b6914;color:#fff;border-radius:50%;font-size:13px;font-weight:700;margin-right:8px}
-.step-title{font-size:15px;font-weight:700;color:#2c1810}
-.step-desc{font-size:11px;color:#888;margin:4px 0 10px 34px}
+.form-panel{background:#fff;border-radius:8px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:14px}
+.form-panel h3{font-size:14px;color:#2c1810;margin-bottom:12px;border-bottom:2px solid #e8d5b7;padding-bottom:6px}
+.section-title{font-size:12px;font-weight:700;color:#555;margin:10px 0 6px}
 
-/* 医家选择条 */
-.school-bar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px 34px}
-.school-chip{padding:6px 14px;font-size:11px;border:2px solid #e5d9c5;border-radius:6px;background:#fdfbf7;cursor:pointer;transition:.2s;white-space:nowrap}
-.school-chip:hover{border-color:#8b6914}
-.school-chip.active{background:#8b6914;color:#fff;border-color:#8b6914;font-weight:600}
-.school-chip .hint{font-size:9px;opacity:0.7;display:block;line-height:1.2}
+/* 总按区域 */
+.zong-an-row{display:flex;gap:12px;margin-bottom:10px}
+.zong-an-card{flex:1;background:#fefdf9;border:2px solid #e8d5b7;border-radius:6px;padding:10px 12px}
+.zong-an-card .title{font-size:12px;font-weight:700;color:#8b6914;margin-bottom:6px}
+.zong-an-card select{width:100%;padding:5px;font-size:11px;border:1px solid #ddd;border-radius:3px;margin-bottom:3px}
+.zong-an-card label{font-size:10px;color:#888;display:block;margin-top:3px}
 
-/* 表单区域 */
-.form-area{margin-left:34px;min-height:80px}
-.form-placeholder{color:#aaa;font-size:12px;text-align:center;padding:30px}
+.pulse-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.pulse-cell{border:1px solid #e8d5b7;border-radius:4px;padding:7px;background:#fdfbf7}
+.pulse-cell .pos{font-size:11px;font-weight:700;color:#8b6914;margin-bottom:3px}
+.pulse-cell select{width:100%;padding:4px 5px;font-size:11px;border:1px solid #ddd;border-radius:3px;background:#fafaf7;margin-bottom:2px}
+.pulse-cell select:focus{border-color:#8b6914;outline:none}
+.sym-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.sym-grid label{font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;padding:3px 5px;border-radius:3px}
+.sym-grid label:hover{background:#fdf6e3}
+.btn-row{text-align:center;margin:14px 0 0}
+.btn{background:#8b6914;color:#fff;border:none;padding:9px 30px;font-size:14px;border-radius:6px;cursor:pointer;font-weight:600}
+.btn:hover{background:#a07e1f}
+.btn-clear{background:#ccc;color:#555;margin-left:8px}
 
-/* 各家专属表单 */
-.school-form{display:none;padding:14px;background:#fefdf9;border:1px solid #e8d5b7;border-radius:8px}
-.school-form.active{display:block}
-.school-form h3{font-size:13px;color:#8b6914;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8d5b7}
-.school-form .form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-.school-form .form-cell{flex:1;min-width:130px}
-.school-form .form-cell label{font-size:10px;color:#777;display:block;margin-bottom:2px}
-.school-form .form-cell select,.school-form .form-cell input{width:100%;padding:6px 8px;font-size:11px;border:1px solid #ddd;border-radius:4px;background:#fff}
-.school-form .form-cell select:focus{border-color:#8b6914;outline:none}
-.school-form .note{font-size:10px;color:#999;margin-top:6px;font-style:italic}
-.zong-an{display:flex;gap:10px;margin-bottom:8px}
-.zong-an>div{flex:1;padding:8px 10px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8}
+/* 结果 - 按医家分组 */
+.school-section{margin-bottom:16px}
+.school-section .school-header{font-size:14px;font-weight:700;color:#2c1810;padding:8px 12px;background:#f0e6d2;border-radius:6px 6px 0 0;display:flex;justify-content:space-between;align-items:center}
+.school-section .school-header .tag{font-size:10px;background:#8b6914;color:#fff;padding:2px 8px;border-radius:3px}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:8px}
+.card{background:#fff;border-radius:5px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.05);border-left:3px solid #ddd;font-size:11px}
+.card .fw{font-size:9px;color:#aaa;margin-bottom:4px}
+.card .step{font-size:10px;color:#555;margin:2px 0;padding-left:2px}
+.card .step b{color:#8b6914}
+.card .result{background:#fdf6e3;padding:5px 7px;border-radius:3px;margin-top:4px}
+.card .warn{color:#c0392b;font-size:10px;margin-top:3px;font-weight:600}
+.card.match{border-left-color:#8b6914;background:#fefdf9}
+.card.strong{border-left-color:#2c6b14}
+.no-result{text-align:center;color:#aaa;font-size:11px;padding:16px}
 
-/* 陈建国 四步引导 */
-.cj-step{margin:8px 0 4px 34px;padding:10px 14px;background:#fdfaf4;border:1px solid #e8d5b7;border-radius:6px}
-.cj-step-title{font-size:12px;font-weight:700;color:#8b6914;margin-bottom:6px}
-.cj-step-desc{font-size:10px;color:#888;margin-bottom:6px;font-style:italic}
-.cj-guide{font-size:11px;color:#8b6914;background:#fef9ee;padding:5px 8px;border-radius:4px;margin:4px 0;line-height:1.6}
-.cj-result-box{margin:8px 0 0 34px;padding:10px;background:#fefdf9;border-left:4px solid #8b6914;border-radius:4px}
-.cj-big-btn{padding:8px 18px;font-size:13px;font-weight:600;border:none;border-radius:6px;cursor:pointer;background:#8b6914;color:#fff}
-.cj-big-btn:hover{background:#6b4f10}
-.cj-reset{background:transparent;color:#8b6914;border:1px solid #8b6914;padding:4px 12px;font-size:11px;border-radius:4px;cursor:pointer;margin-left:8px}
-
-/* 多选脉象 chip（胡希恕专用） */
-.pulse-chip-group{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
-.pulse-chip-group label{font-size:11px;padding:2px 8px;border:1px solid #d4c9b0;border-radius:3px;cursor:pointer;background:#fdfaf4;white-space:nowrap}
-.pulse-chip-group label:hover{border-color:#8b6914;background:#fdf3d5}
-.pulse-chip-group input[type=checkbox]{display:none}
-.pulse-chip-group input[type=checkbox]:checked + span{color:#fff}
-.pulse-chip-group label:has(input:checked){background:#8b6914;color:#fff;border-color:#8b6914}
-.hx-total-block{flex:1;min-width:180px;padding:8px 10px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8}
-.hx-step-label{font-size:10px;color:#8b6914;font-weight:700;margin:5px 0 2px}
-
-/* 结果区 */
-.result-box{margin:12px 0 0 34px;padding:14px;background:#fefdf9;border-left:4px solid #8b6914;border-radius:4px;display:none}
-.result-box h4{font-size:13px;color:#2c1810;margin-bottom:4px}
-.result-box .tag{font-size:9px;background:#f0e6d2;color:#8b6914;padding:2px 6px;border-radius:3px;margin-left:6px}
-.result-box .output{font-size:11px;color:#555;line-height:1.8;margin-top:6px}
-.result-box .output b{color:#8b6914}
-.result-box .warn{color:#c0392b;font-weight:600}
-
-.btn{display:inline-block;padding:8px 24px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600}
-.btn-primary{background:#8b6914;color:#fff}.btn-primary:hover{background:#6b4f10}
-.btn-outline{background:transparent;color:#8b6914;border:1px solid #8b6914}
-.btn-sm{padding:4px 12px;font-size:11px}
-.toolbar{text-align:center;padding:10px;font-size:11px;color:#a09080}
-.toolbar a{color:#8b6914;text-decoration:none;margin:0 8px}
-.toolbar a:hover{text-decoration:underline}
-
-/* 张锡纯三步辨证漏斗 */
-.zx-step{margin:10px 0;padding:12px;border:1px solid #d4c4a0;border-radius:8px;background:#fffef8}
-.zx-step-title{font-size:12px;font-weight:700;color:#8b6914;margin-bottom:6px}
-.zx-step-desc{font-size:11px;color:#666;margin-bottom:6px}
-.zx-guide{font-size:10px;color:#8b6914;background:#fef9ef;padding:6px 8px;border-radius:4px;margin:6px 0;line-height:1.8}
-.zx-radio{display:block;margin:4px 0;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:3px;transition:all .2s}
-.zx-radio input{margin-right:4px}
-.zx-radio:has(input:checked){background:#8b6914;color:#fff}
-.zx-chip{display:inline-block;margin:3px;padding:4px 10px;font-size:11px;border:1px solid #d4c4a0;border-radius:14px;cursor:pointer;background:#fff}
-.zx-chip input{display:none}
-.zx-chip:has(input:checked){background:#8b6914;color:#fff;border-color:#8b6914}
-.zx-big-btn{display:inline-block;padding:8px 20px;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;background:#8b6914;color:#fff}
-.zx-big-btn:hover{background:#6b4f10}
-.zx-result-box{margin:12px 0 0 0;padding:14px;background:#fefdf9;border-left:4px solid #8b6914;border-radius:4px;display:none}
-.zx-big-select label{display:block;margin:4px 0;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:3px}
-.zx-big-select input{margin-right:4px}
-.zx-big-select input:checked ~ span{background:#8b6914;color:#fff;padding:2px 6px;border-radius:3px}
-.zx-form-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+@media(max-width:900px){.results-grid{grid-template-columns:1fr}}
 </style>
-<script src="diagnosis_engine.js"></script>
 </head>
 <body>
 
 <div class="header">
-<h1>九家并列脉诊辨证体系</h1>
-<div class="sub">选医家 → 各家用各自专属脉诊表 → 按各自体系独立辨证</div>
-</div>
-
-<div class="toolbar">
-<a href="jiujia_maizhen.html">通用查询工具</a> ·
-<a href="pulse-diagnosis_project_index.md">文件索引</a> ·
-<a href="使用手册_v2.md">使用手册</a> ·
-<a href="SYSTEM_CHAIN.md">系统链</a>
+<div><h1>九家并列脉诊辨证工具 v3</h1><span class="sub">选医家 → 填脉象（含左右手总按） → 并行出结果</span></div>
 </div>
 
 <div class="container">
 
-<!-- 第一步：选择医家 -->
-<div class="step">
-<span class="step-num">1</span><span class="step-title">选择医家</span>
-<p class="step-desc">每家辨证体系不同，脉诊表格也不同。选一家开始，或选多家并列对比。</p>
+<!-- 医家选择 -->
+<div class="school-selector">
+<span class="label">选择医家：</span>
+<button class="school-btn all active" onclick="selectSchools('all')" data-school="all">九家全开</button>
+<button class="school-btn" onclick="selectSchools('zhangxichun')" data-school="zhangxichun">张锡纯·气机升降</button>
+<button class="school-btn" onclick="selectSchools('zhangzhongjing')" data-school="zhangzhongjing">张仲景·六经</button>
+<button class="school-btn" onclick="selectSchools('huxishu')" data-school="huxishu">胡希恕·八纲六经</button>
+<button class="school-btn" onclick="selectSchools('chenjianguo')" data-school="chenjianguo">陈建国·三部九候</button>
+<button class="school-btn" onclick="selectSchools('liuduzhou')" data-school="liuduzhou">刘渡舟·十论分诊</button>
+<button class="school-btn" onclick="selectSchools('huangyuanyu')" data-school="huangyuanyu">黄元御·一气周流</button>
+<button class="school-btn" onclick="selectSchools('caoyingfu')" data-school="caoyingfu">曹颖甫·方证对应</button>
+<button class="school-btn" onclick="selectSchools('zhengqinan')" data-school="zhengqinan">郑钦安·阴阳</button>
+<button class="school-btn" onclick="selectSchools('yaomeiling')" data-school="yaomeiling">姚梅龄·脉学分层</button>
+</div>
 
-<div class="school-bar" id="schoolBar"></div>
-<div style="margin-left:34px;margin-top:6px">
-<button class="btn btn-sm btn-primary" onclick="selectReco()">推荐组合</button>
-<button class="btn btn-sm btn-outline" onclick="selectAll()">全选</button>
-<button class="btn btn-sm btn-outline" onclick="clearSel()">清空</button>
-<span style="font-size:11px;color:#999;margin-left:8px" id="selCount">未选</span>
+<div class="form-panel">
+<h3>脉象输入（左右手总按 + 六部单按）</h3>
+
+<!-- 左手总按 -->
+<div class="zong-an-row">
+<div class="zong-an-card">
+<div class="title">左手总按（三指齐按）</div>
+<label>脉形</label><select id="zongLeftShape">
+<option value="">--</option>
+<option>浮</option><option>沉</option><option>弦</option><option>细</option><option>弱</option>
+<option>洪</option><option>滑</option><option>涩</option><option>紧</option><option>缓</option>
+<option>大</option><option>硬</option><option>微</option><option>数</option><option>迟</option>
+<option>革</option><option>芤</option><option>促</option><option>代</option><option>结</option>
+<option>伏</option><option>濡</option><option>散</option>
+</select>
+<label>力度</label><select id="zongLeftForce">
+<option value="">--</option>
+<option>有力</option><option>无力</option><option>弦硬(假有力)</option><option>弦无力</option>
+<option>按之即无</option><option>弹指</option><option>重按始得</option>
+</select>
+</div>
+
+<!-- 右手总按 -->
+<div class="zong-an-card">
+<div class="title">右手总按（三指齐按）</div>
+<label>脉形</label><select id="zongRightShape">
+<option value="">--</option>
+<option>浮</option><option>沉</option><option>弦</option><option>细</option><option>弱</option>
+<option>洪</option><option>滑</option><option>涩</option><option>紧</option><option>缓</option>
+<option>大</option><option>硬</option><option>微</option><option>数</option><option>迟</option>
+<option>革</option><option>芤</option><option>促</option><option>代</option><option>结</option>
+<option>伏</option><option>濡</option><option>散</option>
+</select>
+<label>力度</label><select id="zongRightForce">
+<option value="">--</option>
+<option>有力</option><option>无力</option><option>弦硬(假有力)</option><option>弦无力</option>
+<option>按之即无</option><option>弹指</option><option>重按始得</option>
+</select>
 </div>
 </div>
 
-<!-- 第二步：填写各家专属脉诊表 -->
-<div class="step">
-<span class="step-num">2</span><span class="step-title">填写脉诊数据</span>
-<p class="step-desc">根据选中医家的体系填写其专属脉诊表。每家关注的脉诊维度不同。</p>
+<p style="font-size:10px;color:#999;margin:0 0 8px">以下为六部单按（浮中沉逐指），每部至少选脉形</p>
 
-<div class="form-area" id="formArea">
-<div class="form-placeholder">请先在第一步选择至少一家医体。</div>
+<div class="section-title">左手 · 寸关尺</div>
+<div class="pulse-grid" id="leftPulse"></div>
+<div class="section-title">右手 · 寸关尺</div>
+<div class="pulse-grid" id="rightPulse"></div>
+
+<div class="section-title">兼证与体征</div>
+<div class="sym-grid" id="symGrid"></div>
+
+<div class="section-title" style="margin-top:10px">主诉（自由填写）</div>
+<textarea id="chiefComplaint" rows="2" style="width:100%;padding:7px;border:1px solid #ddd;border-radius:4px;font-size:12px;resize:vertical" placeholder="例：头晕三日，气从脐上冲，大便三日未行..."></textarea>
+
+<div class="btn-row">
+<button class="btn" onclick="diagnose()">九家并行辨证</button>
+<button class="btn btn-clear" onclick="clearAll()">清空</button>
 </div>
 </div>
 
-<!-- 第三步：主诉与症状 -->
-<div class="step">
-<span class="step-num">3</span><span class="step-title">主诉与症状（通用）</span>
-<p class="step-desc">此处为所有选中医家共用的症状信息。部分医家（刘渡舟、郑钦安）以此为主驱动。</p>
-
-<div style="margin-left:34px">
-<textarea id="chiefComplaint" rows="2" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;font-size:12px;margin-bottom:10px" placeholder="主诉：例：胸闷气短三日，动则加剧，畏寒怕冷，大便溏泻..."></textarea>
-<div class="chip-grid" id="symGrid"></div>
-</div>
-</div>
-
-<!-- 第四步：辨证执行 -->
-<div class="step">
-<span class="step-num">4</span><span class="step-title">辨证执行</span>
-<p class="step-desc">各家按自身体系独立辨证，输出格式互不相同。</p>
-
-<div style="margin-left:34px">
-<button class="btn btn-primary" onclick="runAll()">开始辨证</button>
-</div>
 <div id="results"></div>
 </div>
 
-</div>
-
 <script>
-// ========== 九家定义 ==========
-var schools = [
-  {
-    id:'zhangxichun', name:'张锡纯', system:'气机升降辨证', era:'清末民初',
-    pulseFields:'left-right-contrast',
-    description:'核心：辨左右虚实 → 定升降方向。总按定左右，单按定脏腑。弦脉/硬脉是关键。',
-    formId:'zxForm'
-  },
-  {
-    id:'zhangzhongjing', name:'张仲景', system:'六经辨证', era:'东汉',
-    pulseFields:'six-meridian',
-    description:'核心：六经主脉定位。太阳浮、阳明大、少阳弦、太阴缓、少阴微细、厥阴弦细。',
-    formId:'zjForm'
-  },
-  {
-    id:'huxishu', name:'胡希恕', system:'六经八纲脉证辨证', era:'近代',
-    pulseFields:'three-step-bagang',
-    description:'核心：脉诊三步法定乾坤——浮沉定病位、迟数定寒热、沉取有力无力定虚实。缓≠慢（缓=因汗出脉管弛缓），26脉象三分法，103方症候群+特征脉精确匹配。总按为核心诊法，六部分部为辅助参考。',
-    formId:'hxForm'
-  },
-  {
-    id:'chenjianguo', name:'陈建国', system:'三部九候脉诊', era:'当代',
-    pulseFields:'three-layer-nine-position',
-    description:'核心：六步定向法，浮中沉×寸关尺九候。50方脉位签名库精确匹配。纯脉诊驱动。',
-    formId:'cjForm'
-  },
-  {
-    id:'yaomeiling', name:'姚梅龄', system:'脉学分层辨证', era:'当代',
-    pulseFields:'six-dimension',
-    description:'核心：六维分层（位·体·力·率·律·形）。pulse_db.json检索。知医邦28脉量化直接适用。',
-    formId:'ymForm'
-  },
-  {
-    id:'liuduzhou', name:'刘渡舟', system:'十论分诊辨证', era:'当代',
-    pulseFields:'symptom-driven',
-    description:'核心：症状驱动（水证·气机·脾胃），脉象辅助六经定位。症状关键词为必填。',
-    formId:'ldForm'
-  },
-  {
-    id:'huangyuanyu', name:'黄元御', system:'一气周流辨证', era:'清代',
-    pulseFields:'zhongqi-guan',
-    description:'核心：右关定中气，寸关尺一气升降。24脉12对阴阳。右关为必采。',
-    formId:'hyForm'
-  },
-  {
-    id:'caoyingfu', name:'曹颖甫', system:'方证对应辨证', era:'近代',
-    pulseFields:'left-right-basic',
-    description:'核心：左右分诊 + 92案脉证映射。病汗药汗鉴别。脉证精准对应。',
-    formId:'cyForm'
-  },
-  {
-    id:'zhengqinan', name:'郑钦安', system:'阴阳辨证', era:'清代',
-    pulseFields:'chi-yang',
-    description:'核心：尺脉辨真阳 + 三问定阴阳。假热真寒鉴别。尺脉必查。',
-    formId:'znForm'
+// ========== 医家选择 ==========
+var activeSchools = 'all';
+function selectSchools(id){
+  activeSchools = id;
+  document.querySelectorAll('.school-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('[data-school="'+id+'"]').classList.add('active');
+}
+
+// ========== 构建六部表单 ==========
+var posNames = ['寸','关','尺'];
+var shapeOpts = ['','浮','沉','弦','细','弱','微','洪','滑','数','迟','涩','紧','缓','大','硬','革','芤','促','代','结','伏','濡','散'];
+var forceOpts = ['','有力','无力','弦硬(假有力)','弦无力','按之即无','弹指','重按始得'];
+
+function buildPulseGrid(containerId, side){
+  var h='';
+  for(var i=0;i<3;i++){
+    var pos = side+'_'+posNames[i];
+    h+='<div class="pulse-cell"><div class="pos">'+side+'手'+posNames[i]+'</div>';
+    h+='<label style="font-size:9px;color:#888">脉形</label><select id="shape_'+pos+'">';
+    for(var j=0;j<shapeOpts.length;j++) h+='<option>'+shapeOpts[j]+'</option>';
+    h+='</select>';
+    h+='<label style="font-size:9px;color:#888">力度</label><select id="force_'+pos+'">';
+    for(var j=0;j<forceOpts.length;j++) h+='<option>'+forceOpts[j]+'</option>';
+    h+='</select></div>';
   }
-];
-
-var activeSchool = null;
-var selectedSchools = {};
-
-// ========== 渲染医家选择条 ==========
-var barHtml='';
-for(var i=0;i<schools.length;i++){
-  var s=schools[i];
-  barHtml+='<div class="school-chip" id="chip_'+s.id+'" onclick="toggleSchool(\''+s.id+'\')">'+s.name+'<span class="hint">'+s.system+'</span></div>';
+  document.getElementById(containerId).innerHTML=h;
 }
-document.getElementById('schoolBar').innerHTML=barHtml;
+buildPulseGrid('leftPulse','左');
+buildPulseGrid('rightPulse','右');
 
-// ========== 渲染症状网格 ==========
-var allSyms=['发热','恶寒','畏寒','寒热往来','自汗','盗汗','无汗','头痛','头晕','眩晕',
-  '胸闷','心悸','气短','咳嗽','痰多','恶心','呕吐','呃逆','嗳气','反酸',
-  '腹胀','腹痛','便秘','便溏','腹泻','小便不利','小便频数','水肿','浮肿',
-  '口苦','口干','口渴','不渴','咽干','目眩','耳鸣','失眠','嗜睡','乏力',
-  '纳差','肢冷','手足厥冷','麻木','腰酸','腰冷','面色萎黄','面色晄白','潮热','烦躁',
-  '胸胁苦满','心下痞','脐下悸','气上冲','身重','黄疸'];
-var sh='';
-for(var i=0;i<allSyms.length;i++){
-  sh+='<label id="sym_'+i+'" onclick="this.classList.toggle(\'selected\')">'+allSyms[i]+'</label>';
+// 兼证
+var symptoms = ['发热','恶寒','汗出','无汗','口渴','不渴','头痛','眩晕','胸闷','心悸','气短','咳嗽','痰多','恶心','呕吐','腹胀','腹痛','便秘','便溏','小便不利','水肿','黄疸','失眠','烦躁','乏力','纳差','口苦','咽干','肢冷','麻木'];
+var symHtml='';
+for(var i=0;i<symptoms.length;i++){
+  symHtml+='<label><input type="checkbox" value="'+symptoms[i]+'">'+symptoms[i]+'</label>';
 }
-document.getElementById('symGrid').innerHTML=sh;
+document.getElementById('symGrid').innerHTML=symHtml;
 
-// ========== 渲染各家专属表单 ==========
-var formHtml='';
-
-// --- 张锡纯：气机升降三步辨证漏斗 ---
-formHtml+='<div class="school-form" id="zxForm">';
-formHtml+='<h3>张锡纯 · 气机升降辨证 — 三步漏斗</h3>';
-formHtml+='<div class="note">锡纯辨证核心：先定气机升降方向，再选方剂，脉诊贯穿始终确认。短气/努力呼吸=大气下陷；喘逆/呕恶=气机上逆；否则直走门类。</div>';
-
-// Step 1：辨气机升降方向
-formHtml+='<div id="zxStep1" class="zx-step">';
-formHtml+='<div class="zx-step-title">第一步：辨气机升降方向</div>';
-formHtml+='<div class="zx-step-desc">张氏谓："胸中大气，为诸气之纲领。"短气/努力呼吸=大气下陷；喘逆/呕恶=气机上逆；否则直走门类。</div>';
-formHtml+='<div class="zx-guide">';
-formHtml+='  \u2987 <b>大气下陷</b>：气短不足以息，努力呼吸有似乎喘，脉象沉迟微弱关前尤甚<br>';
-formHtml+='  \u2196 <b>气机上逆</b>：喘逆迫促、气息上冲、呕恶呃逆、胸膈满闷，脉象弦硬大而长<br>';
-formHtml+='  \u2194 <b>无明显升降异常</b>：直接按症状定位门类（33门）<br>';
-formHtml+='</div>';
-formHtml+='<div style="margin:8px 0 4px">';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_direction" value="sink" onchange="zxSetDirection(\'sink\')"> <span>短气/努力呼吸 → 大气下陷</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_direction" value="up" onchange="zxSetDirection(\'up\')"> <span>喘逆/呕恶/满闷 → 气机上逆</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_direction" value="direct" onchange="zxSetDirection(\'direct\')"> <span>无升降异常 → 直走门类</span></label>';
-formHtml+='</div>';
-formHtml+='<div id="zx_dirNote" style="font-size:11px;color:#8b6914;min-height:20px"></div>';
-formHtml+='</div>';
-
-// Step 2：大气下陷分支
-formHtml+='<div id="zxStep2Sink" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第二步：大气下陷分型</div>';
-formHtml+='<div class="zx-step-desc">大气下陷，脉象沉迟微弱，关前尤甚。选最贴合者：</div>';
-formHtml+='<div class="zx-guide">';
-formHtml+='  \u2705 <b>纯大气下陷</b>：气短、气息将停、脉沉迟微弱 → <b>升陷汤</b><br>';
-formHtml+='  \u2705 <b>兼心肺阳虚</b>：心冷、背紧、恶寒、脉微弱而迟 → <b>回阳升陷汤</b><br>';
-formHtml+='  \u2705 <b>兼气分郁结</b>：胸中满闷、经络瘀淤 → <b>理郁升陷汤</b><br>';
-formHtml+='  \u2705 <b>兼脾气下陷</b>：小便不禁 → <b>醒脾升陷汤</b>';
-formHtml+='</div>';
-formHtml+='<div style="margin:8px 0 4px">';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="升陷汤" onchange="zxSetSink(\'升陷汤\')"> <span>升陷汤 — 纯大气下陷</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="回阳升陷汤" onchange="zxSetSink(\'回阳升陷汤\')"> <span>回阳升陷汤 — 兼心肺阳虚</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="理郁升陷汤" onchange="zxSetSink(\'理郁升陷汤\')"> <span>理郁升陷汤 — 兼气分郁结</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="醒脾升陷汤" onchange="zxSetSink(\'醒脾升陷汤\')"> <span>醒脾升陷汤 — 兼脾气下陷</span></label>';
-formHtml+='</div>';
-formHtml+='<div style="margin-top:8px"><button class="zx-big-btn" onclick="zxShowPulse()">\uD83D\uDD0D 确认，进入脉诊确认</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(1)">\u2190 上一步</button></div>';
-formHtml+='</div>';
-
-// Step 2：气机上逆分支
-formHtml+='<div id="zxStep2Up" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第二步：气机上逆分型（镇降类）</div>';
-formHtml+='<div class="zx-step-desc">冲气上逆、胃气不降，脉象弦硬大而长，右部尤甚。选最贴合者：</div>';
-formHtml+='<div style="margin:8px 0 4px">';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="参赭镇气汤" onchange="zxSetUp(\'参赭镇气汤\')"> <span>参赭镇气汤 — 阴阳两虚+喘逆迫促</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="薯蓣纳气汤" onchange="zxSetUp(\'薯蓣纳气汤\')"> <span>薯蓣纳气汤 — 阴虚不纳气作喘</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="滋培汤" onchange="zxSetUp(\'滋培汤\')"> <span>滋培汤 — 虚劳喘逆+饮食减少</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="镇摄汤" onchange="zxSetUp(\'镇摄汤\')"> <span>镇摄汤 — 胸膈满闷、脉大而弦（脾胃真气外泄）</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="镇逆汤" onchange="zxSetUp(\'镇逆汤\')"> <span>镇逆汤 — 胃气上逆呕吐</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="寒降汤" onchange="zxSetUp(\'寒降汤\')"> <span>寒降汤 — 胃气上逆+吐衄脉洪滑</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="温降汤" onchange="zxSetUp(\'温降汤\')"> <span>温降汤 — 胃气上逆+吐衄脉虚濡迟</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="清降汤" onchange="zxSetUp(\'清降汤\')"> <span>清降汤 — 吐衄不止阴分亏损</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="秘红丹" onchange="zxSetUp(\'秘红丹\')"> <span>秘红丹 — 肝郁多怒+吐衄</span></label>';
-formHtml+='</div>';
-formHtml+='<div style="margin-top:8px"><button class="zx-big-btn" onclick="zxShowPulse()">\uD83D\uDD0D 确认，进入脉诊确认</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(1)">\u2190 上一步</button></div>';
-formHtml+='</div>';
-
-// Step 2：直走门类分支
-formHtml+='<div id="zxStep2Direct" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第二步：按症状定位门类</div>';
-formHtml+='<div class="zx-step-desc">张氏《医学衷中参西录》分33门。选最符合主诉的病位门类：</div>';
-formHtml+='<div class="zx-form-row" style="display:flex;flex-wrap:wrap;gap:6px">';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_01" onchange="zxSetSection(\'s_01\',\'阴虚劳热\')"><span>阴虚劳热</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_02" onchange="zxSetSection(\'s_02\',\'阳虚\')"><span>阳虚</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_03" onchange="zxSetSection(\'s_03\',\'大气下陷\')"><span>大气下陷</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_04" onchange="zxSetSection(\'s_04\',\'喘息\')"><span>喘息</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_05" onchange="zxSetSection(\'s_05\',\'痰饮\')"><span>痰饮</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_06" onchange="zxSetSection(\'s_06\',\'肺病\')"><span>肺病</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_07" onchange="zxSetSection(\'s_07\',\'吐衄\')"><span>吐衄</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_08" onchange="zxSetSection(\'s_08\',\'心病\')"><span>心病</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_12" onchange="zxSetSection(\'s_12\',\'中风\')"><span>中风</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_15" onchange="zxSetSection(\'s_15\',\'呕吐\')"><span>呕吐</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_17" onchange="zxSetSection(\'s_17\',\'泄泻\')"><span>泄泻</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_18" onchange="zxSetSection(\'s_18\',\'痢\')"><span>痢疾</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_21" onchange="zxSetSection(\'s_21\',\'癃闭\')"><span>癃闭水肿</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_23" onchange="zxSetSection(\'s_23\',\'伤寒\')"><span>伤寒</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_24" onchange="zxSetSection(\'s_24\',\'温病\')"><span>温病</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_29" onchange="zxSetSection(\'s_29\',\'女科\')"><span>女科</span></label>';
-formHtml+='</div>';
-formHtml+='<div id="zx_sectionFormulas" style="margin-top:8px;display:none"><div class="zx-step-desc">该门类下的方剂：</div><div id="zx_formulaRadios" style="margin:4px 0"></div></div>';
-formHtml+='<div style="margin-top:8px"><button class="zx-big-btn" id="zx_toPulseBtn" onclick="zxShowPulse()" style="display:none">\uD83D\uDD0D 确认，进入脉诊确认</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(1)">\u2190 上一步</button></div>';
-formHtml+='</div>';
-
-// Step 3：脉诊确认
-formHtml+='<div id="zxStep3" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第三步：脉诊确认（左右对比）</div>';
-formHtml+='<div class="zx-step-desc">张氏诊脉核心：总按左右对比为第一层，单按脏腑定位为第二层。</div>';
-formHtml+='<div class="zong-an">';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左手总按（候阴盛衰）</div>';
-formHtml+='<select id="zx_zongL"><option value="">--脉形</option><option>弦</option><option>弦细</option><option>弦数</option><option>弦硬</option><option>弦长</option><option>细</option><option>弱</option><option>浮</option><option>沉</option><option>洪</option><option>滑</option><option>涩</option><option>数</option><option>迟</option><option>微</option><option>虚</option></select>';
-formHtml+='<select id="zx_zongLF" style="margin-top:3px"><option value="">--力度</option><option>有力</option><option>无力</option><option>弦硬</option><option>弦无力</option><option>按之即无</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右手总按（候阳盛衰）</div>';
-formHtml+='<select id="zx_zongR"><option value="">--脉形</option><option>弦</option><option>弦细</option><option>弦数</option><option>弦硬</option><option>弦长</option><option>细</option><option>弱</option><option>浮</option><option>沉</option><option>洪</option><option>滑</option><option>涩</option><option>数</option><option>迟</option><option>微</option><option>虚</option></select>';
-formHtml+='<select id="zx_zongRF" style="margin-top:3px"><option value="">--力度</option><option>有力</option><option>无力</option><option>弦硬</option><option>弦无力</option><option>按之即无</option></select></div>';
-formHtml+='</div>';
-formHtml+='<div class="note" id="zx_pulseNote">已选方向：<span id="zx_selectedDir"></span> → 已选方剂：<span id="zx_selectedFormula"></span></div>';
-formHtml+='<div><button class="zx-big-btn" onclick="zxAnalyze()">\uD83D\uDD0D 完成辨证</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(2)">\u2190 上一步</button></div>';
-formHtml+='</div>';
-
-// 结果区
-formHtml+='<div id="zxResult" class="zx-result-box" style="display:none"></div>';
-formHtml+='</div>';
-
-      // --- 陈建国：三部九候四步引导流 ---
-      // 步骤状态管理
-      var cjStep = 0; // 0=未开始 1=左手总按 2=左手最异部 3=右手总按 4=右手最异部 5=完成
-      var cjData = { leftOver:'' , rightOver:'', leftMost:'', rightMost:'', leftDepth:'', rightDepth:'', leftNote:'', rightNote:'' };
-      
-      function cjStepHtml(step) {
-        var h = '';
-        // 步骤1：左手总按
-        h += '<div class="cj-step' + (step===1?'':'' ) + '">';
-        h += '<div class="cj-step-title">第一步：左手总按（诊左脉总体）</div>';
-        h += '<div class="cj-step-desc">左脉诊"阴"盛衰。依《仲景阴阳脉法》："左脉诊阴盛衰"。</div>';
-        h += '<div class="cj-guide">';
-        h += '👆 先感受整只左手的脉动：<br>';
-        h += '· 比正常健康脉更有力/脉管更宽大 = <b>太过</b>（阴盛/实）<br>';
-        h += '· 比正常健康脉更无力/脉管更细小 = <b>不及</b>（阴虚/虚）<br>';
-        h += '· 重要性：脉动力量为主（候气），脉管宽度为辅（候血）<br>';
-        h += '· 参考：诸部均有力→太过；诸部均无力→不及；';
-        h += '</div>';
-        h += '<div style="margin:8px 0 4px">左手总体：';
-        h += '<label class="cj-radio"><input type="radio" name="cj_leftOver" value="太过" onchange="cjSetOver(\'left\',\'太过\')"> <span>太过（阴盛/实）</span></label> ';
-        h += '<label class="cj-radio"><input type="radio" name="cj_leftOver" value="不及" onchange="cjSetOver(\'left\',\'不及\')"> <span>不及（阴虚/虚）</span></label> ';
-        h += '<label class="cj-radio"><input type="radio" name="cj_leftOver" value="正常" onchange="cjSetOver(\'left\',\'正常\')"> <span>正常</span></label>';
-        h += '</div>';
-        h += '<div id="cj_leftOverNote" style="font-size:11px;color:#8b6914;min-height:20px"></div>';
-        h += '<div style="margin-top:8px"><button class="cj-big-btn" onclick="cjNext(2)">下一步：找左手最异部 ▶</button>';
-        h += '<button class="cj-reset" onclick="cjReset()">重置</button></div>';
-        h += '</div>';
-        // 步骤2：左手最异部
-        h += '<div class="cj-step' + (step===2?'':'' ) + '">';
-        h += '<div class="cj-step-title">第二步：左手最异常部（定位）</div>';
-        h += '<div class="cj-step-desc">总体' + (cjData.leftOver||'?') + ' → 找最有力（或最无力）的那一部</div>';
-        h += '<div class="cj-guide">';
-        h += '👆 依据总按结果探查：<br>';
-        h += '· 总体<b>太过</b> → 找脉动<b>最有力</b>的一部（寸/关/尺）<br>';
-        h += '· 总体<b>不及</b> → 找脉动<b>最无力</b>的一部（寸/关/尺）<br>';
-        h += '· 进一步探该部最强脉动在<b>浮/中/沉</b>哪一位（最强脉动所在=病位）<br>';
-        h += '· 参考：寸=上焦/表，关=中焦，尺=下焦/里';
-        h += '</div>';
-        h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">';
-        ['左寸','左关','左尺'].forEach(function(pos){
-          h += '<div style="flex:1;min-width:120px;padding:8px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8;text-align:center">';
-          h += '<div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">' + pos + '</div>';
-          h += '<select id="cj_leftPos" style="width:100%;padding:4px;font-size:11px" onchange="cjSetPos(\'left\',this.value)">';
-          h += '<option value="">--最异部--</option><option value="'+pos+'">👉 '+pos+' 是最异常部</option></select>';
-          h += '<div style="margin-top:4px;font-size:10px;color:#888">浮中沉最强位：</div>';
-          h += '<select id="cj_leftDepth" style="width:100%;padding:4px;font-size:11px;margin-top:2px">';
-          h += '<option value="">--</option><option value="浮">浮（上焦/表）</option><option value="中">中（中焦）</option><option value="沉">沉（下焦/里）</option></select>';
-          h += '<div style="margin-top:4px;font-size:10px;color:#888">脉形（辅助）：</div>';
-          h += '<div class="pulse-chip-group" id="cj_leftMx" style="margin-top:2px">';
-          ['弦','细','弱','滑','涩','紧','洪','微','濡','数','迟','缓'].forEach(function(m){
-            h += '<label><input type="checkbox" value="'+m+'"><span>'+m+'</span></label>';
-          });
-          h += '</div></div>';
-        });
-        h += '</div>';
-        h += '<div id="cj_leftNote" style="font-size:11px;color:#8b6914;min-height:20px;margin:4px 0"></div>';
-        h += '<div><button class="cj-big-btn" onclick="cjNext(3)">下一步：右手总按 ▶</button>';
-        h += '<button class="cj-big-btn" style="background:#aaa;margin-left:8px" onclick="cjNext(1)">◀ 上一步</button></div>';
-        h += '</div>';
-        // 步骤3：右手总按
-        h += '<div class="cj-step' + (step===3?'':'' ) + '">';
-        h += '<div class="cj-step-title">第三步：右手总按（诊右脉总体）</div>';
-        h += '<div class="cj-step-desc">右脉诊"阳"盛衰。依《仲景阴阳脉法》："右脉诊阳盛衰"。</div>';
-        h += '<div class="cj-guide">';
-        h += '👆 先感受整只右手的脉动：<br>';
-        h += '· 比正常健康脉更有力 = <b>太过</b>（阳盛/实热）<br>';
-        h += '· 比正常健康脉更无力 = <b>不及</b>（阳虚/虚）<br>';
-        h += '· 关键：左右对比才有意义！左手太过+右手正常=纯阴盛（升法）；左右都实=方向相反，需分轻重';
-        h += '</div>';
-        h += '<div style="margin:8px 0 4px">右手总体：';
-        h += '<label class="cj-radio"><input type="radio" name="cj_rightOver" value="太过" onchange="cjSetOver(\'right\',\'太过\')"> <span>太过（阳盛/实热）</span></label> ';
-        h += '<label class="cj-radio"><input type="radio" name="cj_rightOver" value="不及" onchange="cjSetOver(\'right\',\'不及\')"> <span>不及（阳虚/虚）</span></label> ';
-        h += '<label class="cj-radio"><input type="radio" name="cj_rightOver" value="正常" onchange="cjSetOver(\'right\',\'正常\')"> <span>正常</span></label>';
-        h += '</div>';
-        h += '<div id="cj_rightOverNote" style="font-size:11px;color:#8b6914;min-height:20px"></div>';
-        h += '<div style="margin-top:8px"><button class="cj-big-btn" onclick="cjNext(4)">下一步：找右手最异部 ▶</button>';
-        h += '<button class="cj-big-btn" style="background:#aaa;margin-left:8px" onclick="cjNext(2)">◀ 上一步</button></div>';
-        h += '</div>';
-        // 步骤4：右手最异部
-        h += '<div class="cj-step' + (step===4?'':'' ) + '">';
-        h += '<div class="cj-step-title">第四步：右手最异常部（定位）</div>';
-        h += '<div class="cj-step-desc">总体' + (cjData.rightOver||'?') + ' → 找最有力（或最无力）的那一部</div>';
-        h += '<div class="cj-guide">';
-        h += '👆 依据右手总按结果探查：<br>';
-        h += '· 总体<b>太过</b> → 找右手脉动<b>最有力</b>的一部<br>';
-        h += '· 总体<b>不及</b> → 找右手脉动<b>最无力</b>的一部<br>';
-        h += '· 最强脉动<b>浮/中/沉</b> = 病位上/中/下焦<br>';
-        h += '· 双手均填写完毕后，系统自动判断阴阳盛衰组合类型';
-        h += '</div>';
-        h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:8px 0">';
-        ['右寸','右关','右尺'].forEach(function(pos){
-          h += '<div style="flex:1;min-width:120px;padding:8px;border:2px solid #d4c4a0;border-radius:6px;background:#fffef8;text-align:center">';
-          h += '<div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">' + pos + '</div>';
-          h += '<select id="cj_rightPos" style="width:100%;padding:4px;font-size:11px" onchange="cjSetPos(\'right\',this.value)">';
-          h += '<option value="">--最异部--</option><option value="'+pos+'">👉 '+pos+' 是最异常部</option></select>';
-          h += '<div style="margin-top:4px;font-size:10px;color:#888">浮中沉最强位：</div>';
-          h += '<select id="cj_rightDepth" style="width:100%;padding:4px;font-size:11px;margin-top:2px">';
-          h += '<option value="">--</option><option value="浮">浮（上焦/表）</option><option value="中">中（中焦）</option><option value="沉">沉（下焦/里）</option></select>';
-          h += '<div style="margin-top:4px;font-size:10px;color:#888">脉形（辅助）：</div>';
-          h += '<div class="pulse-chip-group" id="cj_rightMx" style="margin-top:2px">';
-          ['弦','细','弱','滑','涩','紧','洪','微','濡','数','迟','缓'].forEach(function(m){
-            h += '<label><input type="checkbox" value="'+m+'"><span>'+m+'</span></label>';
-          });
-          h += '</div></div>';
-        });
-        h += '</div>';
-        h += '<div id="cj_rightNote" style="font-size:11px;color:#8b6914;min-height:20px;margin:4px 0"></div>';
-        h += '<div><button class="cj-big-btn" onclick="cjAnalyze()">🔍 完成辨证</button>';
-        h += '<button class="cj-big-btn" style="background:#aaa;margin-left:8px" onclick="cjNext(3)">◀ 上一步</button></div>';
-        h += '</div>';
-        // 结果区
-        h += '<div id="cjResult" class="cj-result-box" style="display:none"></div>';
-        return h;
-      }
-      
-      function cjSetOver(side, val) {
-        if (side === 'left') { cjData.leftOver = val; document.getElementById('cj_leftOverNote').textContent = '已选：左手总体 = ' + val; }
-        else { cjData.rightOver = val; document.getElementById('cj_rightOverNote').textContent = '已选：右手总体 = ' + val; }
-      }
-      function cjSetPos(side, val) {
-        if (side === 'left') { cjData.leftMost = val; updateCjNote('left'); }
-        else { cjData.rightMost = val; updateCjNote('right'); }
-      }
-      function updateCjNote(side) {
-        var pos = side==='left' ? cjData.leftMost : cjData.rightMost;
-        var depthId = side==='left' ? 'cj_leftDepth' : 'cj_rightDepth';
-        var depth = document.getElementById(depthId) ? document.getElementById(depthId).value : '';
-        var el = document.getElementById('cj_' + side + 'Note');
-        if (!el) return;
-        var note = side==='left' ? '左手' : '右手';
-        note += '最异常部：' + (pos||'?');
-        if (depth) note += '，最强脉动在<b>' + depth + '位</b>';
-        el.innerHTML = note;
-      }
-      function cjNext(step) {
-        cjStep = step;
-        // 隐藏所有步骤，显示当前步骤
-        var form = document.getElementById('cjForm');
-        if (form) {
-          form.querySelector('.cj-step-guide') || form.appendChild(document.createElement('div'));
-        }
-        // 重新渲染
-        renderCjForm();
-      }
-      function cjReset() {
-        cjStep = 0; cjData = { leftOver:'', rightOver:'', leftMost:'', rightMost:'', leftDepth:'', rightDepth:'', leftNote:'', rightNote:'' };
-        renderCjForm();
-      }
-      // 完成辨证：收集四步数据 → 调用 runAll()
-      function cjAnalyze() {
-        // 收集 cjData 和 DOM 数据
-        var fd = {};
-        // 从 cjData 读取总按
-        fd.cj_leftOver = cjData.leftOver || '';
-        fd.cj_rightOver = cjData.rightOver || '';
-        // 从 DOM 读取最异部/深度/脉形
-        var lp = document.getElementById('cj_leftPos');
-        fd.cj_leftMost = lp ? lp.value : (cjData.leftMost || '');
-        var ld = document.getElementById('cj_leftDepth');
-        fd.cj_leftDepth = ld ? ld.value : (cjData.leftDepth || '');
-        fd.cj_leftMx = valsChip('cj_leftMx');
-        var rp = document.getElementById('cj_rightPos');
-        fd.cj_rightMost = rp ? rp.value : (cjData.rightMost || '');
-        var rd = document.getElementById('cj_rightDepth');
-        fd.cj_rightDepth = rd ? rd.value : (cjData.rightDepth || '');
-        fd.cj_rightMx = valsChip('cj_rightMx');
-        // 合并到全局 formData（让 runAll 能读到）
-        for (var k in fd) formData[k] = fd[k];
-        // 直接调用 runAll 完成辨证
-        runAll();
-      }
-      function renderCjForm() {
-        var form = document.getElementById('cjForm');
-        if (!form) return;
-        // 显示当前步骤
-        var allSteps = form.querySelectorAll('.cj-step');
-        for (var i=0; i<allSteps.length; i++) allSteps[i].style.display = 'none';
-        var current = form.querySelector('.cj-step:nth-child(' + (cjStep) + ')');
-        // 简单重绘：直接替换整个cjForm内容
-        // 为简化，改用showhide逻辑
-      }
-      
-      // 覆盖表单区：陈建国用四步引导
-      formHtml += '<div class="school-form" id="cjForm"><h3>陈建国 · 三部九候脉诊 — 四步定向法</h3>';
-      formHtml += '<div style="background:#fdfbf4;padding:8px 10px;border-radius:6px;margin-bottom:10px;font-size:11px;color:#666;line-height:1.6">';
-      formHtml += '<b>操作流（按《经方脉证图解》原著）：</b><br>';
-      formHtml += '第一步：左手总按 → 定阴盛衰 &nbsp;|&nbsp; 第二步：左手最异部 → 定位 &nbsp;|&nbsp; ';
-      formHtml += '第三步：右手总按 → 定阳盛衰 &nbsp;|&nbsp; 第四步：右手最异部 → 定位 &nbsp;→&nbsp; 系统自动判断双手组合类型';
-      formHtml += '</div>';
-      // 初始显示第一步
-      formHtml += '<div id="cj_steps_container">';
-      formHtml += cjStepHtml(1);
-      formHtml += '</div>';
-      formHtml += '<style>.cj-radio{margin-right:10px;font-size:11px;cursor:pointer}.cj-radio input{margin-right:3px}</style>';
-      formHtml += '</div>';
-
-// --- 姚梅龄：六维分层 ---
-formHtml+='<div class="school-form" id="ymForm"><h3>姚梅龄 · 脉学分层辨证 — 六维采集</h3>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>脉位（总体）</label><select id="ym_wei"><option value="">--</option><option>浮</option><option>中</option><option>沉</option><option>伏</option></select></div>';
-formHtml+='<div class="form-cell"><label>脉体</label><select id="ym_ti"><option value="">--</option><option>大</option><option>细</option><option>长</option><option>短</option></select></div>';
-formHtml+='<div class="form-cell"><label>脉力</label><select id="ym_li"><option value="">--</option><option>有力</option><option>无力</option><option>虚</option><option>实</option></select></div>';
-formHtml+='<div class="form-cell"><label>脉率</label><select id="ym_lv"><option value="">--</option><option>数</option><option>迟</option><option>缓</option><option>疾</option></select></div>';
-formHtml+='<div class="form-cell"><label>脉律</label><select id="ym_lu"><option value="">--</option><option>整齐</option><option>促</option><option>结</option><option>代</option></select></div></div>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>脉形（可多描述）</label><input type="text" id="ym_xing" placeholder="如：弦、滑、涩、紧"></div>';
-formHtml+='<div class="form-cell"><label>左右差异</label><input type="text" id="ym_lr" placeholder="如：左弦右弱"></div></div>';
-formHtml+='<div class="note">姚氏六维分层：脉位→脉体→脉力→脉率→脉律→脉形。知医邦28脉代码直接映射至脉形维度。每维度独立记录，比单脉名描述精确得多。</div>';
-formHtml+='<div style="margin-top:8px"><label style="font-size:10px">知医邦28脉代码（可选）</label><input type="text" id="ym_zhiyi" style="width:100%;padding:4px;font-size:11px;border:1px solid #ddd;border-radius:3px" placeholder="例：EA IB CC ..."></div></div>';
-
-// --- 张仲景：六经定位 ---
-formHtml+='<div class="school-form" id="zjForm"><h3>张仲景 · 六经辨证 — 六经主脉定位</h3>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>总体脉象</label><select id="zj_pulse"><option value="">--</option><option>浮</option><option>沉</option><option>弦</option><option>细</option><option>微</option><option>洪</option><option>大</option><option>滑</option><option>涩</option><option>数</option><option>迟</option><option>紧</option><option>缓</option><option>弱</option></select></div>';
-formHtml+='<div class="form-cell"><label>力度</label><select id="zj_force"><option value="">--</option><option>有力</option><option>无力</option></select></div>';
-formHtml+='<div class="form-cell"><label>左右侧重</label><select id="zj_lr"><option value="">--</option><option>左盛</option><option>右盛</option><option>均衡</option></select></div></div>';
-formHtml+='<div class="note">六经主脉定位：太阳浮、阳明大、少阳弦、太阴缓弱、少阴微细、厥阴弦细欲绝。需结合症状（寒热/汗出/二便）确定六经归属。</div></div>';
-
-// --- 黄元御：右关中气 ---
-formHtml+='<div class="school-form" id="hyForm"><h3>黄元御 · 一气周流 — 右关中气 + 24脉阴阳</h3>';
-formHtml+='<div class="zong-an"><div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右关（中气）<span style="color:#c0392b">★必填</span></div>';
-formHtml+='<select id="hy_guan"><option value="">--脉形</option><option>缓</option><option>弱</option><option>濡</option><option>弦</option><option>硬</option><option>滑</option><option>涩</option><option>沉</option><option>浮</option></select>';
-formHtml+='<select id="hy_guanF" style="margin-top:3px"><option value="">--力度</option><option>有力</option><option>无力</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左手总体</div>';
-formHtml+='<select id="hy_left"><option value="">--</option><option>弦</option><option>细</option><option>沉</option><option>浮</option><option>涩</option><option>大</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右手总体</div>';
-formHtml+='<select id="hy_right"><option value="">--</option><option>弦</option><option>沉</option><option>浮</option><option>滑</option><option>涩</option></select></div></div>';
-formHtml+='<div class="note">右关为中气之枢。右关弱/缓/濡 → 中气不足用黄芽汤。右关弦硬 → 木郁克土用达郁汤。左弦右沉 → 肝升太过肺降不及。</div></div>';
-
-// --- 郑钦安：尺脉真阳 ---
-formHtml+='<div class="school-form" id="znForm"><h3>郑钦安 · 阴阳辨证 — 尺脉真阳 + 三问</h3>';
-formHtml+='<div class="zong-an"><div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左尺（真阴）<span style="color:#c0392b">★</span></div>';
-formHtml+='<select id="zn_lchi"><option value="">--脉形</option><option>弱</option><option>微</option><option>细</option><option>沉</option><option>浮</option><option>弦</option><option>正常</option></select>';
-formHtml+='<select id="zn_lchiF" style="margin-top:3px"><option value="">--力度</option><option>无力</option><option>按之即无</option><option>有力</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右尺（真阳）<span style="color:#c0392b">★</span></div>';
-formHtml+='<select id="zn_rchi"><option value="">--脉形</option><option>弱</option><option>微</option><option>细</option><option>沉</option><option>浮</option><option>弦</option><option>正常</option></select>';
-formHtml+='<select id="zn_rchiF" style="margin-top:3px"><option value="">--力度</option><option>无力</option><option>按之即无</option><option>有力</option></select></div></div>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>寒热</label><select id="zn_hot"><option value="">--</option><option>畏寒</option><option>发热</option><option>寒热往来</option></select></div>';
-formHtml+='<div class="form-cell"><label>二便</label><select id="zn_stool"><option value="">--</option><option>便溏</option><option>便秘</option><option>正常</option><option>小便清长</option><option>小便黄赤</option></select></div>';
-formHtml+='<div class="form-cell"><label>渴饮</label><select id="zn_thirst"><option value="">--</option><option>不渴</option><option>渴喜热饮</option><option>渴喜冷饮</option></select></div></div>';
-formHtml+='<div class="note">尺脉辨真阳为郑氏核心。尺弱+畏寒+不渴=阳虚四逆汤。若发热而尺虚，为假热真寒——此即"火神派"关键鉴别点。</div></div>';
-
-// --- 曹颖甫：左右基本 ---
-formHtml+='<div class="school-form" id="cyForm"><h3>曹颖甫 · 方证对应 — 左右分诊</h3>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>左手脉</label><select id="cy_left"><option value="">--</option><option>浮</option><option>沉</option><option>弦</option><option>细</option><option>弱</option><option>实</option><option>大</option><option>滑</option><option>涩</option></select></div>';
-formHtml+='<div class="form-cell"><label>右手脉</label><select id="cy_right"><option value="">--</option><option>浮</option><option>沉</option><option>弦</option><option>细</option><option>弱</option><option>实</option><option>大</option><option>滑</option><option>涩</option></select></div>';
-formHtml+='<div class="form-cell"><label>汗出</label><select id="cy_sweat"><option value="">--</option><option>有汗</option><option>无汗</option></select></div></div>';
-formHtml+='<div class="note">曹氏方证对应：左右皆浮+有汗=桂枝汤，左右皆浮+无汗=麻黄汤。左弦右实=大柴胡汤证。病汗药汗鉴别为曹氏特色。</div></div>';
-
-// --- 胡希恕：左右总按 + 六部分部（辅助参考） ---
-// 辅助函数：生成多选脉象chip组
-function hxChips(groupId, chips){
-  var h='<div class="pulse-chip-group" id="'+groupId+'">';
-  chips.forEach(function(c){
-    h+='<label><input type="checkbox" value="'+c+'"><span>'+c+'</span></label>';
-  });
-  return h+'</div>';
+// ========== 清空 ==========
+function clearAll(){
+  var all=document.querySelectorAll('select');
+  for(var i=0;i<all.length;i++) all[i].selectedIndex=0;
+  document.getElementById('chiefComplaint').value='';
+  var cbs=document.querySelectorAll('#symGrid input');
+  for(var i=0;i<cbs.length;i++) cbs[i].checked=false;
+  document.getElementById('results').innerHTML='';
 }
-// 读取多选chip组的值数组
-function valsChip(groupId){
+
+// ========== 采集脉象数据 ==========
+function collectPulseData(){
+  var data = {
+    zongLeft: { shape: document.getElementById('zongLeftShape').value, force: document.getElementById('zongLeftForce').value },
+    zongRight: { shape: document.getElementById('zongRightShape').value, force: document.getElementById('zongRightForce').value },
+    leftCun: getPos('左_寸'), leftGuan: getPos('左_关'), leftChi: getPos('左_尺'),
+    rightCun: getPos('右_寸'), rightGuan: getPos('右_关'), rightChi: getPos('右_尺'),
+    symptoms: getSymptoms(),
+    complaint: document.getElementById('chiefComplaint').value.trim()
+  };
+  return data;
+}
+function getPos(key){
+  return {
+    shape: document.getElementById('shape_'+key).value,
+    force: document.getElementById('force_'+key).value
+  };
+}
+function getSymptoms(){
+  var cbs=document.querySelectorAll('#symGrid input:checked');
   var arr=[];
-  var el=document.getElementById(groupId);
-  if(!el) return arr;
-  el.querySelectorAll('input[type=checkbox]:checked').forEach(function(cb){arr.push(cb.value);});
+  for(var i=0;i<cbs.length;i++) arr.push(cbs[i].value);
   return arr;
 }
 
-formHtml+='<div class="school-form" id="hxForm"><h3>胡希恕 · 六经八纲脉证辨证 — 三步法定乾坤</h3>';
+// ========== 各医家辨证逻辑 ==========
+var schoolNames = {
+  zhangxichun: {name:'张锡纯', system:'气机升降辨证'},
+  zhangzhongjing: {name:'张仲景', system:'六经辨证'},
+  huxishu: {name:'胡希恕', system:'八纲六经辨证'},
+  chenjianguo: {name:'陈建国', system:'三部九候脉诊辨证'},
+  liuduzhou: {name:'刘渡舟', system:'十论分诊辨证'},
+  huangyuanyu: {name:'黄元御', system:'一气周流辨证'},
+  caoyingfu: {name:'曹颖甫', system:'方证对应辨证'},
+  zhengqinan: {name:'郑钦安', system:'阴阳辨证'},
+  yaomeiling: {name:'姚梅龄', system:'脉学分层辨证'}
+};
 
-// 左右手总按 — 三步全部多选
-formHtml+='<p style="font-size:11px;font-weight:700;color:#2c1810;margin:0 0 6px">一、左右手总按（核心三步法）</p>';
-formHtml+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">';
-
-// 左手总按
-formHtml+='<div class="hx-total-block"><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左手总按</div>';
-formHtml+='<div class="hx-step-label">第一步·浮沉（病位）</div>';
-formHtml+=hxChips('hx_L_fc',['浮','中（不浮不沉）','沉','伏']);
-formHtml+='<div class="hx-step-label">第二步·迟数（病性寒热）</div>';
-formHtml+=hxChips('hx_L_cs',['数','迟','缓']);
-formHtml+='<div class="hx-step-label">第三步·力度（虚实）</div>';
-formHtml+=hxChips('hx_L_ld',['有力','无力']);
-formHtml+='<div class="hx-step-label">脉形（可多选）</div>';
-formHtml+=hxChips('hx_L_mx',['弦','细','弱','滑','涩','紧','大','微','洪','浮取弦','沉取弱']);
-formHtml+='</div>';
-
-// 右手总按
-formHtml+='<div class="hx-total-block"><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右手总按</div>';
-formHtml+='<div class="hx-step-label">第一步·浮沉（病位）</div>';
-formHtml+=hxChips('hx_R_fc',['浮','中（不浮不沉）','沉','伏']);
-formHtml+='<div class="hx-step-label">第二步·迟数（病性寒热）</div>';
-formHtml+=hxChips('hx_R_cs',['数','迟','缓']);
-formHtml+='<div class="hx-step-label">第三步·力度（虚实）</div>';
-formHtml+=hxChips('hx_R_ld',['有力','无力']);
-formHtml+='<div class="hx-step-label">脉形（可多选）</div>';
-formHtml+=hxChips('hx_R_mx',['弦','细','弱','滑','涩','紧','大','微','洪','浮取弦','沉取弱']);
-formHtml+='</div>';
-
-formHtml+='</div>';
-formHtml+='<div style="font-size:10px;color:#888;background:#fdfbf4;padding:6px 8px;border-radius:4px;margin-bottom:8px">三步法：<b>浮=表/沉=里/中=半表半里</b>（病位）→ <b>数=热/迟=寒</b>（病性）→ <b>有力=实/无力=虚</b>（虚实）。缓≠迟（缓=脉管弛缓，因汗出津伤，非速度慢）。阴阳在仲景脉法有二义：阳浮阴弱（外内）、阴阳俱紧（寸尺）。</div>';
-
-// 六部分部表（辅助参考）——脉形改为多选chip
-formHtml+='<p style="font-size:11px;font-weight:700;color:#999;margin:6px 0 4px">二、六部分部脉诊（辅助参考，非核心）<span style="font-weight:400;font-size:10px">——胡老："不要在寸关尺上绕圈子"</span></p>';
-formHtml+='<table style="width:100%;font-size:10px;border-collapse:collapse">';
-formHtml+='<tr style="background:#fdfbf7"><th style="padding:4px;border:1px solid #e8d5b7;width:7%">部位</th>';
-['左寸','左关','左尺','右寸','右关','右尺'].forEach(function(pos){
-  formHtml+='<th style="padding:4px;border:1px solid #e8d5b7;font-weight:600;color:#555">'+pos+'</th>';
-});
-formHtml+='</tr>';
-
-// 浮沉行（单选 select 保持简洁）
-formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center">浮沉</td>';
-['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
-  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_fc" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>浮</option><option>中</option><option>沉</option><option>伏</option></select></td>';
-});
-formHtml+='</tr>';
-
-// 脉形行（多选chip）
-formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center;vertical-align:top">脉形</td>';
-['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
-  formHtml+='<td style="padding:3px;border:1px solid #e8d5b7;vertical-align:top">';
-  formHtml+=hxChips('hx_'+id+'_mx',['弦','细','弱','滑','涩','紧','大','微','洪']);
-  formHtml+='</td>';
-});
-formHtml+='</tr>';
-
-// 力度行
-formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center">力度</td>';
-['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(id){
-  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="hx_'+id+'_ld" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>有力</option><option>无力</option><option>弦硬</option></select></td>';
-});
-formHtml+='</tr></table>';
-
-formHtml+='<div class="note"><b>胡希恕脉证辨证核心：</b>辨病位→辨病性→辨方证。总按三步法为核心，六部分部仅辅助参考。金匮胸痹"阳微阴弦"是尺寸分部例外用法（上焦阳虚+下焦阴寒），非泛用五脏定位。26脉象三分法（脉动/脉体/血行），103方症候群+特征脉精确匹配。</div></div>';
-
-// --- 刘渡舟：症状驱动 ---
-formHtml+='<div class="school-form" id="ldForm"><h3>刘渡舟 · 十论分诊 — 症状驱动</h3>';
-formHtml+='<div class="form-row"><div class="form-cell"><label>脉象（辅助定位六经）</label><select id="ld_pulse"><option value="">--</option><option>浮</option><option>沉</option><option>弦</option><option>细</option><option>微</option><option>洪</option><option>大</option></select></div></div>';
-formHtml+='<div class="note">刘氏十论分诊以症状关键词触发：水证论（小便/浮肿/眩/悸）、气机论（胁/口苦/呕/痞）、脾胃论（食/腹/便/泄）。脉象辅助六经定位。请在第三步勾选相关症状。</div></div>';
-
-document.getElementById('formArea').innerHTML=formHtml + '<div id="formPlaceholder" class="form-placeholder" style="display:none">请先在第一步选择至少一家医体。</div>';
-
-// 默认全选九家
-selectAll();
-
-// 辅助函数
-function buildPosSelect(pref,pos){
-  var h='<div class="form-cell"><label>'+pos+'</label>';
-  h+='<select id="'+pref+'_'+pos+'"><option value="">--</option><option>弦</option><option>细</option><option>弱</option><option>浮</option><option>沉</option><option>洪</option><option>滑</option><option>涩</option><option>数</option><option>迟</option><option>大</option><option>硬</option></select></div>';
-  return h;
-}
-function chenPos(pref,pos){
-  var h='<div class="form-cell"><label>'+pos+'</label>';
-  h+='<select id="'+pref+'_t_'+pos+'" style="width:48%"><option value="">太过/不及</option><option>太过</option><option>不及</option><option>正常</option></select>';
-  h+='<select id="'+pref+'_d_'+pos+'" style="width:48%"><option value="">浮/中/沉</option><option>浮</option><option>中</option><option>沉</option></select></div>';
-  return h;
-}
-function chenQ(pref,pos){
-  return '<div class="form-cell"><label>'+pos+'脉质</label><select id="'+pref+'_q_'+pos+'"><option value="">--</option><option>拘急</option><option>有力</option><option>无力</option><option>管细</option></select></div>';
-}
-
-// ========== 选择逻辑 ==========
-function toggleSchool(id){
-  if(selectedSchools[id]) delete selectedSchools[id];
-  else selectedSchools[id]=true;
-  updateUI();
-}
-function selectAll(){for(var i=0;i<schools.length;i++) selectedSchools[schools[i].id]=true; updateUI();}
-function clearSel(){selectedSchools={}; updateUI();}
-function selectReco(){
-  selectedSchools={};
-  selectedSchools['zhangxichun']=true;
-  selectedSchools['zhangzhongjing']=true;
-  selectedSchools['chenjianguo']=true;
-  selectedSchools['zhengqinan']=true;
-  updateUI();
-}
-
-function updateUI(){
-  // 更新chip高亮
-  for(var i=0;i<schools.length;i++){
-    var chip=document.getElementById('chip_'+schools[i].id);
-    chip.classList.toggle('active',!!selectedSchools[schools[i].id]);
+function analyzeZhangXichun(d){
+  var steps=[], result='', herbs=[], warn='';
+  
+  // ===== 构建文本描述（基于结构化数据） =====
+  var allText=[];
+  if(d.zongLeft.shape){
+    var lz='左手总按：'+d.zongLeft.shape;
+    if(d.zongLeft.force) lz+=d.zongLeft.force;
+    allText.push(lz);
   }
-  
-  var count=Object.keys(selectedSchools).length;
-  document.getElementById('selCount').textContent='已选 '+count+' 家';
-  
-  // 显示/隐藏各家表单
-  var selIds=Object.keys(selectedSchools);
-  var allForms=document.querySelectorAll('.school-form');
-  for(var i=0;i<allForms.length;i++) allForms[i].classList.remove('active');
-  
-  if(selIds.length===0){
-    document.getElementById('formPlaceholder').style.display='block';
-    return;
+  if(d.zongRight.shape){
+    var rz='右手总按：'+d.zongRight.shape;
+    if(d.zongRight.force) rz+=d.zongRight.force;
+    allText.push(rz);
   }
-  document.getElementById('formPlaceholder').style.display='none';
-  
-  // 显示选中医家表单
-  for(var i=0;i<selIds.length;i++){
-    var s=schools.find(function(x){return x.id===selIds[i];});
-    if(s){
-      var f=document.getElementById(s.formId);
-      if(f) f.classList.add('active');
+  var posKeys=['leftCun','leftGuan','leftChi','rightCun','rightGuan','rightChi'];
+  var posLabels=['左寸','左关','左尺','右寸','右关','右尺'];
+  for(var i=0;i<6;i++){
+    var pos=d[posKeys[i]];
+    if(pos.shape){
+      var line=posLabels[i]+':'+pos.shape;
+      if(pos.force) line+=pos.force;
+      allText.push(line);
     }
   }
-}
-
-// ========== 辨证执行 ==========
-function runAll(){
-  var selIds = Object.keys(selectedSchools);
-  if (selIds.length === 0) { alert('请先选择医家'); return; }
+  if(d.symptoms.length) allText.push('症状：'+d.symptoms.join('，'));
+  if(d.complaint) allText.push('主诉：'+d.complaint);
+  var text=allText.join('。');
   
-  var syms = [];
-  document.querySelectorAll('#symGrid label.selected').forEach(function(l) { syms.push(l.textContent); });
-  var complaint = document.getElementById('chiefComplaint').value;
+  // ===== 第一步：辨气机升降 =====
+  var sinkingKw=['气短','乏力','下坠感','呼气困难','努力呼吸','气息将停',
+                 '短气','大气下陷','怔忡','大汗淋漓','气短不足以息',
+                 '神昏','肢体痿废','二便不禁','肛门突出','声颤'];
+  var flowKw=['气上冲','呃逆','呕吐','头目眩晕','吸气难','肩息',
+              '胃气上逆','哕气','胁下胀疼','冲气','心下有气上冲',
+              '腹中有气自下上冲','饮食不下','胸中烦热','昏仆'];
+  var nSink=0,nFlow=0;
+  for(var i=0;i<sinkingKw.length;i++) if(text.indexOf(sinkingKw[i])>=0) nSink++;
+  for(var i=0;i<flowKw.length;i++) if(text.indexOf(flowKw[i])>=0) nFlow++;
   
-  document.getElementById('results').innerHTML = '<div style="text-align:center;padding:20px;color:#8b6914">辨证中...</div>';
+  var exhaleDiff=text.indexOf('呼气难')>=0||text.indexOf('呼气困难')>=0;
+  var inhaleDiff=text.indexOf('吸气难')>=0||text.indexOf('肩息')>=0;
+  var qiDir='neutral';
   
-  // 收集表单数据
-  var formData = {};
-  // 陈建国 四步引导流数据收集
-  var cjLeftOver = ''; var cjRightOver = ''; var cjLeftMost = ''; var cjRightMost = '';
-  var cjLeftDepth = ''; var cjRightDepth = '';
-  // 左手总按
-  var cjLeftRadios = document.querySelectorAll('input[name="cj_leftOver"]');
-  for (var cri=0; cri<cjLeftRadios.length; cri++) { if (cjLeftRadios[cri].checked) { cjLeftOver = cjLeftRadios[cri].value; break; } }
-  // 右手总按
-  var cjRightRadios = document.querySelectorAll('input[name="cj_rightOver"]');
-  for (var crr=0; crr<cjRightRadios.length; crr++) { if (cjRightRadios[crr].checked) { cjRightOver = cjRightRadios[crr].value; break; } }
-  // 左手最异部
-  var cjLeftPos = document.getElementById('cj_leftPos');
-  if (cjLeftPos) cjLeftMost = cjLeftPos.value;
-  var cjLeftDepthEl = document.getElementById('cj_leftDepth');
-  if (cjLeftDepthEl) cjLeftDepth = cjLeftDepthEl.value;
-  formData.cj_leftMx = valsChip('cj_leftMx');
-  // 右手最异部
-  var cjRightPos = document.getElementById('cj_rightPos');
-  if (cjRightPos) cjRightMost = cjRightPos.value;
-  var cjRightDepthEl = document.getElementById('cj_rightDepth');
-  if (cjRightDepthEl) cjRightDepth = cjRightDepthEl.value;
-  formData.cj_rightMx = valsChip('cj_rightMx');
+  if(nSink>0&&nFlow===0){
+    qiDir='sinking';
+    steps.push('<b>第一步·辨气机：</b>检出'+nSink+'项下陷症状，无上逆 → 判定「大气下陷」→ 升陷类方池');
+  }else if(nFlow>0&&nSink===0){
+    qiDir='counterflow';
+    steps.push('<b>第一步·辨气机：</b>检出'+nFlow+'项上逆症状，无下陷 → 判定「气机上逆」→ 镇逆类方池');
+  }else if(nSink>0&&nFlow>0){
+    qiDir='mixed';
+    steps.push('<b>第一步·辨气机：</b>下陷'+nSink+'项+上逆'+nFlow+'项 → 「升降失调」→ 全方池评估');
+  }else{
+    steps.push('<b>第一步·辨气机：</b>无明显气机升降偏倾 → 基于脉诊深入辨证');
+  }
+  if(exhaleDiff&&!inhaleDiff) steps.push('  ⚠ 呼气困难 → 支持大气下陷（原著：大气下陷者呼气难，与气逆之喘吸气难相反）');
+  else if(inhaleDiff) steps.push('  ⚠ 吸气困难/肩息 → 支持气逆之喘');
   
-  formData.cj_leftOver  = cjLeftOver;
-  formData.cj_rightOver = cjRightOver;
-  formData.cj_leftMost  = cjLeftMost;
-  formData.cj_rightMost = cjRightMost;
-  formData.cj_leftDepth  = cjLeftDepth;
-  formData.cj_rightDepth = cjRightDepth;
+  // ===== 第二步：脉诊虚实寒热 =====
+  var gemaiKw=['革','大而不洪','如按鼓革'];
+  var hasGemai=false;
+  for(var i=0;i<gemaiKw.length;i++) if(text.indexOf(gemaiKw[i])>=0) hasGemai=true;
   
-  // 张锡纯 三步辨证数据
-  formData.zx_direction = zxData.direction;
-  formData.zx_formula   = zxData.formula;
-  formData.zx_section   = zxData.section;
-  formData.zx_zongL  = val('zx_zongL');
-  formData.zx_zongLF = val('zx_zongLF');
-  formData.zx_zongR  = val('zx_zongR');
-  formData.zx_zongRF = val('zx_zongRF');
-  formData.cj_step1 = val('cj_step1'); formData.cj_step2m = val('cj_step2m'); formData.cj_step2q = val('cj_step2q');
-  ['左寸','左关','左尺','右寸','右关','右尺'].forEach(function(p) {
-    formData['cj_t_'+p] = val('cj_t_'+p);
-    formData['cj_d_'+p] = val('cj_d_'+p);
-    formData['cj_q_'+p] = val('cj_q_'+p);
-  });
-  formData.ym_wei = val('ym_wei'); formData.ym_ti = val('ym_ti'); formData.ym_li = val('ym_li');
-  formData.ym_lv = val('ym_lv'); formData.ym_lu = val('ym_lu'); formData.ym_xing = val('ym_xing'); formData.ym_lr = val('ym_lr');
-  formData.zj_pulse = val('zj_pulse'); formData.zj_force = val('zj_force'); formData.zj_lr = val('zj_lr');
-  formData.hy_guan = val('hy_guan'); formData.hy_guanF = val('hy_guanF'); formData.hy_left = val('hy_left'); formData.hy_right = val('hy_right');
-  formData.zn_lchi = val('zn_lchi'); formData.zn_rchi = val('zn_rchi'); formData.zn_lchiF = val('zn_lchiF'); formData.zn_rchiF = val('zn_rchiF');
-  formData.zn_hot = val('zn_hot'); formData.zn_stool = val('zn_stool'); formData.zn_thirst = val('zn_thirst');
-  formData.cy_left = val('cy_left'); formData.cy_right = val('cy_right'); formData.cy_sweat = val('cy_sweat');
-  // 胡希恕 左右总按（多选）
-  formData.hx_Lfc = valsChip('hx_L_fc'); formData.hx_Lcs = valsChip('hx_L_cs'); formData.hx_Lld = valsChip('hx_L_ld'); formData.hx_Lmx = valsChip('hx_L_mx');
-  formData.hx_Rfc = valsChip('hx_R_fc'); formData.hx_Rcs = valsChip('hx_R_cs'); formData.hx_Rld = valsChip('hx_R_ld'); formData.hx_Rmx = valsChip('hx_R_mx');
-  // 胡希恕 六部分部（脉形多选）
-  ['Lcun','Lguan','Lchi','Rcun','Rguan','Rchi'].forEach(function(p){
-    formData['hx_'+p+'_fc'] = val('hx_'+p+'_fc');
-    formData['hx_'+p+'_mx'] = valsChip('hx_'+p+'_mx');
-    formData['hx_'+p+'_ld'] = val('hx_'+p+'_ld');
-  });
-  
-  // 需要数据的学校列表
-  var needsData = ['zhangxichun', 'chenjianguo', 'huxishu'];
-  var datasNeeded = [];
-  for (var i = 0; i < selIds.length; i++) {
-    if (needsData.indexOf(selIds[i]) >= 0) datasNeeded.push(selIds[i]);
+  if(hasGemai){
+    steps.push('<b>第二步·脉诊：</b>⚠ 检出革脉特征（大而不洪+有力不滑）→ 阴阳离绝之险 → 禁峻下，急收敛固脱');
+    warn='革脉——阴阳离绝之险！虽见便结腹满，禁忌峻下！先收敛固脱（山萸肉、龙骨、牡蛎），攻下则真气崩解。';
+  }else{
+    var hasHong=text.indexOf('洪')>=0;
+    var hasHua=text.indexOf('滑')>=0;
+    var hasXianYing=text.indexOf('弦硬')>=0||(text.indexOf('硬')>=0&&text.indexOf('弦')<0);
+    var hasWeak=text.indexOf('无力')>=0||text.indexOf('按之即无')>=0||
+                text.indexOf('微弱')>=0||text.indexOf('极微弱')>=0;
+    
+    if(hasHong&&hasHua){
+      steps.push('<b>第二步·脉诊：</b>三部总按：洪滑兼具（波涛叠涌+累累如贯珠）→ 真有力，实热实证');
+    }else if(hasXianYing&&!hasHong&&!hasHua){
+      steps.push('<b>第二步·脉诊：</b>弦硬但无洪滑之象 → <b>假有力</b>（阴虚阳浮）→ 滋阴潜阳，忌峻攻');
+    }else if(hasWeak){
+      steps.push('<b>第二步·脉诊：</b>三部总按无力 → 虚证，补益为主');
+    }else{
+      steps.push('<b>第二步·脉诊：</b>脉力未见明确偏颇，继续辨浮沉数迟');
+    }
+    if(text.indexOf('浮')>=0) steps.push('  └ 浮脉 → 表证或阴虚阳浮。关前浮+关后弱则桂枝汤证');
+    if(text.indexOf('沉')>=0) steps.push('  └ 沉脉 → 里证或大气下陷（大气下陷脉多沉）');
+    if((text.indexOf('数')>=0)&&hasWeak){
+      steps.push('  └ 数而无力 → 虚！大补元气，忌寒凉。原著：“见数脉便用凉药，杀人无数”');
+    }else if(text.indexOf('数')>=0){
+      steps.push('  └ 数而有力 → 真热');
+    }
+    if(text.indexOf('迟')>=0) steps.push('  └ 迟而无力 → 大气下陷；迟而有力 → 寒积');
+    
+    // 力度量尺：寸部评估（右寸优先）
+    var cunLevels=getCunForceLevels(d);
+    if(cunLevels.right>=3) steps.push('  └ 右寸力度量尺：level '+cunLevels.right+'（≥微弱）→ 大气下陷标准脉象（右寸关沉迟微弱）');
+    else if(cunLevels.right>=2 && cunLevels.left>=2) steps.push('  └ 两寸皆弱：右level '+cunLevels.right+' 左level '+cunLevels.left+'（均≥无力）→ 关前尤甚，支持升陷');
+    else if(cunLevels.left>=3) steps.push('  └ 左寸力度：level '+cunLevels.left+'（≥微弱），但右寸非弱 → 需结合症状确认');
   }
   
-  // 并行加载数据
-  var promises = datasNeeded.map(function(id) { return loadData(id); });
+  // ===== 第三步：左右对比定脏腑 =====
+  var leftShapes=[d.zongLeft.shape,d.leftCun.shape,d.leftGuan.shape,d.leftChi.shape].filter(function(x){return x;});
+  var rightShapes=[d.zongRight.shape,d.rightCun.shape,d.rightGuan.shape,d.rightChi.shape].filter(function(x){return x;});
+  var leftStr=leftShapes.join(' ')+' '+(d.zongLeft.force||'')+' '+(d.leftCun.force||'')+' '+(d.leftGuan.force||'')+' '+(d.leftChi.force||'');
+  var rightStr=rightShapes.join(' ')+' '+(d.zongRight.force||'')+' '+(d.rightCun.force||'')+' '+(d.rightGuan.force||'')+' '+(d.rightChi.force||'');
+  var combined=leftStr+' '+rightStr;
   
-  Promise.all(promises).then(function() {
-    var html = '';
-    for (var i = 0; i < selIds.length; i++) {
-      var sid = selIds[i];
-      var s = schools.find(function(x) { return x.id === sid; });
-      var diag = diagnose(sid, formData, syms, complaint);
-      
-      html += '<div class="result-box" style="display:block">';
-      html += '<h4>' + s.name + ' <span class="tag">' + s.system + '</span></h4>';
-      html += '<div class="output">';
-      for (var j = 0; j < diag.steps.length; j++) html += diag.steps[j] + '<br>';
-      if (diag.result) html += '<br><b>结论：</b>' + diag.result + '<br>';
-      if (diag.warn) html += '<div class="warn">' + diag.warn + '</div>';
-      if (diag.herbs && diag.herbs.length) html += '参考用药：' + diag.herbs.join('、');
-      if (diag.matchedCases && diag.matchedCases.length) {
-        html += '<br><br><b>匹配医案：</b>';
-        for (var k = 0; k < Math.min(diag.matchedCases.length, 3); k++) {
-          var mc = diag.matchedCases[k];
-          html += '<br>#' + mc.case.id + ' ' + mc.case.title;
-        }
+  // 弦脉九种细分匹配（原著提炼）
+  var xuanMatched='';
+  if(combined.indexOf('弦硬')>=0&&rightStr.indexOf('弦硬')>=0&&(rightStr.indexOf('长')>=0||d.zongRight.shape==='大')){
+    xuanMatched='左右弦硬有力长 → 肝肾阴亏、肝木过盛、冲气上冲 → 镇逆+滋阴';
+    if(qiDir!=='counterflow') qiDir='mixed';
+  }else if(leftStr.indexOf('弦硬')>=0&&rightStr.indexOf('洪')>=0){
+    xuanMatched='左弦硬+右洪实 → 肝火+阳明热 → 白虎加人参汤';
+  }else if(leftStr.indexOf('弦硬')>=0&&(rightStr.indexOf('沉')>=0||rightStr.indexOf('濡')>=0)){
+    xuanMatched='左弦硬+右濡沉 → 湿痰留饮，中焦气化不足 → 化饮健脾';
+  }else if(leftStr.indexOf('弦细')>=0&&leftStr.indexOf('无力')>=0){
+    xuanMatched='左弦细无力 → 肝血虚、大气下陷 → 升陷方向';
+  }else if(leftStr.indexOf('弦硬')>=0&&leftStr.indexOf('无力')<0){
+    xuanMatched='左弦硬（假有力，肝木横恣）→ 镇降（赭石、龙骨、牡蛎）';
+  }else if(combined.indexOf('弦无力')>=0){
+    xuanMatched='弦无力（真无力，气化已衰）→ 补升（忌破气理气）';
+  }else if(leftStr.indexOf('微细')>=0&&leftStr.indexOf('按之即无')>=0){
+    xuanMatched='左微细模糊按之即无 → 肝胆虚热/肝虚胁痛 → 滋阴柔肝';
+  }else if(leftStr.indexOf('弦硬')<0&&rightStr.indexOf('弦硬')>=0){
+    xuanMatched='右弦硬有力长（>左脉）→ 冲气上冲、胃气不降 → 参赭镇气汤/镇逆汤';
+    if(qiDir==='neutral') qiDir='counterflow';
+  }else if(leftStr.indexOf('弦')>=0&&rightStr.indexOf('弦')>=0&&combined.indexOf('无力')>=0){
+    xuanMatched='左右弦细无力 → 气血两亏、阴阳两虚 → 双补气血';
+  }
+  if(xuanMatched){
+    steps.push('<b>第三步·左右脏腑：</b>'+xuanMatched);
+  }else{
+    var leftExcess=isExcess(d.zongLeft.shape,d.zongLeft.force,d.leftCun,d.leftGuan,d.leftChi);
+    var rightExcess=isExcess(d.zongRight.shape,d.zongRight.force,d.rightCun,d.rightGuan,d.rightChi);
+    if(rightExcess&&!leftExcess){
+      steps.push('<b>第三步·左右脏腑：</b>右脉实+左脉虚 → 冲气上冲、胃气不降 → 镇逆降胃');
+    }else if(leftExcess&&!rightExcess){
+      steps.push('<b>第三步·左右脏腑：</b>左脉实+右脉虚 → 肝阳上亢、阴虚火旺 → 平肝滋阴');
+    }else if(!leftExcess&&!rightExcess){
+      steps.push('<b>第三步·左右脏腑：</b>左右皆虚 → 以寸部为重点辨大气下陷');
+    }else{
+      steps.push('<b>第三步·左右脏腑：</b>左右皆实 → 辨真热假热');
+    }
+  }
+  
+  // ===== 第四步：尺部虚里 =====
+  var chiNoRoot=(d.leftChi.force==='按之即无'&&d.rightChi.force==='按之即无')||
+                ((d.leftChi.shape==='微'||d.leftChi.shape==='弱')&&(d.rightChi.shape==='微'||d.rightChi.shape==='弱')&&
+                 (d.leftChi.force==='按之即无'||d.rightChi.force==='按之即无'));
+  var chiWeak=(d.leftChi.shape==='弱'||d.leftChi.shape==='微'||d.leftChi.force==='按之即无'||
+               d.rightChi.shape==='弱'||d.rightChi.shape==='微'||d.rightChi.force==='按之即无');
+  
+  if(chiNoRoot||(text.indexOf('尺脉无根')>=0)){
+    steps.push('<b>第四步·尺部虚里：</b>⚠ 尺脉无根 → 肝肾虚极，阴阳不维，急防虚脱！');
+    if(!warn) warn='尺脉无根——肝肾虚极！急防虚脱，宜收敛固脱为先。';
+  }else if(chiWeak){
+    steps.push('<b>第四步·尺部虚里：</b>尺脉虚弱 → 阳升而阴不能应，滋阴为要');
+  }else if(d.leftChi.shape||d.rightChi.shape){
+    steps.push('<b>第四步·尺部虚里：</b>尺脉有根 → 预后可治');
+  }else{
+    steps.push('<b>第四步·尺部虚里：</b>尺部未提供 → 建议补充以决预后');
+  }
+  
+  // ===== 第五步：方证锁定 =====
+  var formulas=[];
+  var cunLevels=getCunForceLevels(d);
+  var hasCunWeak=cunLevels.right>=3||text.indexOf('寸部微弱')>=0||text.indexOf('两寸微弱')>=0||
+                 text.indexOf('关前尤甚')>=0;
+  
+  // 升陷汤系列
+  if(qiDir==='sinking'||qiDir==='mixed'||hasCunWeak||(text.indexOf('升陷')>=0)){
+    if(hasCunWeak||text.indexOf('沉迟微弱')>=0||text.indexOf('关前尤甚')>=0){
+      formulas.push({name:'升陷汤', score:12, herbs:'生黄芪、知母、桔梗、柴胡、升麻', note:'寸部微弱+关前尤甚→大气下陷之征'});
+    }
+    if(text.indexOf('身冷')>=0||text.indexOf('恶寒')>=0||text.indexOf('心肺阳虚')>=0||text.indexOf('背紧')>=0){
+      formulas.push({name:'回阳升陷汤', score:10, herbs:'生黄芪、干姜、当归身、桂枝炭、甘草', note:'大气下陷兼心肺阳虚'});
+    }
+    if(text.indexOf('胸中满痛')>=0||text.indexOf('胁胀')>=0||text.indexOf('郁结')>=0||text.indexOf('经络湮淤')>=0){
+      formulas.push({name:'理郁升陷汤', score:10, herbs:'生黄芪、知母、当归身、桂枝尖、柴胡、乳香、没药', note:'大气下陷兼气分郁结'});
+    }
+    if(text.indexOf('小便不禁')>=0||text.indexOf('脾气虚')>=0){
+      formulas.push({name:'醒脾升陷汤', score:10, herbs:'生黄芪、白术、桑寄生、川断、萸肉、龙骨、牡蛎', note:'大气下陷兼脾气虚极'});
+    }
+    if(formulas.length===0&&(qiDir==='sinking'||nSink>0||hasCunWeak)){
+      formulas.push({name:'升陷汤', score:6, herbs:'生黄芪、知母、桔梗、柴胡、升麻', note:'基于脉象虚陷推断'});
+    }
+  }
+  
+  // 冲逆系列
+  if(qiDir==='counterflow'||qiDir==='mixed'||xuanMatched.indexOf('弦硬')>=0||rightStr.indexOf('弦硬')>=0){
+    if((xuanMatched.indexOf('弦硬')>=0||rightStr.indexOf('弦硬')>=0)&&
+       (qiDir==='counterflow'||qiDir==='mixed'||text.indexOf('冲气')>=0)){
+      formulas.push({name:'参赭镇气汤', score:10, herbs:'野台参、生赭石、生芡实、生山药、萸肉、清半夏、茯苓', note:'冲气上冲+阴分亏虚'});
+    }
+    if(text.indexOf('呕吐')>=0||text.indexOf('胃气上逆')>=0||text.indexOf('呃逆')>=0||text.indexOf('哕气')>=0){
+      formulas.push({name:'镇逆汤', score:8, herbs:'生赭石、清半夏、生姜、竹茹', note:'冲胃并逆'});
+    }
+    if(leftStr.indexOf('弦硬')>=0&&rightStr.indexOf('弦硬')>=0){
+      formulas.push({name:'镇肝熄风汤', score:9, herbs:'怀牛膝、生赭石、生龙骨、生牡蛎、生龟板、生杭芍、玄参、天冬', note:'肝阳上亢+冲气上冲'});
+    }
+    if(text.indexOf('吐血')>=0||text.indexOf('衄血')>=0||text.indexOf('咳血')>=0||text.indexOf('吐衄')>=0){
+      if(text.indexOf('洪')>=0&&text.indexOf('滑')>=0){
+        formulas.push({name:'寒降汤', score:8, herbs:'生赭石、清半夏、瓜蒌仁、生杭芍、竹茹、牛蒡子、甘草', note:'吐衄+阳明实热'});
+      }else{
+        formulas.push({name:'温降汤', score:7, herbs:'生赭石、清半夏、干姜、生怀山药、生姜', note:'吐衄+虚寒'});
       }
-      html += '</div></div>';
     }
-    
-    // 交叉对比
-    if (selIds.length >= 2) {
-      html += '<div class="result-box" style="display:block;border-left-color:#d4c4a0;background:#fefdf9;margin-top:8px">';
-      html += '<h4>交叉对比 <span class="tag">多体系</span></h4>';
-      html += '<div class="output" style="font-size:11px">';
-      html += '<p>以上' + selIds.length + '家分别从各自辨证体系独立分析：</p>';
-      html += '<p>· 张锡纯看<b>左右虚实</b>（124案脉证） · 陈建国看<b>九候脉位签名</b>（277方）</p>';
-      html += '<p>· 胡希恕看<b>六经提纲症候群</b>（103方） · 曹颖甫看<b>方证脉汗对应</b>（92案）</p>';
-      html += '<p>· 张仲景看<b>六经主脉定位</b> · 郑钦安看<b>尺脉真阳</b></p>';
-      html += '<p>· 黄元御看<b>右关中气</b> · 姚梅龄看<b>六维分层</b> · 刘渡舟看<b>十论分诊</b></p>';
-      html += '<p>若多家指向同一方向则可信度极高；若分歧则需辨析各家假设前提的差异。</p>';
-      html += '</div></div>';
+    if(formulas.length===0&&qiDir==='counterflow'){
+      formulas.push({name:'参赭镇气汤', score:5, herbs:'野台参、生赭石、生芡实、生山药、萸肉、清半夏、茯苓', note:'冲逆基础方'});
     }
-    
-    document.getElementById('results').innerHTML = html;
-  }).catch(function(e) {
-    document.getElementById('results').innerHTML = '<div class="result-box" style="display:block;border-left-color:#c0392b"><div class="output">数据加载异常：' + e.message + '。使用离线简化逻辑重试...</div></div>';
+  }
+  
+  formulas.sort(function(a,b){return b.score-a.score;});
+  
+  if(formulas.length>0){
+    var top3=formulas.slice(0,3);
+    steps.push('<b>第五步·方证锁定：</b>'+top3.map(function(f){return f.name+'('+f.score+'分)';}).join(' > '));
+    var top=top3[0];
+    result='推荐方剂：<b>'+top.name+'</b><br>组成：'+top.herbs+'<br>依据：'+top.note;
+    herbs=top.herbs.split('、');
+  }else if(d.zongLeft.shape||d.zongRight.shape||d.leftCun.shape||d.rightCun.shape){
+    steps.push('<b>第五步·方证锁定：</b>未匹配到特定方剂——症状/脉象信息不足，建议补充主诉与兼证');
+    result='请填写主诉和兼证信息，以精确定方。';
+  }else{
+    steps.push('<b>第五步·方证锁定：</b>脉象信息不足，请至少填写左右总按或寸部脉象');
+    result='请填写脉象信息。';
+  }
+  
+  return {steps:steps, result:result, herbs:herbs, warn:warn||''};
+}
+
+// 力度量尺：评估寸部虚陷程度（左右分离，右寸优先）
+function getCunForceLevels(d){
+  var forces=[d.leftCun.force,d.rightCun.force];
+  var shapes=[d.leftCun.shape,d.rightCun.shape];
+  var levels=[0,0];
+  for(var i=0;i<2;i++){
+    var f=forces[i];
+    if(f==='按之即无') levels[i]=Math.max(levels[i],4);
+    else if(f==='弦无力') levels[i]=Math.max(levels[i],3);
+    else if(f==='无力'||f==='重按始得') levels[i]=Math.max(levels[i],2);
+    var s=shapes[i];
+    if(s==='微'||s==='极微弱') levels[i]=Math.max(levels[i],4);
+    else if(s==='弱'||s==='微弱') levels[i]=Math.max(levels[i],3);
+    else if(s==='细') levels[i]=Math.max(levels[i],2);
+  }
+  return {left:levels[0], right:levels[1], max:Math.max(levels[0],levels[1])};
+}
+
+function analyzeZhangZhongjing(d){
+  var steps=[], result='', warn='';
+  steps.push('<b>六经定位：</b>依脉象定六经纲领');
+  
+  if(d.zongLeft.shape==='浮'||d.leftCun.shape==='浮'||d.rightCun.shape==='浮'){
+    steps.push('浮脉 → 太阳病（表证），麻黄汤/桂枝汤证');
+    result='病在太阳，当以汗法。脉浮紧用麻黄汤，脉浮缓用桂枝汤。';
+  }else if(d.zongRight.shape==='大'||d.rightGuan.shape==='洪'||d.zongLeft.shape==='洪'){
+    steps.push('大/洪脉 → 阳明病（里热），白虎汤证');
+    result='病在阳明，清热生津。白虎汤主之。';
+  }else if(d.zongLeft.shape==='弦'||d.leftGuan.shape==='弦'){
+    steps.push('弦脉 → 少阳病（半表半里），小柴胡汤证');
+    result='病在少阳，和解为主。小柴胡汤加减。';
+  }else if(d.zongLeft.shape==='细'||d.zongRight.shape==='微'||d.rightChi.shape==='微'){
+    steps.push('细/微脉 → 少阴病（虚寒），四逆汤证');
+    result='病入少阴，回阳救逆。四逆汤辈。';
+  }else{
+    steps.push('脉象特征不明显，需结合症状综合判断六经归属');
+    result='建议补充兼证后重新分析。';
+  }
+  
+  return {steps:steps, result:result, warn:warn||''};
+}
+
+function analyzeHuXishu(d){
+  var steps=[], result='', warn='';
+  steps.push('<b>先辨阴阳：</b>');
+  var isExcessGlobal = (isExcess(d.zongLeft.shape,d.zongLeft.force,d.leftCun,d.leftGuan,d.leftChi) ||
+                        isExcess(d.zongRight.shape,d.zongRight.force,d.rightCun,d.rightGuan,d.rightChi));
+  if(isExcessGlobal){
+    steps.push('阳证 → 病在三阳（太阳/少阳/阳明）');
+    if(d.zongRight.shape==='大'||d.zongLeft.shape==='洪'){ steps.push('阳明证 → 承气汤/白虎汤；');
+      result='阳明里热，承气汤辈。'; }
+    else if(d.zongLeft.shape==='弦'){ steps.push('少阳证 → 小柴胡汤；'); result='少阳半表半里，小柴胡汤加减。'; }
+    else { steps.push('太阳证 → 麻黄汤/桂枝汤；'); result='太阳表证。'; }
+  }else{
+    steps.push('阴证 → 病在三阴（太阴/少阴/厥阴）');
+    steps.push('尺脉不足 → 少阴/太阴中寒，四逆汤/理中汤方向');
+    result='阴证虚寒，当温补。四逆汤/理中汤辈。';
+  }
+  steps.push('<b>方证对应：</b>脉证合参定最终方证');
+  return {steps:steps, result:result, warn:warn||''};
+}
+
+function analyzeChenJianguo(d){
+  var steps=[], result='';
+  steps.push('<b>六步定向：</b>浮中沉九候定位');
+  
+  var filled = 0;
+  ['左_寸','左_关','左_尺','右_寸','右_关','右_尺'].forEach(function(k){
+    var shape = document.getElementById('shape_'+k).value;
+    if(shape) filled++;
   });
-}
-
-function val(id) { var e = document.getElementById(id); return e ? e.value : ''; }
-
-// ========== 张锡纯 三步辨证漏斗 JS ==========
-var zxData = { direction:'', formula:'', section:'' };
-
-function zxSetDirection(dir) {
-  zxData.direction = dir;
-  var labels = { 'sink':'大气下陷（短气）', 'up':'气机上逆（喘逆）', 'direct':'直走门类' };
-  document.getElementById('zx_dirNote').textContent = '已选：' + (labels[dir]||dir);
-  document.getElementById('zxStep2Sink').style.display   = (dir==='sink')  ? 'block' : 'none';
-  document.getElementById('zxStep2Up').style.display     = (dir==='up')    ? 'block' : 'none';
-  document.getElementById('zxStep2Direct').style.display = (dir==='direct') ? 'block' : 'none';
-  document.getElementById('zxStep1').style.display = 'none';
-}
-
-function zxSetSink(formula) {
-  zxData.formula = formula;
-}
-function zxSetUp(formula) {
-  zxData.formula = formula;
-}
-function zxSetFormula(formula) {
-  zxData.formula = formula;
-}
-
-function zxSetSection(sectionId, sectionName) {
-  zxData.section = sectionId;
-  // 尝试从v4.json加载该门类的方剂
-  var v4 = DataCache['zhangxichun_v4'];
-  if (v4 && v4[sectionId] && v4[sectionId].formulas) {
-    var fmts = v4[sectionId].formulas;
-    var html = '';
-    for (var i = 0; i < fmts.length; i++) {
-      var f = fmts[i];
-      html += '<label class="zx-radio"><input type="radio" name="zx_formula" value="' + f.name + '" onchange="zxSetFormula(\'' + f.name.replace(/'/g,'\\\'') + '\')"> <span>' + f.name + '</span></label>';
+  
+  if(filled>=4){
+    steps.push('脉象采集充分 → 可进入九候精准比对');
+    if(d.zongLeft.shape==='弦'&&d.zongRight.shape==='弦'){
+      steps.push('左右皆弦 → 肝气郁结证，四逆散/柴胡疏肝散');
+      result='肝气郁结，疏肝解郁。四逆散加减。';
+    }else if(d.rightGuan.shape==='弱'){
+      steps.push('右关弱 → 脾胃虚弱，六君子汤方向');
+      result='脾虚不运，健脾益气。六君子汤加减。';
+    }else{
+      steps.push('九候信息已记录，可对比50方脉证签章库进行精准匹配');
+      result='建议查阅50方脉证签章库做进一步匹配。';
     }
-    document.getElementById('zx_formulaRadios').innerHTML = html;
-    document.getElementById('zx_sectionFormulas').style.display = 'block';
-    document.getElementById('zx_toPulseBtn').style.display = 'inline-block';
-  } else {
-    // 没有v4数据，直接进入脉诊
-    document.getElementById('zx_sectionFormulas').style.display = 'block';
-    document.getElementById('zx_formulaRadios').innerHTML = '<span style="color:#c0392b;font-size:11px">该门类方剂数据加载中，请直接进入脉诊确认。</span>';
-    document.getElementById('zx_toPulseBtn').style.display = 'inline-block';
+  }else{
+    steps.push('脉象信息不足 → 建议补全六部后重新分析');
+    result='请至少填写四部脉象。';
   }
+  return {steps:steps, result:result, warn:''};
 }
 
-function zxShowPulse() {
-  document.getElementById('zxStep2Sink').style.display   = 'none';
-  document.getElementById('zxStep2Up').style.display     = 'none';
-  document.getElementById('zxStep2Direct').style.display = 'none';
-  document.getElementById('zxStep3').style.display = 'block';
-  var dirLabels = { 'sink':'大气下陷', 'up':'气机上逆', 'direct':'直走门类' };
-  document.getElementById('zx_selectedDir').textContent = dirLabels[zxData.direction] || zxData.direction;
-  document.getElementById('zx_selectedFormula').textContent = zxData.formula || '（脉诊确认后定）';
-}
-
-function zxBackStep(step) {
-  if (step === 1) {
-    // 回到第一步
-    document.getElementById('zxStep2Sink').style.display   = 'none';
-    document.getElementById('zxStep2Up').style.display     = 'none';
-    document.getElementById('zxStep2Direct').style.display = 'none';
-    document.getElementById('zxStep3').style.display = 'none';
-    document.getElementById('zxStep1').style.display = 'block';
-  } else if (step === 2) {
-    // 回到第二步
-    document.getElementById('zxStep3').style.display = 'none';
-    if (zxData.direction === 'sink')   document.getElementById('zxStep2Sink').style.display = 'block';
-    else if (zxData.direction === 'up') document.getElementById('zxStep2Up').style.display   = 'block';
-    else document.getElementById('zxStep2Direct').style.display = 'block';
+function analyzeLiuDuzhou(d){
+  var steps=[], result='';
+  steps.push('<b>六经主脉定基：</b>');
+  if(d.zongLeft.shape==='浮'||d.zongRight.shape==='浮'){
+    steps.push('浮脉 → 太阳经（桂枝汤/麻黄汤）');
+    result='病在太阳，当辨有汗无汗以定桂麻。';
+  }else if(d.zongRight.shape==='大'||d.rightGuan.shape==='洪'){
+    steps.push('大/洪脉 → 阳明经（白虎汤/承气汤）');
+    result='阳明热盛。';
+  }else if(d.zongLeft.shape==='弦'){
+    steps.push('弦脉 → 少阳经（小柴胡汤）');
+    result='少阳枢机不利。';
+  }else{
+    steps.push('<b>以脉测证：</b>脉象信息不足，建议结合十论分诊法逐层深入');
+    result='需更多脉证信息以完成十论分诊。';
   }
+  return {steps:steps, result:result, warn:''};
 }
 
-function zxAnalyze() {
-  // 收集所有数据
-  var fd = {
-    zx_direction: zxData.direction,
-    zx_formula:   zxData.formula,
-    zx_section:   zxData.section,
-    zx_zongL:  val('zx_zongL'),
-    zx_zongLF: val('zx_zongLF'),
-    zx_zongR:  val('zx_zongR'),
-    zx_zongRF: val('zx_zongRF')
+function analyzeHuangYuanyu(d){
+  var steps=[], result='';
+  steps.push('<b>一气周流：</b>右关定中气');
+  var guanPulse = d.rightGuan.shape || d.zongRight.shape;
+  if(guanPulse==='弱'||guanPulse==='缓'||guanPulse==='濡'){
+    steps.push('右关弱/缓/濡 → 中气不足，脾土不运');
+    result='中土虚馁，升清降浊失司。黄芽汤/理中汤加减。';
+  }else if(guanPulse==='弦'||guanPulse==='硬'){
+    steps.push('右关弦硬 → 木郁克土，中气被遏');
+    result='肝木横逆犯脾，达郁汤合下气汤。';
+  }else if(d.zongLeft.shape==='弦'&&d.zongRight.shape==='沉'){
+    steps.push('左弦右沉 → 肝郁气滞，肺胃不降');
+    result='肝气左升太过，肺胃右降不及。';
+  }else{
+    steps.push('脉象需左右对比定升降失衡方向');
+    result='建议补全左右脉象信息。';
+  }
+  return {steps:steps, result:result, warn:''};
+}
+
+function analyzeCaoYingfu(d){
+  var steps=[], result='';
+  steps.push('<b>脉证定位：</b>');
+  if(d.zongLeft.shape==='浮'&&d.zongRight.shape==='浮'){
+    steps.push('左右皆浮 → 表证，当辨有汗无汗');
+    if(d.symptoms.indexOf('汗出')>=0) result='有汗用桂枝汤，无汗用麻黄汤。';
+    else result='表证，建议补充汗出情况。';
+  }else if(d.zongLeft.shape==='弦'&&d.zongRight.shape==='实'){
+    steps.push('左弦右实 → 大柴胡汤证');
+    result='少阳阳明合病，大柴胡汤主之。';
+  }else{
+    steps.push('脉证信息不足，建议补全后对比92案脉证映射库');
+    result='曹氏经方实验派，每方必有确凿脉证。';
+  }
+  return {steps:steps, result:result, warn:''};
+}
+
+function analyzeZhengQinan(d){
+  var steps=[], result='', warn='';
+  steps.push('<b>阴阳总纲：</b>尺脉辨真阳');
+  var chiWeak = (d.leftChi.shape==='弱'||d.leftChi.shape==='微'||d.rightChi.shape==='弱'||d.rightChi.shape==='微');
+  var chiForce = (d.leftChi.force==='无力'||d.leftChi.force==='按之即无'||d.rightChi.force==='无力');
+  
+  if(chiWeak||chiForce){
+    steps.push('尺脉虚弱 → 真阳不足，阴寒内盛');
+    result='阳虚为本，四逆汤/附子理中汤。';
+    if(d.symptoms.indexOf('发热')>=0) warn='警示：虽有发热，但尺脉虚，此为假热真寒！禁用寒凉！';
+  }else if(d.zongRight.shape==='大'&&d.zongLeft.shape==='洪'){
+    steps.push('六脉洪大有力 → 阳热实证');
+    result='阳明实热，白虎汤/承气汤。';
+  }else{
+    steps.push('需结合三问（寒热/二便/渴饮）辅助阴阳判定');
+    result='阴阳偏向不明确，建议增加三问信息。';
+  }
+  return {steps:steps, result:result, warn:warn||''};
+}
+
+function analyzeYaoMeiling(d){
+  var steps=[], result='';
+  steps.push('<b>六维分层：</b>脉位→脉体→脉力→脉率→脉律→脉形');
+  var filled=0;
+  for(var k in d){
+    if(typeof d[k]==='object'&&d[k].shape) filled++;
+  }
+  if(filled>=3){
+    steps.push('脉位（浮中沉）：'+(d.zongLeft.shape||d.zongRight.shape||'未采集'));
+    steps.push('脉体（大小）：'+((d.zongLeft.shape==='大'||d.zongRight.shape==='大')?'大脉':(d.zongLeft.shape==='细'?'细脉':'未明')));
+    steps.push('脉力（虚实）：'+(d.zongLeft.force||d.zongRight.force||'未采集'));
+    result='六维分层采集完成，可参照《临证脉学十六讲》逐层分析。';
+  }else{
+    result='建议补全脉位、脉体、脉力三基础维度。';
+  }
+  return {steps:steps, result:result, warn:''};
+}
+
+// ========== 辅助函数 ==========
+function isExcess(zongShape, zongForce, cun, guan, chi){
+  var shapes = [zongShape, cun.shape, guan.shape, chi.shape].filter(x=>x);
+  var forces = [zongForce, cun.force, guan.force, chi.force].filter(x=>x);
+  var excessShapes = ['洪','大','硬','革','实','滑','紧','弦'];
+  var hasExcess = shapes.some(function(s){return excessShapes.indexOf(s)>=0;});
+  var hasForce = forces.some(function(f){return f==='有力'||f==='弹指';});
+  return hasExcess || hasForce;
+}
+
+// ========== v7 案匹配引擎 ==========
+var v7CasesCache = null;
+var v7Loaded = false;
+
+function loadV7Cases(cb){
+  if(v7CasesCache){ cb(v7CasesCache); return; }
+  if(v7Loaded) return; // 正在加载中
+  v7Loaded = true;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET','https://raw.githubusercontent.com/weishan730827/pulse-diagnosis/main/zhang_xichun_v7_cases.json',true);
+  xhr.timeout = 8000;
+  xhr.onload = function(){
+    if(xhr.status===200){
+      try { v7CasesCache = JSON.parse(xhr.responseText); }
+      catch(e){
+        // try JSONL
+        var lines = xhr.responseText.trim().split(/\n/);
+        var arr = [];
+        for(var i=0;i<lines.length;i++){
+          try { var o=JSON.parse(lines[i]); if(o)arr.push(o); } catch(e2){}
+        }
+        v7CasesCache = arr.length>0 ? arr : null;
+      }
+    }
+    v7Loaded = false;
+    if(cb) cb(v7CasesCache);
   };
-  for (var k in fd) { formData[k] = fd[k]; }
+  xhr.onerror = function(){ v7Loaded=false; if(cb)cb(null); };
+  xhr.ontimeout = function(){ v7Loaded=false; if(cb)cb(null); };
+  xhr.send();
+}
+
+function matchV7Cases(d){
+  if(!v7CasesCache || !v7CasesCache.length) return [];
+  var results = [];
+  for(var i=0;i<v7CasesCache.length;i++){
+    var c = v7CasesCache[i];
+    var score = 0;
+    var details = [];
+    // 匹配脉象字段：shape/force 在左/右/寸/关/尺
+    var inputFields = {
+      '左寸':[d.leftCun.shape,d.leftCun.force], '左关':[d.leftGuan.shape,d.leftGuan.force], '左尺':[d.leftChi.shape,d.leftChi.force],
+      '右寸':[d.rightCun.shape,d.rightCun.force], '右关':[d.rightGuan.shape,d.rightGuan.force], '右尺':[d.rightChi.shape,d.rightChi.force],
+      '总按左':[d.zongLeft.shape,d.zongLeft.force], '总按右':[d.zongRight.shape,d.zongRight.force]
+    };
+    var caseText = (c.text||c.description||c.pulse||'').toString();
+    // 在每个输入字段中查找匹配
+    for(var k in inputFields){
+      var sv = inputFields[k][0]; var fv = inputFields[k][1];
+      if(sv && caseText.indexOf(sv)>=0){ score+=2; details.push(k+'形:'+sv); }
+      if(fv && caseText.indexOf(fv)>=0){ score+=1; details.push(k+'力:'+fv); }
+    }
+    // 兼证匹配
+    if(d.symptoms && d.symptoms.length){
+      for(var s=0;s<d.symptoms.length;s++){
+        if(caseText.indexOf(d.symptoms[s])>=0){ score+=1; details.push('证:'+d.symptoms[s]); }
+      }
+    }
+    if(score>0){
+      results.push({case:c, score:score, details:details});
+    }
+  }
+  results.sort(function(a,b){return b.score-a.score;});
+  return results.slice(0,5);
+}
+
+// ========== 主诊断函数 ==========
+function diagnose(){
+  var d = collectPulseData();
+  var resultsDiv = document.getElementById('results');
   
-  document.getElementById('zxResult').style.display = 'block';
-  document.getElementById('zxResult').innerHTML = '<div style="text-align:center;padding:12px;color:#8b6914">辨证中...</div>';
+  var schoolList = activeSchools==='all' ? Object.keys(schoolNames) : [activeSchools];
   
-  runAll();
+  var analyzers = {
+    zhangxichun: analyzeZhangXichun, zhangzhongjing: analyzeZhangZhongjing,
+    huxishu: analyzeHuXishu, chenjianguo: analyzeChenJianguo,
+    liuduzhou: analyzeLiuDuzhou, huangyuanyu: analyzeHuangYuanyu,
+    caoyingfu: analyzeCaoYingfu, zhengqinan: analyzeZhengQinan,
+    yaomeiling: analyzeYaoMeiling
+  };
+  
+  var html = '';
+  
+  for(var i=0;i<schoolList.length;i++){
+    var sid = schoolList[i];
+    var info = schoolNames[sid];
+    var analysis = analyzers[sid](d);
+    
+    html += '<div class="school-section">';
+    html += '<div class="school-header">'+info.name+' <span class="tag">'+info.system+'</span></div>';
+    html += '<div class="results-grid">';
+    html += '<div class="card match">';
+    
+    // 步骤
+    for(var j=0;j<analysis.steps.length;j++){
+      html += '<div class="step">'+analysis.steps[j]+'</div>';
+    }
+    
+    // 结果
+    if(analysis.result){
+      html += '<div class="result">'+analysis.result+'</div>';
+    }
+    
+    // 警示
+    if(analysis.warn){
+      html += '<div class="warn">'+analysis.warn+'</div>';
+    }
+    
+    // 方药
+    if(analysis.herbs&&analysis.herbs.length){
+      html += '<div style="margin-top:4px;font-size:10px;color:#8b6914">参考用药：'+analysis.herbs.join('、')+'</div>';
+    }
+    
+    // v7 案匹配挂载点（仅 ZXC）
+    if(sid==='zhangxichun'){
+      html += '<div class="v7-match-panel" id="v7Matches" style="margin-top:6px;padding:8px;background:#f6f3e8;border-radius:4px;font-size:10px;display:none">';
+      html += '<b style="color:#8b6914">📋 相似医案（原著772案匹配）</b><div id="v7MatchList" style="margin-top:4px"></div></div>';
+    }
+    
+    html += '</div></div></div>';
+  }
+  
+  // 汇总对比
+  if(schoolList.length>=2){
+    html += '<div class="school-section">';
+    html += '<div class="school-header">九家对比汇总</div>';
+    html += '<div style="padding:12px;font-size:11px;color:#555;background:#fefdf9;border-radius:0 0 6px 6px">';
+    html += '<p>以上'+schoolList.length+'家分别从各自辨证体系出发给出了分析。各家关注重点不同：</p>';
+    html += '<p>· 张锡纯重<b>五步决策树</b>（辨气机→脉诊虚实→左右脏腑→尺部虚里→方证锁定），弦脉九种细分，关前→寸部映射</p>';
+    html += '<p>· 张仲景重<b>六经脉象定位</b></p>';
+    html += '<p>· 胡希恕重<b>阴阳 → 六经 → 方证</b></p>';
+    html += '<p>· 陈建国重<b>九候精准定位</b></p>';
+    html += '<p>· 黄元御重<b>右关中气</b> + 一气升降</p>';
+    html += '<p>· 郑钦安重<b>尺脉真阳</b> + 假热鉴别</p>';
+    html += '<p>· 刘渡舟/曹颖甫/姚梅龄各有体系特点</p>';
+    html += '</div></div>';
+  }
+  
+  if(!d.zongLeft.shape&&!d.zongRight.shape&&!d.leftCun.shape&&!d.rightCun.shape){
+    html = '<div class="no-result">请至少填写总按或寸口脉象后再进行辨证分析。</div>';
+  }
+  
+  resultsDiv.innerHTML = html;
+
+  // ZXC 案匹配（异步加载 v7 数据）
+  if((activeSchools==='all'||activeSchools==='zhangxichun') && 
+     (d.zongLeft.shape||d.zongRight.shape||d.leftCun.shape||d.rightCun.shape)){
+    loadV7Cases(function(cases){
+      if(!cases) return;
+      var matches = matchV7Cases(d);
+      var panel = document.getElementById('v7Matches');
+      var list = document.getElementById('v7MatchList');
+      if(!panel||!list) return;
+      if(matches.length===0){
+        list.innerHTML = '<span style="color:#999">未匹配到相似医案</span>';
+      }else{
+        var mhtml = '';
+        for(var i=0;i<matches.length;i++){
+          var c = matches[i].case;
+          mhtml += '<div style="margin:3px 0;padding:4px;background:#fff;border-radius:3px;border-left:3px solid #8b6914">';
+          mhtml += '<span style="font-weight:bold;color:#333">#'+(i+1)+' 匹配度:'+matches[i].score+'</span> ';
+          mhtml += '<span style="color:#555">'+(c.name||c.title||'')+'</span>';
+          mhtml += '<br><span style="color:#777">'+(c.text||c.description||'').substring(0,120)+(c.text&&c.text.length>120?'...':'')+'</span>';
+          mhtml += '</div>';
+        }
+        list.innerHTML = mhtml;
+      }
+      panel.style.display = 'block';
+    });
+  }
 }
 </script>
 </body>

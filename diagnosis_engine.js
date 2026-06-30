@@ -44,93 +44,217 @@ function loadData(schoolId) {
 // ========== 张锡纯 气机升降辨证（v8：三步漏斗 + 原著脉案匹配）==========
 // 数据文件：pulse_match_zxc_compact_v2.json（172方，从原著提取）
 // 辨证流程：Step1方向 → Step2方剂 → Step3脉诊确认
-function diagnoseZhangXichun(formData) {
-  var data = DataCache['zhangxichun'];
-  if (!data || data._no_data || data._error) {
-    // 数据未加载，尝试加载v2
-    var v2 = DataCache['zxc_v2'];
-    if (v2 && !v2._error) data = v2;
-    else return simpleZXCDiagnose(formData);
-  }
-
-  var result = { steps: [], result: '', herbs: [], matchedCases: [] };
-
-  // Step1：方向（大气下陷 / 气机上逆 / 直走门类）
-  var direction = formData.zx_direction || '';
-  var formula    = formData.zx_formula   || '';
-  var section    = formData.zx_section   || '';
-
-  if (direction) result.steps.push('【方向】' + (direction==='sink'?'大气下陷（短气/努力呼吸）':direction==='up'?'气机上逆（喘逆/呕恶/胸膈满闷）':'直走门类（33门）'));
-
-  // Step2：方剂
-  if (formula) {
-    result.steps.push('【方剂】' + formula);
-    result.result = formula;
-    // 尝试在data中找该方剂的组成
-    var matchedFormula = null;
-    for (var f = 0; f < data.length; f++) {
-      if (data[f].formula === formula || (data[f].title && data[f].title.indexOf(formula) >= 0)) {
-        matchedFormula = data[f];
-        break;
-      }
-    }
-    if (matchedFormula) {
-      if (matchedFormula.ingredients && matchedFormula.ingredients.length > 0) {
-        result.herbs = matchedFormula.ingredients;
-      }
-      if (matchedFormula.indication) {
-        result.steps.push('【主治】' + matchedFormula.indication.substring(0, 100));
-      }
-    }
-  }
-
-  // Step3：脉诊确认（左右总按对比）
-  var zL  = formData.zx_zongL  || '';
+function diagnoseZhangXichun(formData, symptoms, complaint) {
+  // ===== 构建 text 描述（供关键词匹配） =====
+  var textParts = [];
+  var zL = formData.zx_zongL || '';
   var zLF = formData.zx_zongLF || '';
-  var zR  = formData.zx_zongR  || '';
+  var zR = formData.zx_zongR || '';
   var zRF = formData.zx_zongRF || '';
+  if (zL) { var lp='左手总按：'+zL; if(zLF) lp+=zLF; textParts.push(lp); }
+  if (zR) { var rp='右手总按：'+zR; if(zRF) rp+=zRF; textParts.push(rp); }
+  if (symptoms && symptoms.length) textParts.push('症状：'+symptoms.join('，'));
+  if (complaint) textParts.push('主诉：'+complaint);
+  var text = textParts.join('。');
 
-  if (zL || zR) {
-    result.steps.push('【脉诊确认】左=' + (zL||'?') + (zLF?'/'+zLF:'') + ' | 右=' + (zR||'?') + (zRF?'/'+zRF:''));
-    
-    // 用脉诊数据做二次匹配（找到最相似的医案）
-    var userFeats = extractZXCFeatures(formData);
-    var matches = [];
-    for (var i = 0; i < data.length; i++) {
-      var sc = matchZXCCase(data[i], userFeats);
-      if (sc > 0) matches.push({ case: data[i], score: sc });
+  // ===== 构建结构化数据（兼容五步树） =====
+  var d = {
+    zongLeft:  { shape: zL, force: zLF },
+    zongRight: { shape: zR, force: zRF },
+    leftCun: {}, leftGuan: {}, leftChi: {},
+    rightCun: {}, rightGuan: {}, rightChi: {},
+    symptoms: symptoms || [],
+    complaint: complaint || ''
+  };
+
+  // ===== 合并所有文本供关键词匹配 =====
+  var allText = text;
+
+  // ===== 第一步：辨气机升降 =====
+  var sinkingKw=['气短','乏力','下坠感','呼气困难','努力呼吸','气息将停',
+                 '短气','大气下陷','怔忡','大汗淋漓','气短不足以息',
+                 '神昏','肢体痿废','二便不禁','肛门突出','声颤'];
+  var flowKw=['气上冲','呃逆','呕吐','头目眩晕','吸气难','肩息',
+              '胃气上逆','哕气','胁下胀疼','冲气','心下有气上冲',
+              '腹中有气自下上冲','饮食不下','胸中烦热','昏仆'];
+  var nSink=0, nFlow=0;
+  for (var i=0;i<sinkingKw.length;i++) if (allText.indexOf(sinkingKw[i])>=0) nSink++;
+  for (var i=0;i<flowKw.length;i++) if (allText.indexOf(flowKw[i])>=0) nFlow++;
+
+  var exhaleDiff=allText.indexOf('呼气难')>=0||allText.indexOf('呼气困难')>=0;
+  var inhaleDiff=allText.indexOf('吸气难')>=0||allText.indexOf('肩息')>=0;
+  var qiDir='neutral';
+
+  var steps=[], result='', herbs=[], warn='', matchedCases=[];
+
+  if (nSink>0 && nFlow===0) {
+    qiDir='sinking';
+    steps.push('第一步·辨气机：检出'+nSink+'项下陷症状，无上逆 → 判定大气下陷 → 升陷类方池');
+  } else if (nFlow>0 && nSink===0) {
+    qiDir='counterflow';
+    steps.push('第一步·辨气机：检出'+nFlow+'项上逆症状，无下陷 → 判定气机上逆 → 镇逆类方池');
+  } else if (nSink>0 && nFlow>0) {
+    qiDir='mixed';
+    steps.push('第一步·辨气机：下陷'+nSink+'项+上逆'+nFlow+'项 → 升降失调 → 全方池评估');
+  } else {
+    steps.push('第一步·辨气机：无明显气机升降偏倾 → 基于脉诊深入辨证');
+  }
+  if (exhaleDiff && !inhaleDiff) steps.push('  ⚠ 呼气困难 → 支持大气下陷');
+  else if (inhaleDiff) steps.push('  ⚠ 吸气困难/肩息 → 支持气逆之喘');
+
+  // ===== 第二步：脉诊虚实寒热 =====
+  var gemaiKw=['革','大而不洪','如按鼓革'];
+  var hasGemai=false;
+  for (var i=0;i<gemaiKw.length;i++) if (allText.indexOf(gemaiKw[i])>=0) hasGemai=true;
+
+  if (hasGemai) {
+    steps.push('第二步·脉诊：⚠ 检出革脉特征（大而不洪+有力不滑）→ 阴阳离绝之险 → 禁峻下，急收敛固脱');
+    warn='革脉——阴阳离绝之险！虽见便结腹满，禁忌峻下！先收敛固脱（山萸肉、龙骨、牡蛎），攻下则真气崩解。';
+  } else {
+    var hasHong=allText.indexOf('洪')>=0;
+    var hasHua=allText.indexOf('滑')>=0;
+    var hasXianYing=allText.indexOf('弦硬')>=0||(allText.indexOf('硬')>=0&&allText.indexOf('弦')<0);
+    var hasWeak=allText.indexOf('无力')>=0||allText.indexOf('按之即无')>=0||
+                allText.indexOf('微弱')>=0||allText.indexOf('极微弱')>=0;
+
+    if (hasHong&&hasHua) {
+      steps.push('第二步·脉诊：三部总按：洪滑兼具（波涛叠涌+累累如贯珠）→ 真有力，实热实证');
+    } else if (hasXianYing&&!hasHong&&!hasHua) {
+      steps.push('第二步·脉诊：弦硬但无洪滑之象 → 假有力（阴虚阳浮）→ 滋阴潜阳，忌峻攻');
+    } else if (hasWeak) {
+      steps.push('第二步·脉诊：三部总按无力 → 虚证，补益为主');
+    } else {
+      steps.push('第二步·脉诊：脉力未见明确偏颇，继续辨浮沉数迟');
     }
-    matches.sort(function(a,b){ return b.score - a.score; });
-    
-    if (matches.length > 0 && matches[0].score >= 3) {
-      var best = matches[0].case;
-      result.steps.push('【脉案参照】#' + best.id + ' ' + (best.formula||best.title||'') + '（得分' + matches[0].score.toFixed(1) + '）');
-      if (best.pulse_raw) result.steps.push('  原文脉象：' + best.pulse_raw.substring(0, 80));
-      // 如果Step2没有选方剂，用脉案匹配结果填充
-      if (!formula) {
-        result.result = best.formula || (best.title||'');
-        if (best.ingredients) result.herbs = best.ingredients;
+    if (allText.indexOf('浮')>=0) steps.push('  └ 浮脉 → 表证或阴虚阳浮');
+    if (allText.indexOf('沉')>=0) steps.push('  └ 沉脉 → 里证或大气下陷');
+    if (allText.indexOf('数')>=0 && hasWeak) {
+      steps.push('  └ 数而无力 → 虚！大补元气，忌寒凉。原著：见数脉便用凉药，杀人无数');
+    } else if (allText.indexOf('数')>=0) {
+      steps.push('  └ 数而有力 → 真热');
+    }
+    if (allText.indexOf('迟')>=0) steps.push('  └ 迟而无力 → 大气下陷；迟而有力 → 寒积');
+  }
+
+  // ===== 第三步：左右对比定脏腑 =====
+  var leftStr=zL+' '+(zLF||'');
+  var rightStr=zR+' '+(zRF||'');
+  var combined=leftStr+' '+rightStr;
+
+  var xuanMatched='';
+  if (combined.indexOf('弦硬')>=0 && rightStr.indexOf('弦硬')>=0 && (rightStr.indexOf('长')>=0||zR==='大')) {
+    xuanMatched='左右弦硬有力长 → 肝肾阴亏、肝木过盛、冲气上冲 → 镇逆+滋阴';
+    if (qiDir!=='counterflow') qiDir='mixed';
+  } else if (leftStr.indexOf('弦硬')>=0 && rightStr.indexOf('洪')>=0) {
+    xuanMatched='左弦硬+右洪实 → 肝火+阳明热 → 白虎加人参汤';
+  } else if (leftStr.indexOf('弦硬')>=0 && (rightStr.indexOf('沉')>=0||rightStr.indexOf('濡')>=0)) {
+    xuanMatched='左弦硬+右濡沉 → 湿痰留饮，中焦气化不足 → 化饮健脾';
+  } else if (leftStr.indexOf('弦细')>=0 && leftStr.indexOf('无力')>=0) {
+    xuanMatched='左弦细无力 → 肝血虚、大气下陷 → 升陷方向';
+  } else if (leftStr.indexOf('弦硬')>=0 && leftStr.indexOf('无力')<0) {
+    xuanMatched='左弦硬（假有力，肝木横恣）→ 镇降（赭石、龙骨、牡蛎）';
+  } else if (combined.indexOf('弦无力')>=0) {
+    xuanMatched='弦无力（真无力，气化已衰）→ 补升（忌破气理气）';
+  } else if (leftStr.indexOf('微细')>=0 && leftStr.indexOf('按之即无')>=0) {
+    xuanMatched='左微细模糊按之即无 → 肝胆虚热/肝虚胁痛 → 滋阴柔肝';
+  } else if (leftStr.indexOf('弦硬')<0 && rightStr.indexOf('弦硬')>=0) {
+    xuanMatched='右弦硬有力长（>左脉）→ 冲气上冲、胃气不降 → 参赭镇气汤/镇逆汤';
+    if (qiDir==='neutral') qiDir='counterflow';
+  } else if (leftStr.indexOf('弦')>=0 && rightStr.indexOf('弦')>=0 && combined.indexOf('无力')>=0) {
+    xuanMatched='左右弦细无力 → 气血两亏、阴阳两虚 → 双补气血';
+  }
+  if (xuanMatched) {
+    steps.push('第三步·左右脏腑：'+xuanMatched);
+  } else {
+    var leftExcess=false, rightExcess=false;
+    var excessShapes=['洪','大','硬','革','实','滑','紧','弦'];
+    for (var e=0;e<excessShapes.length;e++) {
+      if (zL.indexOf(excessShapes[e])>=0) leftExcess=true;
+      if (zR.indexOf(excessShapes[e])>=0) rightExcess=true;
+    }
+    if (zLF==='有力'||zLF==='弹指') leftExcess=true;
+    if (zRF==='有力'||zRF==='弹指') rightExcess=true;
+    if (rightExcess&&!leftExcess) {
+      steps.push('第三步·左右脏腑：右脉实+左脉虚 → 冲气上冲、胃气不降 → 镇逆降胃');
+    } else if (leftExcess&&!rightExcess) {
+      steps.push('第三步·左右脏腑：左脉实+右脉虚 → 肝阳上亢、阴虚火旺 → 平肝滋阴');
+    } else if (!leftExcess && !rightExcess) {
+      steps.push('第三步·左右脏腑：左右皆虚 → 以寸部为重点辨大气下陷');
+    } else {
+      steps.push('第三步·左右脏腑：左右皆实 → 辨真热假热');
+    }
+  }
+
+  // ===== 第四步：尺部虚里 =====
+  steps.push('第四步·尺部虚里：六部脉诊未采集 → 建议补充六部以精确判断尺根预后');
+
+  // ===== 第五步：方证锁定 =====
+  var formulas=[];
+  var direction = formData.zx_direction || '';
+  var formula   = formData.zx_formula || '';
+
+  if (direction==='sink'||qiDir==='sinking'||qiDir==='mixed') {
+    if (allText.indexOf('身冷')>=0||allText.indexOf('恶寒')>=0||allText.indexOf('心肺阳虚')>=0||allText.indexOf('背紧')>=0) {
+      formulas.push({name:'回阳升陷汤', score:10, herbs:'生黄芪、干姜、当归身、桂枝炭、甘草', note:'大气下陷兼心肺阳虚'});
+    }
+    if (allText.indexOf('胸中满痛')>=0||allText.indexOf('胁胀')>=0||allText.indexOf('郁结')>=0||allText.indexOf('经络湮淤')>=0) {
+      formulas.push({name:'理郁升陷汤', score:10, herbs:'生黄芪、知母、当归身、桂枝尖、柴胡、乳香、没药', note:'大气下陷兼气分郁结'});
+    }
+    if (allText.indexOf('小便不禁')>=0||allText.indexOf('脾气虚')>=0) {
+      formulas.push({name:'醒脾升陷汤', score:10, herbs:'生黄芪、白术、桑寄生、川断、萸肉、龙骨、牡蛎', note:'大气下陷兼脾气虚极'});
+    }
+    if (formulas.length===0) {
+      formulas.push({name:'升陷汤', score:8, herbs:'生黄芪六钱、知母三钱、柴胡一钱五分、桔梗一钱五分、升麻一钱', note:'大气下陷标准方：生黄芪+知母+柴胡+桔梗+升麻'});
+    }
+  }
+
+  if (direction==='up'||qiDir==='counterflow'||qiDir==='mixed') {
+    if (xuanMatched.indexOf('弦硬')>=0||rightStr.indexOf('弦硬')>=0) {
+      formulas.push({name:'参赭镇气汤', score:10, herbs:'野台参、生赭石、生芡实、生山药、萸肉、清半夏、茯苓', note:'冲气上冲+阴分亏虚'});
+    }
+    if (allText.indexOf('呕吐')>=0||allText.indexOf('胃气上逆')>=0||allText.indexOf('呃逆')>=0||allText.indexOf('哕气')>=0) {
+      formulas.push({name:'镇逆汤', score:8, herbs:'生赭石、清半夏、生姜、竹茹', note:'冲胃并逆'});
+    }
+    if (allText.indexOf('吐血')>=0||allText.indexOf('衄血')>=0||allText.indexOf('咳血')>=0||allText.indexOf('吐衄')>=0) {
+      if (allText.indexOf('洪')>=0&&allText.indexOf('滑')>=0) {
+        formulas.push({name:'寒降汤', score:8, herbs:'生赭石、清半夏、瓜蒌仁、生杭芍、竹茹、牛蒡子、甘草', note:'吐衄+阳明实热'});
+      } else {
+        formulas.push({name:'温降汤', score:7, herbs:'生赭石、清半夏、干姜、生怀山药、生姜', note:'吐衄+虚寒'});
       }
-      result.matchedCases = matches.slice(0, 3);
+    }
+    if (formulas.length===0) {
+      formulas.push({name:'参赭镇气汤', score:6, herbs:'野台参、生赭石、生芡实、生山药、萸肉、清半夏、茯苓', note:'冲逆基础方'});
     }
   }
 
-  // 如果方向是大气下陷但没选方剂，给默认建议
-  if (direction === 'sink' && !formula) {
-    if (!result.result) result.result = '升陷汤（纯大气下陷）';
-    result.steps.push('【建议】大气下陷方向 → 升陷汤：生黄芪六钱、知母三钱、柴胡一钱五分、桔梗一钱五分、升麻一钱');
-    result.herbs = ['生黄芪','知母','柴胡','桔梗','升麻'];
-  }
-  if (direction === 'up' && !formula) {
-    if (!result.result) result.result = '参赭镇气汤（阴阳两虚喘逆）';
-    result.steps.push('【建议】气机上逆方向 → 先辨阴阳虚实，参赭镇气汤/镇摄汤/寒降汤选一');
+  // 如果用户选定了方剂，合并考虑
+  if (formula) {
+    steps.push('【用户选定方剂】'+formula);
+    var found=false;
+    for (var i=0;i<formulas.length;i++) {
+      if (formulas[i].name.indexOf(formula)>=0||formula.indexOf(formulas[i].name)>=0) {
+        formulas[i].score+=5;
+        found=true;
+      }
+    }
+    if (!found) {
+      formulas.push({name:formula, score:4, herbs:'', note:'用户指定方剂'});
+    }
   }
 
-  if (result.steps.length === 0) {
-    return simpleZXCDiagnose(formData);
+  formulas.sort(function(a,b){return b.score-a.score;});
+
+  if (formulas.length>0) {
+    var top3=formulas.slice(0,3);
+    steps.push('第五步·方证锁定：'+top3.map(function(f){return f.name+'('+f.score+'分)';}).join(' > '));
+    var top=top3[0];
+    result='推荐方剂：'+top.name;
+    if (top.herbs) result+=' 组成：'+top.herbs;
+    if (top.note) result+=' 依据：'+top.note;
+    herbs=top.herbs?top.herbs.split('、'):[];
   }
 
-  return result;
+  return {steps:steps, result:result, herbs:herbs, matchedCases:matchedCases, warn:warn||''};
 }
 
 function extractZXCFeatures(formData) {
@@ -951,7 +1075,7 @@ function diagnoseLiuDuzhou(symptoms, complaint) {
 // ========== 统一入口 ==========
 function diagnose(schoolId, formData, symptoms, complaint) {
   switch(schoolId) {
-    case 'zhangxichun': return diagnoseZhangXichun(formData);
+    case 'zhangxichun': return diagnoseZhangXichun(formData, symptoms, complaint);
     case 'chenjianguo': return diagnoseChenJianguo(formData);
     case 'huxishu': return diagnoseHuXishu(formData, symptoms, complaint);
     case 'caoyingfu': return diagnoseCaoYingfu(formData);

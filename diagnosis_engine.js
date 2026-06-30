@@ -53,16 +53,29 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
   var zRF = formData.zx_zongRF || '';
   if (zL) { var lp='左手总按：'+zL; if(zLF) lp+=zLF; textParts.push(lp); }
   if (zR) { var rp='右手总按：'+zR; if(zRF) rp+=zRF; textParts.push(rp); }
+  // 六部单按文本
+  var posLabels = ['左寸','左关','左尺','右寸','右关','右尺'];
+  var posKeys = ['zx_cunL','zx_guanL','zx_chiL','zx_cunR','zx_guanR','zx_chiR'];
+  var posForceKeys = ['zx_cunLF','zx_guanLF','zx_chiLF','zx_cunRF','zx_guanRF','zx_chiRF'];
+  for (var pi=0; pi<6; pi++) {
+    var ps = formData[posKeys[pi]] || '';
+    var pf = formData[posForceKeys[pi]] || '';
+    if (ps) { var pt=posLabels[pi]+':'+ps; if(pf) pt+=pf; textParts.push(pt); }
+  }
   if (symptoms && symptoms.length) textParts.push('症状：'+symptoms.join('，'));
   if (complaint) textParts.push('主诉：'+complaint);
   var text = textParts.join('。');
 
-  // ===== 构建结构化数据（兼容五步树） =====
+  // ===== 构建结构化数据（兼容五步树——含六部单按） =====
   var d = {
     zongLeft:  { shape: zL, force: zLF },
     zongRight: { shape: zR, force: zRF },
-    leftCun: {}, leftGuan: {}, leftChi: {},
-    rightCun: {}, rightGuan: {}, rightChi: {},
+    leftCun:   { shape: formData.zx_cunL || '', force: formData.zx_cunLF || '' },
+    leftGuan:  { shape: formData.zx_guanL || '', force: formData.zx_guanLF || '' },
+    leftChi:   { shape: formData.zx_chiL || '', force: formData.zx_chiLF || '' },
+    rightCun:  { shape: formData.zx_cunR || '', force: formData.zx_cunRF || '' },
+    rightGuan: { shape: formData.zx_guanR || '', force: formData.zx_guanRF || '' },
+    rightChi:  { shape: formData.zx_chiR || '', force: formData.zx_chiRF || '' },
     symptoms: symptoms || [],
     complaint: complaint || ''
   };
@@ -134,6 +147,12 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
       steps.push('  └ 数而有力 → 真热');
     }
     if (allText.indexOf('迟')>=0) steps.push('  └ 迟而无力 → 大气下陷；迟而有力 → 寒积');
+    
+    // 力度量尺：寸部评估（右寸优先）
+    var cunLevels = getCunForceLevels(d);
+    if (cunLevels.right >= 3) steps.push('  └ 右寸力度量尺：level ' + cunLevels.right + '（≥微弱）→ 大气下陷标准脉象');
+    else if (cunLevels.right >= 2 && cunLevels.left >= 2) steps.push('  └ 两寸皆弱：右level ' + cunLevels.right + ' 左level ' + cunLevels.left + '（均≥无力）→ 关前尤甚，支持升陷');
+    else if (cunLevels.left >= 3) steps.push('  └ 左寸力度：level ' + cunLevels.left + '（≥微弱），但右寸非弱 → 需结合症状确认');
   }
 
   // ===== 第三步：左右对比定脏腑 =====
@@ -186,7 +205,22 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
   }
 
   // ===== 第四步：尺部虚里 =====
-  steps.push('第四步·尺部虚里：六部脉诊未采集 → 建议补充六部以精确判断尺根预后');
+    var chiNoRoot = (d.leftChi.force === '按之即无' && d.rightChi.force === '按之即无') ||
+                ((d.leftChi.shape === '微' || d.leftChi.shape === '弱') && (d.rightChi.shape === '微' || d.rightChi.shape === '弱') &&
+                 (d.leftChi.force === '按之即无' || d.rightChi.force === '按之即无'));
+  var chiWeak = d.leftChi.shape === '弱' || d.leftChi.shape === '微' || d.leftChi.force === '按之即无' ||
+               d.rightChi.shape === '弱' || d.rightChi.shape === '微' || d.rightChi.force === '按之即无';
+
+  if (chiNoRoot || (allText.indexOf('尺脉无根') >= 0)) {
+    steps.push('第四步·尺部虚里：⚠ 尺脉无根 → 肝肾虚极，阴阳不维，急防虚脱！');
+    if (!warn) warn = '尺脉无根——肝肾虚极！急防虚脱，宜收敛固脱为先。';
+  } else if (chiWeak) {
+    steps.push('第四步·尺部虚里：尺脉虚弱 → 阳升而阴不能应，滋阴为要');
+  } else if (d.leftChi.shape || d.rightChi.shape) {
+    steps.push('第四步·尺部虚里：尺脉有根 → 预后可治');
+  } else {
+    steps.push('第四步·尺部虚里：尺部未提供 → 建议补充以决预后');
+  }
 
   // ===== 第五步：方证锁定 =====
   var formulas=[];
@@ -1086,4 +1120,31 @@ function diagnose(schoolId, formData, symptoms, complaint) {
     case 'liuduzhou': return diagnoseLiuDuzhou(symptoms, complaint);
     default: return { steps: ['未知体系'], result: '', herbs: [] };
   }
+// ===== 辅助函数（五步决策树用） =====
+function getCunForceLevels(d) {
+  var forces = [d.leftCun.force, d.rightCun.force];
+  var shapes = [d.leftCun.shape, d.rightCun.shape];
+  var levels = [0, 0];
+  for (var i = 0; i < 2; i++) {
+    var f = forces[i];
+    if (f === '按之即无') levels[i] = Math.max(levels[i], 4);
+    else if (f === '弦无力') levels[i] = Math.max(levels[i], 3);
+    else if (f === '无力' || f === '重按始得') levels[i] = Math.max(levels[i], 2);
+    var s = shapes[i];
+    if (s === '微' || s === '极微弱') levels[i] = Math.max(levels[i], 4);
+    else if (s === '弱' || s === '微弱') levels[i] = Math.max(levels[i], 3);
+    else if (s === '细') levels[i] = Math.max(levels[i], 2);
+  }
+  return { left: levels[0], right: levels[1], max: Math.max(levels[0], levels[1]) };
+}
+
+function isExcess(zongShape, zongForce, cun, guan, chi) {
+  var shapes = [zongShape, cun.shape, guan.shape, chi.shape].filter(function(x) { return x; });
+  var forces = [zongForce, cun.force, guan.force, chi.force].filter(function(x) { return x; });
+  var excessShapes = ['洪', '大', '硬', '革', '实', '滑', '紧', '弦'];
+  var hasExcess = shapes.some(function(s) { return excessShapes.indexOf(s) >= 0; });
+  var hasForce = forces.some(function(f) { return f === '有力' || f === '弹指'; });
+  return hasExcess || hasForce;
+}
+
 }

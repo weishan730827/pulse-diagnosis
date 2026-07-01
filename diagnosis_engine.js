@@ -222,7 +222,11 @@ function extractZXCFeatures(formData) {
   var terms = ['弦硬','弦细','弦数','弦长','弦浮','弦滑','弦大','弦','细','弱','浮','沉','洪','滑','涩','大','硬','微','数','迟','紧','缓','散','濡','芤','结','代'];
 
   // === 左脉特征 ===
-  if (zL) {
+  // 优先使用总按chip组（用户明确勾选的脉形，源自772案数据）
+  var zongLMx = formData.zx_zongLMx || [];
+  if (zongLMx.length) {
+    feats.left = zongLMx.slice();
+  } else if (zL) {
     for (var i = 0; i < terms.length; i++) {
       if (zL.indexOf(terms[i]) >= 0) feats.left.push(terms[i]);
     }
@@ -234,7 +238,10 @@ function extractZXCFeatures(formData) {
   }
 
   // === 右脉特征 ===
-  if (zR) {
+  var zongRMx = formData.zx_zongRMx || [];
+  if (zongRMx.length) {
+    feats.right = zongRMx.slice();
+  } else if (zR) {
     for (var k = 0; k < terms.length; k++) {
       if (zR.indexOf(terms[k]) >= 0) feats.right.push(terms[k]);
     }

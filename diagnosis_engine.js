@@ -190,99 +190,145 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
 
 
 function extractZXCFeatures(formData) {
-  var feats = { left: [], right: [], force: '', speed: '' };
+  var feats = {
+    left: [], right: [],           // 整合左右脉（向后兼容）
+    cunL: [], guanL: [], chiL: [], // 左三部
+    cunR: [], guanR: [], chiR: [], // 右三部
+    force: '', speed: ''
+  };
   var zL  = formData.zx_zongL  || '';
   var zLF = formData.zx_zongLF || '';
   var zR  = formData.zx_zongR  || '';
   var zRF = formData.zx_zongRF || '';
 
-  // 从六部脉形chip中收集所有脉形
-  var allMx = [];
-  ['zx_cunLMx','zx_guanLMx','zx_chiLMx','zx_cunRMx','zx_guanRMx','zx_chiRMx'].forEach(function(k){
-    var v = formData[k];
-    if (v && v.length) allMx = allMx.concat(v);
+  // 分别收集左右chip勾选
+  var leftMx = [], rightMx = [];
+  ['cunL','guanL','chiL'].forEach(function(k){
+    var v = formData['zx_'+k+'Mx'];
+    if (v && v.length) leftMx = leftMx.concat(v);
   });
+  ['cunR','guanR','chiR'].forEach(function(k){
+    var v = formData['zx_'+k+'Mx'];
+    if (v && v.length) rightMx = rightMx.concat(v);
+  });
+  // 每部位的独立脉形
+  feats.cunL  = formData.zx_cunLMx  || [];
+  feats.guanL = formData.zx_guanLMx || [];
+  feats.chiL  = formData.zx_chiLMx  || [];
+  feats.cunR  = formData.zx_cunRMx  || [];
+  feats.guanR = formData.zx_guanRMx || [];
+  feats.chiR  = formData.zx_chiRMx  || [];
 
   var terms = ['弦硬','弦细','弦数','弦长','弦浮','弦滑','弦大','弦','细','弱','浮','沉','洪','滑','涩','大','硬','微','数','迟','紧','缓','散','濡','芤','结','代'];
-  
-  if (zL || allMx.length) {
+
+  // === 左脉特征 ===
+  if (zL) {
     for (var i = 0; i < terms.length; i++) {
       if (zL.indexOf(terms[i]) >= 0) feats.left.push(terms[i]);
     }
-    // 从chip中补充
-    if (allMx.length && feats.left.length === 0) {
-      for (var j = 0; j < terms.length; j++) {
-        if (allMx.indexOf(terms[j]) >= 0) feats.left.push(terms[j]);
-      }
+  }
+  if (feats.left.length === 0 && leftMx.length) {
+    for (var j = 0; j < terms.length; j++) {
+      if (leftMx.indexOf(terms[j]) >= 0) feats.left.push(terms[j]);
     }
   }
-  if (zLF) {
-    if (zLF.indexOf('无力') >= 0 || zLF === '弦无力' || zLF === '按之即无') feats.force = '虚';
-    else if (zLF.indexOf('有力') >= 0 || zLF === '弦硬') feats.force = '实';
-  }
 
-  if (zR || allMx.length) {
+  // === 右脉特征 ===
+  if (zR) {
     for (var k = 0; k < terms.length; k++) {
       if (zR.indexOf(terms[k]) >= 0) feats.right.push(terms[k]);
     }
-    if (allMx.length && feats.right.length === 0) {
-      for (var l = 0; l < terms.length; l++) {
-        if (allMx.indexOf(terms[l]) >= 0) feats.right.push(terms[l]);
-      }
+  }
+  if (feats.right.length === 0 && rightMx.length) {
+    for (var l = 0; l < terms.length; l++) {
+      if (rightMx.indexOf(terms[l]) >= 0) feats.right.push(terms[l]);
     }
   }
-  if (zRF) {
-    if (zRF.indexOf('无力') >= 0 || zRF === '弦无力' || zRF === '按之即无') feats.force = feats.force || '虚';
-    else if (zRF.indexOf('有力') >= 0 || zRF === '弦硬') feats.force = '实';
-  }
 
-  // 力度: 从六部force收集中补充
+  // === 力度（统一映射为"有力"/"无力"，与v3数据对齐） ===
+  if (zLF) {
+    if (zLF.indexOf('无力') >= 0 || zLF === '弦无力' || zLF === '按之即无') feats.force = '无力';
+    else if (zLF.indexOf('有力') >= 0 || zLF === '弦硬') feats.force = '有力';
+  }
+  if (zRF && !feats.force) {
+    if (zRF.indexOf('无力') >= 0 || zRF === '弦无力' || zRF === '按之即无') feats.force = '无力';
+    else if (zRF.indexOf('有力') >= 0 || zRF === '弦硬') feats.force = '有力';
+  }
   if (!feats.force) {
-    var forceCount = { '有力': 0, '无力': 0, '弦硬': 0 };
+    var fc = { '有力':0, '无力':0, '弦硬':0 };
     ['zx_cunLF','zx_guanLF','zx_chiLF','zx_cunRF','zx_guanRF','zx_chiRF'].forEach(function(k){
       var v = formData[k] || '';
-      if (v === '有力' || v === '弦硬') forceCount['有力']++;
-      if (v === '无力') forceCount['无力']++;
+      if (v === '有力' || v === '弦硬') fc['有力']++;
+      if (v === '无力') fc['无力']++;
     });
-    if (forceCount['有力'] > forceCount['无力']) feats.force = '实';
-    else if (forceCount['无力'] > 0) feats.force = '虚';
+    if (fc['有力'] > fc['无力']) feats.force = '有力';
+    else if (fc['无力'] > 0) feats.force = '无力';
   }
 
-  // 速率
+  // === 速率 ===
+  var allMxForRate = leftMx.concat(rightMx);
   if (zL && zL.indexOf('数') >= 0) feats.speed = '数';
   else if (zL && zL.indexOf('迟') >= 0) feats.speed = '迟';
   else if (zR && zR.indexOf('数') >= 0) feats.speed = '数';
   else if (zR && zR.indexOf('迟') >= 0) feats.speed = '迟';
-  // 从chip中补充
-  if (!feats.speed && allMx.indexOf('数') >= 0) feats.speed = '数';
-  if (!feats.speed && allMx.indexOf('迟') >= 0) feats.speed = '迟';
+  else if (allMxForRate.indexOf('数') >= 0) feats.speed = '数';
+  else if (allMxForRate.indexOf('迟') >= 0) feats.speed = '迟';
 
   return feats;
 }
-
 function matchZXCCase(caseData, userFeats) {
   var score = 0;
   var cf = caseData.feats || {};
 
-  // 左脉匹配（权重×3）
-  for (var i = 0; i < userFeats.left.length; i++) {
-    if (cf['左'] && cf['左'].indexOf(userFeats.left[i]) >= 0) score += 3;
+  // ---- 左三部位置匹配（权重×4）----
+  ['cunL','guanL','chiL'].forEach(function(pos){
+    var user = userFeats[pos] || [];
+    var target = cf['左'] || [];
+    for (var i = 0; i < user.length; i++) {
+      if (target.indexOf(user[i]) >= 0) score += 4;
+      else if (cf['总体'] && cf['总体'].indexOf(user[i]) >= 0) score += 1;
+    }
+  });
+
+  // ---- 右三部位置匹配（权重×4）----
+  ['cunR','guanR','chiR'].forEach(function(pos){
+    var user = userFeats[pos] || [];
+    var target = cf['右'] || [];
+    for (var i = 0; i < user.length; i++) {
+      if (target.indexOf(user[i]) >= 0) score += 4;
+      else if (cf['总体'] && cf['总体'].indexOf(user[i]) >= 0) score += 1;
+    }
+  });
+
+  // ---- 整合左右回退匹配（权重×2）----
+  for (var j = 0; j < userFeats.left.length; j++) {
+    if (cf['左'] && cf['左'].indexOf(userFeats.left[j]) >= 0) score += 2;
+    if (cf['总体'] && cf['总体'].indexOf(userFeats.left[j]) >= 0) score += 1;
   }
-  // 右脉匹配（权重×3）
-  for (var j = 0; j < userFeats.right.length; j++) {
-    if (cf['右'] && cf['右'].indexOf(userFeats.right[j]) >= 0) score += 3;
+  for (var k = 0; k < userFeats.right.length; k++) {
+    if (cf['右'] && cf['右'].indexOf(userFeats.right[k]) >= 0) score += 2;
+    if (cf['总体'] && cf['总体'].indexOf(userFeats.right[k]) >= 0) score += 1;
   }
-  // 总体脉匹配（回退，权重×1）
-  for (var k = 0; k < userFeats.left.length; k++) {
-    if (cf['总体'] && cf['总体'].indexOf(userFeats.left[k]) >= 0) score += 1;
+
+  // ---- 力度匹配（权重×5）----
+  // userFeats.force: "有力"/"无力"; cf['力度']: "有力"/"弦硬有力"/"无力"/"虚"/"实"
+  if (userFeats.force && cf['力度']) {
+    var uf = userFeats.force;
+    var df = cf['力度'];
+    if (df.indexOf(uf) >= 0) score += 5;
+    else if ((uf === '有力' && (df === '实' || df.indexOf('弦硬') >= 0 || df.indexOf('有力') >= 0)) ||
+             (uf === '无力' && (df === '虚' || df === '按之即无' || df.indexOf('无力') >= 0))) score += 4;
   }
-  for (var l = 0; l < userFeats.right.length; l++) {
-    if (cf['总体'] && cf['总体'].indexOf(userFeats.right[l]) >= 0) score += 1;
+
+  // ---- 速率匹配（权重×3）----
+  if (userFeats.speed && cf['速率']) {
+    var ur = userFeats.speed;
+    var dr = String(cf['速率']);
+    // 数字速率（5,6,7,...）→ 数; 3→迟
+    var drNorm = dr;
+    if (/^\d+$/.test(dr)) { var n = parseInt(dr); drNorm = n >= 5 ? '数' : '迟'; }
+    if (drNorm === ur || dr === ur) score += 3;
   }
-  // 力度匹配（权重×5）
-  if (userFeats.force && cf['力度'] === userFeats.force) score += 5;
-  // 速率匹配（权重×2）
-  if (userFeats.speed && cf['速率'] === userFeats.speed) score += 2;
 
   return score;
 }

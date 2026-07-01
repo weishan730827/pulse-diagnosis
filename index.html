@@ -252,109 +252,58 @@ var formHtml='';
 
 // --- 张锡纯：气机升降三步辨证漏斗 ---
 formHtml+='<div class="school-form" id="zxForm">';
-formHtml+='<h3>张锡纯 · 气机升降辨证 — 三步漏斗</h3>';
-formHtml+='<div class="note">锡纯辨证核心：先定气机升降方向，再选方剂，脉诊贯穿始终确认。短气/努力呼吸=大气下陷；喘逆/呕恶=气机上逆；否则直走门类。</div>';
+formHtml+='<h3>张锡纯 · 五步决策树辨证</h3>';
+formHtml+='<div class="note">锡纯辨证五步：脉诊定虚实（有力无力）→ 辨真假有力（洪滑 vs 弦硬）→ 左右对比定脏腑 → 尺部虚里决预后 → 方证锁定。</div>';
 
-// Step 1：辨气机升降方向
-formHtml+='<div id="zxStep1" class="zx-step">';
-formHtml+='<div class="zx-step-title">第一步：辨气机升降方向</div>';
-formHtml+='<div class="zx-step-desc">张氏谓："胸中大气，为诸气之纲领。"短气/努力呼吸=大气下陷；喘逆/呕恶=气机上逆；否则直走门类。</div>';
-formHtml+='<div class="zx-guide">';
-formHtml+='  \u2987 <b>大气下陷</b>：气短不足以息，努力呼吸有似乎喘，脉象沉迟微弱关前尤甚<br>';
-formHtml+='  \u2196 <b>气机上逆</b>：喘逆迫促、气息上冲、呕恶呃逆、胸膈满闷，脉象弦硬大而长<br>';
-formHtml+='  \u2194 <b>无明显升降异常</b>：直接按症状定位门类（33门）<br>';
+// 左右总按
+formHtml+='<div style="display:flex;gap:8px;margin-bottom:8px">';
+formHtml+='<div style="flex:1;background:#fefdf9;border:1px solid #e8d5b7;border-radius:4px;padding:6px 8px">';
+formHtml+='<div style="font-size:10px;font-weight:600;color:#8b6914;margin-bottom:4px">左手总按</div>';
+formHtml+='<select id="zx_zongL" style="width:100%;font-size:10px;padding:3px">';
+formHtml+='<option value="">--</option><option>浮</option><option>中</option><option>沉</option><option>伏</option></select>';
+formHtml+='<select id="zx_zongLF" style="width:100%;font-size:10px;padding:3px;margin-top:3px">';
+formHtml+='<option value="">--力度</option><option>有力</option><option>无力</option><option>弦硬</option></select>';
 formHtml+='</div>';
-formHtml+='<div style="margin:8px 0 4px">';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_direction" value="sink" onchange="zxSetDirection(\'sink\')"> <span>短气/努力呼吸 → 大气下陷</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_direction" value="up" onchange="zxSetDirection(\'up\')"> <span>喘逆/呕恶/满闷 → 气机上逆</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_direction" value="direct" onchange="zxSetDirection(\'direct\')"> <span>无升降异常 → 直走门类</span></label>';
-formHtml+='</div>';
-formHtml+='<div id="zx_dirNote" style="font-size:11px;color:#8b6914;min-height:20px"></div>';
-formHtml+='</div>';
+formHtml+='<div style="flex:1;background:#fefdf9;border:1px solid #e8d5b7;border-radius:4px;padding:6px 8px">';
+formHtml+='<div style="font-size:10px;font-weight:600;color:#8b6914;margin-bottom:4px">右手总按</div>';
+formHtml+='<select id="zx_zongR" style="width:100%;font-size:10px;padding:3px">';
+formHtml+='<option value="">--</option><option>浮</option><option>中</option><option>沉</option><option>伏</option></select>';
+formHtml+='<select id="zx_zongRF" style="width:100%;font-size:10px;padding:3px;margin-top:3px">';
+formHtml+='<option value="">--力度</option><option>有力</option><option>无力</option><option>弦硬</option></select>';
+formHtml+='</div></div>';
 
-// Step 2：大气下陷分支
-formHtml+='<div id="zxStep2Sink" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第二步：大气下陷分型</div>';
-formHtml+='<div class="zx-step-desc">大气下陷，脉象沉迟微弱，关前尤甚。选最贴合者：</div>';
-formHtml+='<div class="zx-guide">';
-formHtml+='  \u2705 <b>纯大气下陷</b>：气短、气息将停、脉沉迟微弱 → <b>升陷汤</b><br>';
-formHtml+='  \u2705 <b>兼心肺阳虚</b>：心冷、背紧、恶寒、脉微弱而迟 → <b>回阳升陷汤</b><br>';
-formHtml+='  \u2705 <b>兼气分郁结</b>：胸中满闷、经络瘀淤 → <b>理郁升陷汤</b><br>';
-formHtml+='  \u2705 <b>兼脾气下陷</b>：小便不禁 → <b>醒脾升陷汤</b>';
-formHtml+='</div>';
-formHtml+='<div style="margin:8px 0 4px">';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="升陷汤" onchange="zxSetSink(\'升陷汤\')"> <span>升陷汤 — 纯大气下陷</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="回阳升陷汤" onchange="zxSetSink(\'回阳升陷汤\')"> <span>回阳升陷汤 — 兼心肺阳虚</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="理郁升陷汤" onchange="zxSetSink(\'理郁升陷汤\')"> <span>理郁升陷汤 — 兼气分郁结</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_sink" value="醒脾升陷汤" onchange="zxSetSink(\'醒脾升陷汤\')"> <span>醒脾升陷汤 — 兼脾气下陷</span></label>';
-formHtml+='</div>';
-formHtml+='<div style="margin-top:8px"><button class="zx-big-btn" onclick="zxShowPulse()">\uD83D\uDD0D 确认，进入脉诊确认</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(1)">\u2190 上一步</button></div>';
-formHtml+='</div>';
+// 六部分部脉诊
+formHtml+='<table style="width:100%;font-size:10px;border-collapse:collapse;margin-bottom:8px">';
+formHtml+='<tr style="background:#fdfbf7"><th style="padding:4px;border:1px solid #e8d5b7;width:10%">部位</th>';
+['左寸','左关','左尺','右寸','右关','右尺'].forEach(function(pos){
+  formHtml+='<th style="padding:4px;border:1px solid #e8d5b7;font-weight:600;color:#555">'+pos+'</th>';
+});
+formHtml+='</tr>';
+formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center">力度</td>';
+['cunL','guanL','chiL','cunR','guanR','chiR'].forEach(function(id){
+  var selId = 'zx_'+id+'F';
+  formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="'+selId+'" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>有力</option><option>无力</option><option>弦硬</option></select></td>';
+});
+formHtml+='</tr></table>';
 
-// Step 2：气机上逆分支
-formHtml+='<div id="zxStep2Up" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第二步：气机上逆分型（镇降类）</div>';
-formHtml+='<div class="zx-step-desc">冲气上逆、胃气不降，脉象弦硬大而长，右部尤甚。选最贴合者：</div>';
-formHtml+='<div style="margin:8px 0 4px">';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="参赭镇气汤" onchange="zxSetUp(\'参赭镇气汤\')"> <span>参赭镇气汤 — 阴阳两虚+喘逆迫促</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="薯蓣纳气汤" onchange="zxSetUp(\'薯蓣纳气汤\')"> <span>薯蓣纳气汤 — 阴虚不纳气作喘</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="滋培汤" onchange="zxSetUp(\'滋培汤\')"> <span>滋培汤 — 虚劳喘逆+饮食减少</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="镇摄汤" onchange="zxSetUp(\'镇摄汤\')"> <span>镇摄汤 — 胸膈满闷、脉大而弦（脾胃真气外泄）</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="镇逆汤" onchange="zxSetUp(\'镇逆汤\')"> <span>镇逆汤 — 胃气上逆呕吐</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="寒降汤" onchange="zxSetUp(\'寒降汤\')"> <span>寒降汤 — 胃气上逆+吐衄脉洪滑</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="温降汤" onchange="zxSetUp(\'温降汤\')"> <span>温降汤 — 胃气上逆+吐衄脉虚濡迟</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="清降汤" onchange="zxSetUp(\'清降汤\')"> <span>清降汤 — 吐衄不止阴分亏损</span></label>';
-formHtml+='  <label class="zx-radio"><input type="radio" name="zx_up" value="秘红丹" onchange="zxSetUp(\'秘红丹\')"> <span>秘红丹 — 肝郁多怒+吐衄</span></label>';
+// 虚里 + 尺部
+formHtml+='<div style="display:flex;gap:8px;margin-bottom:8px">';
+formHtml+='<div style="flex:1;background:#fefdf9;border:1px solid #e8d5b7;border-radius:4px;padding:6px 8px">';
+formHtml+='<div style="font-size:10px;font-weight:600;color:#8b6914;margin-bottom:4px">虚里（左乳下）</div>';
+formHtml+='<select id="zx_xuli" style="width:100%;font-size:10px;padding:3px">';
+formHtml+='<option value="">--</option><option>微弱不可见（正常）</option><option>大动（冲气上逆）</option></select>';
 formHtml+='</div>';
-formHtml+='<div style="margin-top:8px"><button class="zx-big-btn" onclick="zxShowPulse()">\uD83D\uDD0D 确认，进入脉诊确认</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(1)">\u2190 上一步</button></div>';
-formHtml+='</div>';
+formHtml+='<div style="flex:1;background:#fefdf9;border:1px solid #e8d5b7;border-radius:4px;padding:6px 8px">';
+formHtml+='<div style="font-size:10px;font-weight:600;color:#8b6914;margin-bottom:4px">尺部根</div>';
+formHtml+='<select id="zx_chibu" style="width:100%;font-size:10px;padding:3px">';
+formHtml+='<option value="">--</option><option>有根（重按有力）</option><option>无根（重按即无）</option><option>尺脉甚弱</option></select>';
+formHtml+='</div></div>';
 
-// Step 2：直走门类分支
-formHtml+='<div id="zxStep2Direct" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第二步：按症状定位门类</div>';
-formHtml+='<div class="zx-step-desc">张氏《医学衷中参西录》分33门。选最符合主诉的病位门类：</div>';
-formHtml+='<div class="zx-form-row" style="display:flex;flex-wrap:wrap;gap:6px">';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_01" onchange="zxSetSection(\'s_01\',\'阴虚劳热\')"><span>阴虚劳热</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_02" onchange="zxSetSection(\'s_02\',\'阳虚\')"><span>阳虚</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_03" onchange="zxSetSection(\'s_03\',\'大气下陷\')"><span>大气下陷</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_04" onchange="zxSetSection(\'s_04\',\'喘息\')"><span>喘息</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_05" onchange="zxSetSection(\'s_05\',\'痰饮\')"><span>痰饮</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_06" onchange="zxSetSection(\'s_06\',\'肺病\')"><span>肺病</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_07" onchange="zxSetSection(\'s_07\',\'吐衄\')"><span>吐衄</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_08" onchange="zxSetSection(\'s_08\',\'心病\')"><span>心病</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_12" onchange="zxSetSection(\'s_12\',\'中风\')"><span>中风</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_15" onchange="zxSetSection(\'s_15\',\'呕吐\')"><span>呕吐</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_17" onchange="zxSetSection(\'s_17\',\'泄泻\')"><span>泄泻</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_18" onchange="zxSetSection(\'s_18\',\'痢\')"><span>痢疾</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_21" onchange="zxSetSection(\'s_21\',\'癃闭\')"><span>癃闭水肿</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_23" onchange="zxSetSection(\'s_23\',\'伤寒\')"><span>伤寒</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_24" onchange="zxSetSection(\'s_24\',\'温病\')"><span>温病</span></label>';
-formHtml+='  <label class="zx-chip"><input type="radio" name="zx_section" value="s_29" onchange="zxSetSection(\'s_29\',\'女科\')"><span>女科</span></label>';
+// 按钮和结果区
+formHtml+='<div style="text-align:center;margin-bottom:8px">';
+formHtml+='<button type="button" onclick="zxAnalyze()" style="background:#6b4c2a;color:#fff;border:none;border-radius:4px;padding:8px 24px;font-size:12px;font-weight:600;cursor:pointer">开始辨证（五步决策树）</button>';
 formHtml+='</div>';
-formHtml+='<div id="zx_sectionFormulas" style="margin-top:8px;display:none"><div class="zx-step-desc">该门类下的方剂：</div><div id="zx_formulaRadios" style="margin:4px 0"></div></div>';
-formHtml+='<div style="margin-top:8px"><button class="zx-big-btn" id="zx_toPulseBtn" onclick="zxShowPulse()" style="display:none">\uD83D\uDD0D 确认，进入脉诊确认</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(1)">\u2190 上一步</button></div>';
-formHtml+='</div>';
-
-// Step 3：脉诊确认
-formHtml+='<div id="zxStep3" class="zx-step" style="display:none">';
-formHtml+='<div class="zx-step-title">第三步：脉诊确认（左右对比）</div>';
-formHtml+='<div class="zx-step-desc">张氏诊脉核心：总按左右对比为第一层，单按脏腑定位为第二层。</div>';
-formHtml+='<div class="zong-an">';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">左手总按（候阴盛衰）</div>';
-formHtml+='<select id="zx_zongL"><option value="">--脉形</option><option>弦</option><option>弦细</option><option>弦数</option><option>弦硬</option><option>弦长</option><option>细</option><option>弱</option><option>浮</option><option>沉</option><option>洪</option><option>滑</option><option>涩</option><option>数</option><option>迟</option><option>微</option><option>虚</option></select>';
-formHtml+='<select id="zx_zongLF" style="margin-top:3px"><option value="">--力度</option><option>有力</option><option>无力</option><option>弦硬</option><option>弦无力</option><option>按之即无</option></select></div>';
-formHtml+='<div><div style="font-size:11px;font-weight:700;color:#8b6914;margin-bottom:4px">右手总按（候阳盛衰）</div>';
-formHtml+='<select id="zx_zongR"><option value="">--脉形</option><option>弦</option><option>弦细</option><option>弦数</option><option>弦硬</option><option>弦长</option><option>细</option><option>弱</option><option>浮</option><option>沉</option><option>洪</option><option>滑</option><option>涩</option><option>数</option><option>迟</option><option>微</option><option>虚</option></select>';
-formHtml+='<select id="zx_zongRF" style="margin-top:3px"><option value="">--力度</option><option>有力</option><option>无力</option><option>弦硬</option><option>弦无力</option><option>按之即无</option></select></div>';
-formHtml+='</div>';
-formHtml+='<div class="note" id="zx_pulseNote">已选方向：<span id="zx_selectedDir"></span> → 已选方剂：<span id="zx_selectedFormula"></span></div>';
-formHtml+='<div><button class="zx-big-btn" onclick="zxAnalyze()">\uD83D\uDD0D 完成辨证</button> <button class="zx-big-btn" style="background:#aaa;margin-left:8px" onclick="zxBackStep(2)">\u2190 上一步</button></div>';
-formHtml+='</div>';
-
-// 结果区
-formHtml+='<div id="zxResult" class="zx-result-box" style="display:none"></div>';
-formHtml+='</div>';
-
+formHtml+='<div id="zxResult" style="display:none"></div>';
       // --- 陈建国：三部九候四步引导流 ---
       // 步骤状态管理
       var cjStep = 0; // 0=未开始 1=左手总按 2=左手最异部 3=右手总按 4=右手最异部 5=完成
@@ -802,14 +751,25 @@ function runAll(){
   formData.cj_leftDepth  = cjLeftDepth;
   formData.cj_rightDepth = cjRightDepth;
   
-  // 张锡纯 三步辨证数据
-  formData.zx_direction = zxData.direction;
-  formData.zx_formula   = zxData.formula;
-  formData.zx_section   = zxData.section;
+  // 张锡纯 五步决策树数据
   formData.zx_zongL  = val('zx_zongL');
   formData.zx_zongLF = val('zx_zongLF');
   formData.zx_zongR  = val('zx_zongR');
   formData.zx_zongRF = val('zx_zongRF');
+  formData.zx_cunL   = val('zx_cunL');
+  formData.zx_cunLF  = val('zx_cunLF');
+  formData.zx_guanL  = val('zx_guanL');
+  formData.zx_guanLF = val('zx_guanLF');
+  formData.zx_chiL   = val('zx_chiL');
+  formData.zx_chiLF  = val('zx_chiLF');
+  formData.zx_cunR   = val('zx_cunR');
+  formData.zx_cunFR  = val('zx_cunFR');
+  formData.zx_guanR  = val('zx_guanR');
+  formData.zx_guanFR = val('zx_guanFR');
+  formData.zx_chiR   = val('zx_chiR');
+  formData.zx_chiFR  = val('zx_chiFR');
+  formData.zx_xuli   = val('zx_xuli');
+  formData.zx_chibu  = val('zx_chibu');
   formData.cj_step1 = val('cj_step1'); formData.cj_step2m = val('cj_step2m'); formData.cj_step2q = val('cj_step2q');
   ['左寸','左关','左尺','右寸','右关','右尺'].forEach(function(p) {
     formData['cj_t_'+p] = val('cj_t_'+p);
@@ -890,93 +850,9 @@ function runAll(){
 function val(id) { var e = document.getElementById(id); return e ? e.value : ''; }
 
 // ========== 张锡纯 三步辨证漏斗 JS ==========
-var zxData = { direction:'', formula:'', section:'' };
-
-function zxSetDirection(dir) {
-  zxData.direction = dir;
-  var labels = { 'sink':'大气下陷（短气）', 'up':'气机上逆（喘逆）', 'direct':'直走门类' };
-  document.getElementById('zx_dirNote').textContent = '已选：' + (labels[dir]||dir);
-  document.getElementById('zxStep2Sink').style.display   = (dir==='sink')  ? 'block' : 'none';
-  document.getElementById('zxStep2Up').style.display     = (dir==='up')    ? 'block' : 'none';
-  document.getElementById('zxStep2Direct').style.display = (dir==='direct') ? 'block' : 'none';
-  document.getElementById('zxStep1').style.display = 'none';
-}
-
-function zxSetSink(formula) {
-  zxData.formula = formula;
-}
-function zxSetUp(formula) {
-  zxData.formula = formula;
-}
-function zxSetFormula(formula) {
-  zxData.formula = formula;
-}
-
-function zxSetSection(sectionId, sectionName) {
-  zxData.section = sectionId;
-  // 尝试从v4.json加载该门类的方剂
-  var v4 = DataCache['zhangxichun_v4'];
-  if (v4 && v4[sectionId] && v4[sectionId].formulas) {
-    var fmts = v4[sectionId].formulas;
-    var html = '';
-    for (var i = 0; i < fmts.length; i++) {
-      var f = fmts[i];
-      html += '<label class="zx-radio"><input type="radio" name="zx_formula" value="' + f.name + '" onchange="zxSetFormula(\'' + f.name.replace(/'/g,'\\\'') + '\')"> <span>' + f.name + '</span></label>';
-    }
-    document.getElementById('zx_formulaRadios').innerHTML = html;
-    document.getElementById('zx_sectionFormulas').style.display = 'block';
-    document.getElementById('zx_toPulseBtn').style.display = 'inline-block';
-  } else {
-    // 没有v4数据，直接进入脉诊
-    document.getElementById('zx_sectionFormulas').style.display = 'block';
-    document.getElementById('zx_formulaRadios').innerHTML = '<span style="color:#c0392b;font-size:11px">该门类方剂数据加载中，请直接进入脉诊确认。</span>';
-    document.getElementById('zx_toPulseBtn').style.display = 'inline-block';
-  }
-}
-
-function zxShowPulse() {
-  document.getElementById('zxStep2Sink').style.display   = 'none';
-  document.getElementById('zxStep2Up').style.display     = 'none';
-  document.getElementById('zxStep2Direct').style.display = 'none';
-  document.getElementById('zxStep3').style.display = 'block';
-  var dirLabels = { 'sink':'大气下陷', 'up':'气机上逆', 'direct':'直走门类' };
-  document.getElementById('zx_selectedDir').textContent = dirLabels[zxData.direction] || zxData.direction;
-  document.getElementById('zx_selectedFormula').textContent = zxData.formula || '（脉诊确认后定）';
-}
-
-function zxBackStep(step) {
-  if (step === 1) {
-    // 回到第一步
-    document.getElementById('zxStep2Sink').style.display   = 'none';
-    document.getElementById('zxStep2Up').style.display     = 'none';
-    document.getElementById('zxStep2Direct').style.display = 'none';
-    document.getElementById('zxStep3').style.display = 'none';
-    document.getElementById('zxStep1').style.display = 'block';
-  } else if (step === 2) {
-    // 回到第二步
-    document.getElementById('zxStep3').style.display = 'none';
-    if (zxData.direction === 'sink')   document.getElementById('zxStep2Sink').style.display = 'block';
-    else if (zxData.direction === 'up') document.getElementById('zxStep2Up').style.display   = 'block';
-    else document.getElementById('zxStep2Direct').style.display = 'block';
-  }
-}
-
 function zxAnalyze() {
-  // 收集所有数据
-  var fd = {
-    zx_direction: zxData.direction,
-    zx_formula:   zxData.formula,
-    zx_section:   zxData.section,
-    zx_zongL:  val('zx_zongL'),
-    zx_zongLF: val('zx_zongLF'),
-    zx_zongR:  val('zx_zongR'),
-    zx_zongRF: val('zx_zongRF')
-  };
-  for (var k in fd) { formData[k] = fd[k]; }
-  
   document.getElementById('zxResult').style.display = 'block';
-  document.getElementById('zxResult').innerHTML = '<div style="text-align:center;padding:12px;color:#8b6914">辨证中...</div>';
-  
+  document.getElementById('zxResult').innerHTML = '<div style="text-align:center;padding:12px;color:#8b6914">五步决策树分析中...</div>';
   runAll();
 }
 </script>

@@ -1,0 +1,4291 @@
+[
+  {
+    "case_id": "YA_001",
+    "source": "医案篇",
+    "title": "1．虚劳证阳亢阴亏",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "数",
+          "结"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "数",
+          "结"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_002",
+    "source": "医案篇",
+    "title": "2．虚劳兼劳碌过度",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "浮",
+          "芤"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "浮",
+          "芤"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_003",
+    "source": "医案篇",
+    "title": "3．肺劳咳嗽由于伏气化热所伤证",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "重按有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长"
+        ],
+        "force": "有力",
+        "force_kw": "重按有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_004",
+    "source": "医案篇",
+    "title": "4．虚劳咳嗽兼外感实热证",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦而兼硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_005",
+    "source": "医案篇",
+    "title": "5．劳热咳嗽",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "细弱",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_006",
+    "source": "医案篇",
+    "title": "6．肺劳喘嗽遗传性证",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "浮"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "浮"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细",
+          "浮"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦细",
+          "浮"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_007",
+    "source": "医案篇",
+    "title": "7．肺劳痰喘",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "沉",
+          "数",
+          "濡"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细",
+          "沉",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_008",
+    "source": "医案篇",
+    "title": "8．肺劳喘咳",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "濡滑",
+          "濡"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "濡滑"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_009",
+    "source": "医案篇",
+    "title": "9．肺劳喘嗽兼不寐证",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "滑",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "滑",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_010",
+    "source": "医案篇",
+    "title": "10．肺病咳嗽吐血",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "浮"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "浮"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_011",
+    "source": "医案篇",
+    "title": "11．肺病咳吐脓血",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "洪",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_012",
+    "source": "医案篇",
+    "title": "12．肺病咳吐痰血",
+    "formula": "",
+    "pulse": {
+      "right_cun": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_guan": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_013",
+    "source": "医案篇",
+    "title": "1．大气下陷兼小便不禁",
+    "formula": "",
+    "pulse": {
+      "right_cun": {
+        "shapes": [
+          "沉濡"
+        ],
+        "force": "微弱",
+        "force_kw": "沉濡",
+        "especially": true
+      },
+      "right_guan": {
+        "shapes": [
+          "沉濡"
+        ],
+        "force": "微弱",
+        "force_kw": "沉濡",
+        "especially": true
+      },
+      "left_overall": {
+        "shapes": [
+          "沉濡",
+          "沉",
+          "濡"
+        ],
+        "force": "微弱",
+        "force_kw": "沉濡",
+        "especially": true
+      },
+      "right_overall": {
+        "shapes": [
+          "沉濡",
+          "沉",
+          "濡"
+        ],
+        "force": "微弱",
+        "force_kw": "沉濡",
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_014",
+    "source": "医案篇",
+    "title": "2．大气下陷",
+    "formula": "",
+    "pulse": {
+      "right_cun": {
+        "shapes": [
+          "沉"
+        ],
+        "force": "微弱",
+        "force_kw": "沉而无力",
+        "especially": false
+      },
+      "right_guan": {
+        "shapes": [
+          "沉"
+        ],
+        "force": "微弱",
+        "force_kw": "沉而无力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "沉"
+        ],
+        "force": "微弱",
+        "force_kw": "沉而无力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "沉",
+          "硬"
+        ],
+        "force": "微弱",
+        "force_kw": "沉而无力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_015",
+    "source": "医案篇",
+    "title": "3．大气下陷身冷",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "沉细"
+        ],
+        "force": "极弱",
+        "force_kw": "沉细欲无",
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "沉细"
+        ],
+        "force": "极弱",
+        "force_kw": "沉细欲无",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_016",
+    "source": "医案篇",
+    "title": "4．大气陷兼消食",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_017",
+    "source": "医案篇",
+    "title": "5．大气陷兼疝气",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "沉",
+          "数",
+          "迟"
+        ],
+        "force": "微弱",
+        "force_kw": "沉而无力",
+        "especially": true
+      },
+      "right_cun": {
+        "shapes": [
+          "沉",
+          "数",
+          "迟"
+        ],
+        "force": "微弱",
+        "force_kw": "沉而无力",
+        "especially": true
+      },
+      "right_overall": {
+        "shapes": [
+          "数",
+          "迟"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_018",
+    "source": "医案篇",
+    "title": "6．冲气上冲兼奔豚",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_019",
+    "source": "医案篇",
+    "title": "7．胃气不降",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "数",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_020",
+    "source": "医案篇",
+    "title": "8．肝气郁兼胃气不降",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "数",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "沉细",
+          "数"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_021",
+    "source": "医案篇",
+    "title": "9．胃气不降",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_022",
+    "source": "医案篇",
+    "title": "1．吐血证",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "芤",
+          "大"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "芤",
+          "大"
+        ],
+        "force": "微弱",
+        "force_kw": "重按无力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_023",
+    "source": "医案篇",
+    "title": "2．咳血兼吐血证",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "浮",
+          "濡"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "浮"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_024",
+    "source": "医案篇",
+    "title": "3．吐血兼咳嗽",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "浮弦",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "浮弦",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_025",
+    "source": "医案篇",
+    "title": "4．吐血兼咳嗽",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "弦长"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_026",
+    "source": "医案篇",
+    "title": "5．吐血证",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "硬",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "硬",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_027",
+    "source": "医案篇",
+    "title": "6．吐血证",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_028",
+    "source": "医案篇",
+    "title": "7．大便下血",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_029",
+    "source": "医案篇",
+    "title": "8．大便下血",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_030",
+    "source": "医案篇",
+    "title": "9．大便下血",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "濡"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "硬"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_031",
+    "source": "医案篇",
+    "title": "10．大便下血",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "洪滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_032",
+    "source": "医案篇",
+    "title": "11．瘀血短气",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_033",
+    "source": "医案篇",
+    "title": "1．脑充血头疼",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_034",
+    "source": "医案篇",
+    "title": "2．脑充血头疼",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_035",
+    "source": "医案篇",
+    "title": "3．脑充血头疼",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_036",
+    "source": "医案篇",
+    "title": "4．脑充血兼腿痿弱",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "弦",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_037",
+    "source": "医案篇",
+    "title": "5．脑充血兼痰厥",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_038",
+    "source": "医案篇",
+    "title": "6．脑充血兼偏枯",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_039",
+    "source": "医案篇",
+    "title": "1．噎膈",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_040",
+    "source": "医案篇",
+    "title": "2．反胃吐食",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_041",
+    "source": "医案篇",
+    "title": "3．胃脘疼闷",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_042",
+    "source": "医案篇",
+    "title": "4．冷积腹疼",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_043",
+    "source": "医案篇",
+    "title": "5．肠结腹疼",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_044",
+    "source": "医案篇",
+    "title": "6．肠结腹疼兼外感实热",
+    "formula": "",
+    "pulse": {
+      "right_guan": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_045",
+    "source": "医案篇",
+    "title": "1．头疼",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "弦",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦而兼硬",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_046",
+    "source": "医案篇",
+    "title": "2．目病干疼",
+    "formula": "",
+    "pulse": {
+      "right_guan": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_047",
+    "source": "医案篇",
+    "title": "3．牙疼",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_048",
+    "source": "医案篇",
+    "title": "1．胁疼",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "微细"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_049",
+    "source": "医案篇",
+    "title": "2．胁下疼兼胃口疼",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "沉弦",
+          "弦",
+          "硬"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_050",
+    "source": "医案篇",
+    "title": "3．胁疼",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_051",
+    "source": "医案篇",
+    "title": "4．腰疼",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "沉"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "沉弦",
+          "沉"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_052",
+    "source": "医案篇",
+    "title": "5．腿疼",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦细",
+          "数",
+          "迟"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      },
+      "right_overall": {
+        "shapes": [
+          "弦细",
+          "数",
+          "迟"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_053",
+    "source": "医案篇",
+    "title": "1．受风水肿",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "滑"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_054",
+    "source": "医案篇",
+    "title": "2．阴虚水肿",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "数",
+          "硬"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细",
+          "弦",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_055",
+    "source": "医案篇",
+    "title": "3．风水有痰",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_056",
+    "source": "医案篇",
+    "title": "1．黄胆兼外感",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "浮"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "浮",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_057",
+    "source": "医案篇",
+    "title": "2．黄胆",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "沉细"
+        ],
+        "force": "极弱",
+        "force_kw": "沉细欲无",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_058",
+    "source": "医案篇",
+    "title": "3．黄胆",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "滑"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_059",
+    "source": "医案篇",
+    "title": "1．痢疾转肠溃疡",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦而兼硬",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦细",
+          "弦",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦而兼硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_060",
+    "source": "医案篇",
+    "title": "2．痢疾",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "虚"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_061",
+    "source": "医案篇",
+    "title": "3．痢疾",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "浮",
+          "濡"
+        ],
+        "force": "无力",
+        "force_kw": "软",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "浮",
+          "濡"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_062",
+    "source": "医案篇",
+    "title": "4．噤口痢",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "浮",
+          "浮弦"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "浮",
+          "硬"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_063",
+    "source": "医案篇",
+    "title": "1．泄泻兼发灼",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_064",
+    "source": "医案篇",
+    "title": "2．小便白浊",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "浮"
+        ],
+        "force": "微弱",
+        "force_kw": "重按无力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "浮"
+        ],
+        "force": "微弱",
+        "force_kw": "重按无力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_065",
+    "source": "医案篇",
+    "title": "3．小便因寒闭塞",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_066",
+    "source": "医案篇",
+    "title": "1．心虚不寐",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "浮弦",
+          "弦",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦而兼硬",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "硬",
+          "短"
+        ],
+        "force": "有力",
+        "force_kw": "弦而兼硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_067",
+    "source": "医案篇",
+    "title": "2．不寐兼惊悸",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "滑",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "滑",
+          "数"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_068",
+    "source": "医案篇",
+    "title": "1．痫风兼脑充血",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_069",
+    "source": "医案篇",
+    "title": "2．受风螈",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_070",
+    "source": "医案篇",
+    "title": "3．慢脾风",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_071",
+    "source": "医案篇",
+    "title": "4．慢脾风",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_072",
+    "source": "医案篇",
+    "title": "5．将成慢脾风",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "数",
+          "迟",
+          "濡",
+          "虚"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细",
+          "数",
+          "迟"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_073",
+    "source": "医案篇",
+    "title": "6．癫狂失心",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_074",
+    "source": "医案篇",
+    "title": "7．神经锗乱",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "长",
+          "弦长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "硬",
+          "长",
+          "弦硬",
+          "虚"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_075",
+    "source": "医案篇",
+    "title": "1．伤寒兼脑膜炎",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_076",
+    "source": "医案篇",
+    "title": "2．伤寒脉闭",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_077",
+    "source": "医案篇",
+    "title": "3．伤寒脉闭",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_078",
+    "source": "医案篇",
+    "title": "4．少阴伤寒",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_079",
+    "source": "医案篇",
+    "title": "5．伤寒兼有伏热证",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_080",
+    "source": "医案篇",
+    "title": "1．温病兼大气下陷",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦细",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "重诊似有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细",
+          "细",
+          "浮"
+        ],
+        "force": "有力",
+        "force_kw": "重诊似有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_081",
+    "source": "医案篇",
+    "title": "2．温病兼气虚气郁",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": "微弱",
+        "force_kw": "不任重按",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_082",
+    "source": "医案篇",
+    "title": "3．温病兼吐泻腿抽",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "浮弦"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_083",
+    "source": "医案篇",
+    "title": "4．温病少阴证",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "细",
+          "数",
+          "涩"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_084",
+    "source": "医案篇",
+    "title": "5．温病结胸",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "沉"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "沉弦",
+          "沉"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_085",
+    "source": "医案篇",
+    "title": "6．温病结胸",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_086",
+    "source": "医案篇",
+    "title": "7．温病",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "浮弦",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "浮弦",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_087",
+    "source": "医案篇",
+    "title": "8．风温",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_088",
+    "source": "医案篇",
+    "title": "9．风温兼伏气化热",
+    "formula": "",
+    "pulse": {
+      "right_guan": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_089",
+    "source": "医案篇",
+    "title": "10．温病兼痧疹",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_090",
+    "source": "医案篇",
+    "title": "11．温病兼劳力过度",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪",
+          "浮",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "洪",
+          "浮"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_091",
+    "source": "医案篇",
+    "title": "12．温病兼下痢",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_092",
+    "source": "医案篇",
+    "title": "13．温病兼脑膜炎",
+    "formula": "",
+    "pulse": {
+      "left_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_093",
+    "source": "医案篇",
+    "title": "14．温热泄泻",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_094",
+    "source": "医案篇",
+    "title": "15．温病兼虚热",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_095",
+    "source": "医案篇",
+    "title": "16．温病体虚",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_096",
+    "source": "医案篇",
+    "title": "17．温热腹疼兼下痢",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_097",
+    "source": "医案篇",
+    "title": "18．温病兼下痢",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "洪"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_098",
+    "source": "医案篇",
+    "title": "19．温病兼下痢",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "数"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "数",
+          "硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦而兼硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_099",
+    "source": "医案篇",
+    "title": "20．暑温兼泄泻",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_100",
+    "source": "医案篇",
+    "title": "21．温病",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_101",
+    "source": "医案篇",
+    "title": "22．温病兼项后作疼",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "硬",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "硬",
+          "大",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_102",
+    "source": "医案篇",
+    "title": "23．温病兼胁疼",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_103",
+    "source": "医案篇",
+    "title": "24．风温兼喘促",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_104",
+    "source": "医案篇",
+    "title": "25．秋温兼伏气化热",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "沉弦",
+          "洪",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_105",
+    "source": "医案篇",
+    "title": "26．温病兼呕吐",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦长"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "弦长"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_106",
+    "source": "医案篇",
+    "title": "27．温病兼呕吐",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "洪",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_107",
+    "source": "医案篇",
+    "title": "28．温病兼衄血便血",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_108",
+    "source": "医案篇",
+    "title": "29．温疹",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_109",
+    "source": "医案篇",
+    "title": "30．温疹兼喉痧",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "洪滑"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "洪滑"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_110",
+    "source": "医案篇",
+    "title": "31．温病兼喉痧痰喘",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "重诊有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_111",
+    "source": "医案篇",
+    "title": "32．温病兼喉疼",
+    "formula": "",
+    "pulse": {
+      "right_guan": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "重按有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_112",
+    "source": "医案篇",
+    "title": "33．温病兼阴虚",
+    "formula": "",
+    "pulse": {
+      "right_cun": {
+        "shapes": [
+          "浮",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_113",
+    "source": "医案篇",
+    "title": "34．温病兼喘胀",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_114",
+    "source": "医案篇",
+    "title": "35．温病兼虚热",
+    "formula": "",
+    "pulse": {
+      "right_guan": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_115",
+    "source": "医案篇",
+    "title": "36．温病兼吐血",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "洪",
+          "长"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_116",
+    "source": "医案篇",
+    "title": "37．温病兼冲气上冲",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪滑",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "重按有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬",
+          "洪滑",
+          "长"
+        ],
+        "force": "有力",
+        "force_kw": "重按有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_117",
+    "source": "医案篇",
+    "title": "1．疟疾兼阴虚",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "数",
+          "虚"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      },
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "数",
+          "虚"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_118",
+    "source": "医案篇",
+    "title": "2．疟疾兼脾胀",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_119",
+    "source": "医案篇",
+    "title": "3．疟疾兼暑热",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦硬",
+          "洪"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_120",
+    "source": "医案篇",
+    "title": "4．疟痢兼证",
+    "formula": "",
+    "pulse": {
+      "left_guan": {
+        "shapes": [
+          "弦"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_121",
+    "source": "医案篇",
+    "title": "1．霍乱兼转筋",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_122",
+    "source": "医案篇",
+    "title": "2．霍乱吐泻",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_123",
+    "source": "医案篇",
+    "title": "3．霍乱脱证",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_124",
+    "source": "医案篇",
+    "title": "4．霍乱暴脱证",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_125",
+    "source": "医案篇",
+    "title": "1．怀妊受温病",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "洪滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "洪滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_126",
+    "source": "医案篇",
+    "title": "2．受妊呕吐",
+    "formula": "",
+    "pulse": {
+      "left_guan": {
+        "shapes": [
+          "浮"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_127",
+    "source": "医案篇",
+    "title": "3．怀妊得温病兼痰喘",
+    "formula": "",
+    "pulse": {
+      "right_cun": {
+        "shapes": [
+          "洪",
+          "数"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_128",
+    "source": "医案篇",
+    "title": "4．怀妊受温病兼下痢",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪滑"
+        ],
+        "force": "有力",
+        "force_kw": "重诊有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦长",
+          "洪滑"
+        ],
+        "force": "有力",
+        "force_kw": "重诊有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_129",
+    "source": "医案篇",
+    "title": "5．产后下血",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "沉",
+          "虚"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细",
+          "沉",
+          "虚"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_130",
+    "source": "医案篇",
+    "title": "6．产后手足抽掣",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "沉涩"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "沉弦"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_131",
+    "source": "医案篇",
+    "title": "7．产后瘕",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "沉涩"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "沉弦",
+          "沉涩"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_132",
+    "source": "医案篇",
+    "title": "8．血闭成瘕",
+    "formula": "",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦细"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦细"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_133",
+    "source": "医案篇",
+    "title": "9．产后温病",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YA_134",
+    "source": "医案篇",
+    "title": "10．流产后满闷",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_135",
+    "source": "医案篇",
+    "title": "11．月闭兼温疹靥急",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YA_136",
+    "source": "医案篇",
+    "title": "12．处女经闭",
+    "formula": "",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦",
+          "硬"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YA_137",
+    "source": "医案篇",
+    "title": "13．血崩证",
+    "formula": "",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_001",
+    "source": "医方篇",
+    "title": "",
+    "formula": "资生汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_002",
+    "source": "医方篇",
+    "title": "",
+    "formula": "十全育真汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_003",
+    "source": "医方篇",
+    "title": "",
+    "formula": "醴泉饮",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_004",
+    "source": "医方篇",
+    "title": "",
+    "formula": "一味薯蓣饮",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_005",
+    "source": "医方篇",
+    "title": "",
+    "formula": "参麦汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_006",
+    "source": "医方篇",
+    "title": "",
+    "formula": "珠玉二宝粥",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_007",
+    "source": "医方篇",
+    "title": "",
+    "formula": "沃雪汤",
+    "pulse": {
+      "right_cun": {
+        "shapes": [
+          "浮大"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_008",
+    "source": "医方篇",
+    "title": "",
+    "formula": "既济汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_009",
+    "source": "医方篇",
+    "title": "",
+    "formula": "来复汤",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "微细",
+          "虚"
+        ],
+        "force": "极弱",
+        "force_kw": "按之即无",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_010",
+    "source": "医方篇",
+    "title": "",
+    "formula": "镇摄汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_011",
+    "source": "医方篇",
+    "title": "",
+    "formula": "敦复汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_012",
+    "source": "医方篇",
+    "title": "",
+    "formula": "敦复汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_013",
+    "source": "医方篇",
+    "title": "",
+    "formula": "升陷汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "极弱",
+        "force_kw": "微弱欲无",
+        "especially": false
+      },
+      "left_guan": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "极弱",
+        "force_kw": "微弱欲无",
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": false
+      },
+      "left_chi": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "极弱",
+        "force_kw": "微弱欲无",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "极弱",
+        "force_kw": "微弱欲无",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_014",
+    "source": "医方篇",
+    "title": "",
+    "formula": "回阳升陷汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_015",
+    "source": "医方篇",
+    "title": "",
+    "formula": "理郁升陷汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_016",
+    "source": "医方篇",
+    "title": "",
+    "formula": "参赭镇气汤",
+    "pulse": {
+      "right_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_guan": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_017",
+    "source": "医方篇",
+    "title": "",
+    "formula": "薯蓣纳气汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_018",
+    "source": "医方篇",
+    "title": "",
+    "formula": "滋培汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_019",
+    "source": "医方篇",
+    "title": "",
+    "formula": "理饮汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_020",
+    "source": "医方篇",
+    "title": "",
+    "formula": "理痰汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_021",
+    "source": "医方篇",
+    "title": "",
+    "formula": "龙理痰汤",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_022",
+    "source": "医方篇",
+    "title": "",
+    "formula": "治痰点天突穴法",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_023",
+    "source": "医方篇",
+    "title": "",
+    "formula": "清金益气汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_024",
+    "source": "医方篇",
+    "title": "",
+    "formula": "清金解毒汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_025",
+    "source": "医方篇",
+    "title": "",
+    "formula": "清凉华盖饮",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "滑",
+          "浮",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "滑",
+          "浮",
+          "大"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_026",
+    "source": "医方篇",
+    "title": "",
+    "formula": "寒降汤",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": "有力",
+        "force_kw": "重按有力",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "细弱"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_027",
+    "source": "医方篇",
+    "title": "",
+    "formula": "温降汤",
+    "pulse": {
+      "right_guan": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YF_028",
+    "source": "医方篇",
+    "title": "",
+    "formula": "保元寒降汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_029",
+    "source": "医方篇",
+    "title": "",
+    "formula": "保元清降汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_030",
+    "source": "医方篇",
+    "title": "",
+    "formula": "秘红丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_031",
+    "source": "医方篇",
+    "title": "",
+    "formula": "二鲜饮",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_032",
+    "source": "医方篇",
+    "title": "",
+    "formula": "化血丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_033",
+    "source": "医方篇",
+    "title": "",
+    "formula": "补络补管汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_034",
+    "source": "医方篇",
+    "title": "",
+    "formula": "化瘀理膈丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_035",
+    "source": "医方篇",
+    "title": "",
+    "formula": "定心汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_036",
+    "source": "医方篇",
+    "title": "",
+    "formula": "安魂汤",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_037",
+    "source": "医方篇",
+    "title": "",
+    "formula": "荡痰汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_038",
+    "source": "医方篇",
+    "title": "",
+    "formula": "荡痰加甘遂汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_039",
+    "source": "医方篇",
+    "title": "",
+    "formula": "一味铁养汤",
+    "pulse": {
+      "left_guan": {
+        "shapes": [
+          "浮",
+          "虚"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_040",
+    "source": "医方篇",
+    "title": "",
+    "formula": "定风丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_041",
+    "source": "医方篇",
+    "title": "",
+    "formula": "镇风汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_042",
+    "source": "医方篇",
+    "title": "",
+    "formula": "搜风汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_043",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味黄五物汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_044",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味玉屏风散",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_045",
+    "source": "医方篇",
+    "title": "",
+    "formula": "镇肝熄风汤",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_046",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味补血汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_047",
+    "source": "医方篇",
+    "title": "",
+    "formula": "振颓汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_048",
+    "source": "医方篇",
+    "title": "",
+    "formula": "姜胶膏",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_049",
+    "source": "医方篇",
+    "title": "",
+    "formula": "参赭培气汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "滑实"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YF_050",
+    "source": "医方篇",
+    "title": "",
+    "formula": "薯蓣半夏粥",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_051",
+    "source": "医方篇",
+    "title": "",
+    "formula": "急救回生丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_052",
+    "source": "医方篇",
+    "title": "",
+    "formula": "卫生防疫宝丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_053",
+    "source": "医方篇",
+    "title": "",
+    "formula": "急救回阳汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_054",
+    "source": "医方篇",
+    "title": "",
+    "formula": "益脾饼",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_055",
+    "source": "医方篇",
+    "title": "",
+    "formula": "扶中汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_056",
+    "source": "医方篇",
+    "title": "",
+    "formula": "薯蓣粥",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_057",
+    "source": "医方篇",
+    "title": "",
+    "formula": "薯蓣鸡子黄粥",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_058",
+    "source": "医方篇",
+    "title": "",
+    "formula": "燮理汤",
+    "pulse": {
+      "left_guan": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "微弱",
+          "虚"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": true
+      },
+      "right_overall": {
+        "shapes": [
+          "微弱",
+          "虚"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YF_059",
+    "source": "医方篇",
+    "title": "",
+    "formula": "解毒生化丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_060",
+    "source": "医方篇",
+    "title": "",
+    "formula": "天水涤肠汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_061",
+    "source": "医方篇",
+    "title": "",
+    "formula": "通变白头翁汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_062",
+    "source": "医方篇",
+    "title": "",
+    "formula": "三宝粥",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": "极弱",
+        "force_kw": "几不见",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_063",
+    "source": "医方篇",
+    "title": "",
+    "formula": "通变白虎加人参汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_064",
+    "source": "医方篇",
+    "title": "",
+    "formula": "硝菔通结汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_065",
+    "source": "医方篇",
+    "title": "",
+    "formula": "赭遂攻结汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_066",
+    "source": "医方篇",
+    "title": "",
+    "formula": "通结用葱白熨法",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_067",
+    "source": "医方篇",
+    "title": "",
+    "formula": "玉液汤",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "滑"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_068",
+    "source": "医方篇",
+    "title": "",
+    "formula": "滋饮",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_069",
+    "source": "医方篇",
+    "title": "",
+    "formula": "济阴汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_070",
+    "source": "医方篇",
+    "title": "",
+    "formula": "白茅根汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_071",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味苓桂术甘汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_072",
+    "source": "医方篇",
+    "title": "",
+    "formula": "寒通汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_073",
+    "source": "医方篇",
+    "title": "",
+    "formula": "鸡茅根汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_074",
+    "source": "医方篇",
+    "title": "",
+    "formula": "理血汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_075",
+    "source": "医方篇",
+    "title": "",
+    "formula": "澄化汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_076",
+    "source": "医方篇",
+    "title": "",
+    "formula": "清肾汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_077",
+    "source": "医方篇",
+    "title": "",
+    "formula": "舒和汤",
+    "pulse": {
+      "left_overall": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_078",
+    "source": "医方篇",
+    "title": "",
+    "formula": "麻黄加知母汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_079",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味桂枝代粥汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "浮"
+        ],
+        "force": "极弱",
+        "force_kw": "不见",
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "浮"
+        ],
+        "force": "极弱",
+        "force_kw": "不见",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_080",
+    "source": "医方篇",
+    "title": "",
+    "formula": "从龙汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_081",
+    "source": "医方篇",
+    "title": "",
+    "formula": "馏水石膏饮",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "浮洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "浮洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_082",
+    "source": "医方篇",
+    "title": "",
+    "formula": "通变大柴胡汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_083",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味越婢加半夏汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_084",
+    "source": "医方篇",
+    "title": "",
+    "formula": "清解汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_085",
+    "source": "医方篇",
+    "title": "",
+    "formula": "凉解汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_086",
+    "source": "医方篇",
+    "title": "",
+    "formula": "寒解汤",
+    "pulse": {
+      "right_cun": {
+        "shapes": [
+          "浮"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": true
+      }
+    }
+  },
+  {
+    "case_id": "YF_087",
+    "source": "医方篇",
+    "title": "",
+    "formula": "和解汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_088",
+    "source": "医方篇",
+    "title": "",
+    "formula": "宣解汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_089",
+    "source": "医方篇",
+    "title": "",
+    "formula": "滋阴宣解汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_090",
+    "source": "医方篇",
+    "title": "",
+    "formula": "滋阴清燥汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_091",
+    "source": "医方篇",
+    "title": "",
+    "formula": "犹龙汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_092",
+    "source": "医方篇",
+    "title": "",
+    "formula": "仙露汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "洪滑",
+          "数",
+          "大"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "洪滑",
+          "数",
+          "大"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_093",
+    "source": "医方篇",
+    "title": "",
+    "formula": "石膏粳米汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_094",
+    "source": "医方篇",
+    "title": "",
+    "formula": "镇逆白虎汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_095",
+    "source": "医方篇",
+    "title": "",
+    "formula": "白虎加人参以山药代粳米汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_096",
+    "source": "医方篇",
+    "title": "",
+    "formula": "宁嗽定喘饮",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_097",
+    "source": "医方篇",
+    "title": "",
+    "formula": "荡胸汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_098",
+    "source": "医方篇",
+    "title": "",
+    "formula": "一味莱菔子汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_099",
+    "source": "医方篇",
+    "title": "",
+    "formula": "镇逆承气汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [
+          "洪"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_100",
+    "source": "医方篇",
+    "title": "",
+    "formula": "青盂汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_101",
+    "source": "医方篇",
+    "title": "",
+    "formula": "护心至宝丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_102",
+    "source": "医方篇",
+    "title": "",
+    "formula": "清疹汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_103",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味小柴胡汤",
+    "pulse": {
+      "left_overall": {
+        "shapes": [
+          "弦长"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "弦长"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_104",
+    "source": "医方篇",
+    "title": "",
+    "formula": "升降汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_105",
+    "source": "医方篇",
+    "title": "",
+    "formula": "培脾舒肝汤",
+    "pulse": {
+      "right_overall": {
+        "shapes": [],
+        "force": "极弱",
+        "force_kw": "似有似无",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦细"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_106",
+    "source": "医方篇",
+    "title": "",
+    "formula": "金铃泻肝汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_107",
+    "source": "医方篇",
+    "title": "",
+    "formula": "活络效灵丹",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "洪数"
+        ],
+        "force": "有力",
+        "force_kw": "有力",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_108",
+    "source": "医方篇",
+    "title": "",
+    "formula": "活络祛寒汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_109",
+    "source": "医方篇",
+    "title": "",
+    "formula": "振中汤",
+    "pulse": {
+      "right_guan": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_110",
+    "source": "医方篇",
+    "title": "",
+    "formula": "曲直汤",
+    "pulse": {
+      "right_overall": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "微弱"
+        ],
+        "force": "微弱",
+        "force_kw": "微弱",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_111",
+    "source": "医方篇",
+    "title": "",
+    "formula": "玉烛汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_112",
+    "source": "医方篇",
+    "title": "",
+    "formula": "理冲汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_113",
+    "source": "医方篇",
+    "title": "",
+    "formula": "安冲汤",
+    "pulse": {
+      "left_guan": {
+        "shapes": [
+          "浮弦"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_chi": {
+        "shapes": [
+          "浮弦"
+        ],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_overall": {
+        "shapes": [
+          "濡",
+          "弦硬",
+          "弦细"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [
+          "弦硬"
+        ],
+        "force": "有力",
+        "force_kw": "弦硬",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_114",
+    "source": "医方篇",
+    "title": "",
+    "formula": "固冲汤",
+    "pulse": {
+      "right_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_guan": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "left_overall": {
+        "shapes": [],
+        "force": "极弱",
+        "force_kw": "皆不见",
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_115",
+    "source": "医方篇",
+    "title": "",
+    "formula": "温冲汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_116",
+    "source": "医方篇",
+    "title": "",
+    "formula": "清带汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_117",
+    "source": "医方篇",
+    "title": "",
+    "formula": "加味麦门冬汤",
+    "pulse": {
+      "left_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      },
+      "right_cun": {
+        "shapes": [],
+        "force": null,
+        "force_kw": null,
+        "especially": false
+      }
+    }
+  },
+  {
+    "case_id": "YF_118",
+    "source": "医方篇",
+    "title": "",
+    "formula": "寿胎丸",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_119",
+    "source": "医方篇",
+    "title": "",
+    "formula": "和血熄风汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_120",
+    "source": "医方篇",
+    "title": "",
+    "formula": "升肝舒郁汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_121",
+    "source": "医方篇",
+    "title": "",
+    "formula": "资生通脉汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_122",
+    "source": "医方篇",
+    "title": "",
+    "formula": "蒲公英汤",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_123",
+    "source": "医方篇",
+    "title": "",
+    "formula": "磨翳散",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_124",
+    "source": "医方篇",
+    "title": "",
+    "formula": "益瞳丸",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_125",
+    "source": "医方篇",
+    "title": "",
+    "formula": "咀华清喉丹",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_126",
+    "source": "医方篇",
+    "title": "",
+    "formula": "牙疳敷藤黄法",
+    "pulse": {}
+  },
+  {
+    "case_id": "YF_127",
+    "source": "医方篇",
+    "title": "",
+    "formula": "内托生肌散",
+    "pulse": {}
+  }
+]

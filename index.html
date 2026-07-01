@@ -284,6 +284,18 @@ formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;t
   var selId = 'zx_'+id+'F';
   formHtml+='<td style="padding:2px;border:1px solid #e8d5b7"><select id="'+selId+'" style="width:100%;font-size:10px;padding:2px"><option value="">--</option><option>有力</option><option>无力</option><option>弦硬</option></select></td>';
 });
+formHtml+='</tr>';
+// 六部脉形（多选）
+var ZXC_SHAPES=['弦','细','弱','滑','涩','紧','洪','微','濡','数','迟','缓','浮','沉'];
+formHtml+='<tr><td style="padding:4px;border:1px solid #e8d5b7;font-weight:600;text-align:center;vertical-align:middle">脉形</td>';
+['cunL','guanL','chiL','cunR','guanR','chiR'].forEach(function(id){
+  formHtml+='<td style="padding:3px;border:1px solid #e8d5b7;vertical-align:top">';
+  formHtml+='<div class="pulse-chip-group" id="zx_'+id+'Mx">';
+  ZXC_SHAPES.forEach(function(m){
+    formHtml+='<label><input type="checkbox" value="'+m+'"><span>'+m+'</span></label>';
+  });
+  formHtml+='</div></td>';
+});
 formHtml+='</tr></table>';
 
 // 虚里 + 尺部
@@ -756,18 +768,19 @@ function runAll(){
   formData.zx_zongLF = val('zx_zongLF');
   formData.zx_zongR  = val('zx_zongR');
   formData.zx_zongRF = val('zx_zongRF');
-  formData.zx_cunL   = val('zx_cunL');
   formData.zx_cunLF  = val('zx_cunLF');
-  formData.zx_guanL  = val('zx_guanL');
   formData.zx_guanLF = val('zx_guanLF');
-  formData.zx_chiL   = val('zx_chiL');
   formData.zx_chiLF  = val('zx_chiLF');
-  formData.zx_cunR   = val('zx_cunR');
-  formData.zx_cunFR  = val('zx_cunFR');
-  formData.zx_guanR  = val('zx_guanR');
-  formData.zx_guanFR = val('zx_guanFR');
-  formData.zx_chiR   = val('zx_chiR');
-  formData.zx_chiFR  = val('zx_chiFR');
+  formData.zx_cunRF  = val('zx_cunRF');
+  formData.zx_guanRF = val('zx_guanRF');
+  formData.zx_chiRF  = val('zx_chiRF');
+  // 六部脉形（多选chip）
+  formData.zx_cunLMx   = valsChip('zx_cunLMx');
+  formData.zx_guanLMx  = valsChip('zx_guanLMx');
+  formData.zx_chiLMx   = valsChip('zx_chiLMx');
+  formData.zx_cunRMx   = valsChip('zx_cunRMx');
+  formData.zx_guanRMx  = valsChip('zx_guanRMx');
+  formData.zx_chiRMx   = valsChip('zx_chiRMx');
   formData.zx_xuli   = val('zx_xuli');
   formData.zx_chibu  = val('zx_chibu');
   formData.cj_step1 = val('cj_step1'); formData.cj_step2m = val('cj_step2m'); formData.cj_step2q = val('cj_step2q');

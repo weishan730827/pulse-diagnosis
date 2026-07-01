@@ -16,7 +16,7 @@ function loadData(schoolId) {
     if (DataCache[schoolId]) { resolve(DataCache[schoolId]); return; }
     
     var urls = {
-      'zhangxichun': 'pulse_match_zxc_compact.json',
+      'zhangxichun': 'pulse_match_zxc_compact_v3.json',
       'chenjianguo': 'pulse_match_cjg_compact.json',
       'huxishu': 'pulse_match_hxs_compact.json',
       'caoyingfu': 'cao_yingfu_cases_compact.json',
@@ -54,12 +54,12 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
   if (zL) { var lp='左手总按：'+zL; if(zLF) lp+=zLF; textParts.push(lp); }
   if (zR) { var rp='右手总按：'+zR; if(zRF) rp+=zRF; textParts.push(rp); }
   var posLabels = ['左寸','左关','左尺','右寸','右关','右尺'];
-  var posKeys = ['zx_cunL','zx_guanL','zx_chiL','zx_cunR','zx_guanR','zx_chiR'];
+  var posKeys = ['zx_cunLMx','zx_guanLMx','zx_chiLMx','zx_cunRMx','zx_guanRMx','zx_chiRMx'];
   var posForceKeys = ['zx_cunLF','zx_guanLF','zx_chiLF','zx_cunRF','zx_guanRF','zx_chiRF'];
   for (var pi=0; pi<6; pi++) {
-    var ps = formData[posKeys[pi]] || '';
+    var ps = formData[posKeys[pi]] || [];
     var pf = formData[posForceKeys[pi]] || '';
-    if (ps) { var pt=posLabels[pi]+':'+ps; if(pf) pt+=pf; textParts.push(pt); }
+    if (ps.length) { var pt=posLabels[pi]+':'+ps.join(','); if(pf) pt+='('+pf+')'; textParts.push(pt); }
   }
   if (symptoms && symptoms.length) textParts.push('症状：'+symptoms.join('，'));
   if (complaint) textParts.push('主诉：'+complaint);
@@ -68,12 +68,12 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
   var d = {
     zongLeft:  { shape: zL, force: zLF },
     zongRight: { shape: zR, force: zRF },
-    leftCun:   { shape: formData.zx_cunL || '', force: formData.zx_cunLF || '' },
-    leftGuan:  { shape: formData.zx_guanL || '', force: formData.zx_guanLF || '' },
-    leftChi:   { shape: formData.zx_chiL || '', force: formData.zx_chiLF || '' },
-    rightCun:  { shape: formData.zx_cunR || '', force: formData.zx_cunRF || '' },
-    rightGuan: { shape: formData.zx_guanR || '', force: formData.zx_guanRF || '' },
-    rightChi:  { shape: formData.zx_chiR || '', force: formData.zx_chiRF || '' },
+    leftCun:   { shape: (formData.zx_cunLMx||[]).join(','), force: formData.zx_cunLF || '' },
+    leftGuan:  { shape: (formData.zx_guanLMx||[]).join(','), force: formData.zx_guanLF || '' },
+    leftChi:   { shape: (formData.zx_chiLMx||[]).join(','), force: formData.zx_chiLF || '' },
+    rightCun:  { shape: (formData.zx_cunRMx||[]).join(','), force: formData.zx_cunRF || '' },
+    rightGuan: { shape: (formData.zx_guanRMx||[]).join(','), force: formData.zx_guanRF || '' },
+    rightChi:  { shape: (formData.zx_chiRMx||[]).join(','), force: formData.zx_chiRF || '' },
     symptoms: symptoms || [],
     complaint: complaint || ''
   };
@@ -196,11 +196,24 @@ function extractZXCFeatures(formData) {
   var zR  = formData.zx_zongR  || '';
   var zRF = formData.zx_zongRF || '';
 
+  // 从六部脉形chip中收集所有脉形
+  var allMx = [];
+  ['zx_cunLMx','zx_guanLMx','zx_chiLMx','zx_cunRMx','zx_guanRMx','zx_chiRMx'].forEach(function(k){
+    var v = formData[k];
+    if (v && v.length) allMx = allMx.concat(v);
+  });
+
   var terms = ['弦硬','弦细','弦数','弦长','弦浮','弦滑','弦大','弦','细','弱','浮','沉','洪','滑','涩','大','硬','微','数','迟','紧','缓','散','濡','芤','结','代'];
   
-  if (zL) {
+  if (zL || allMx.length) {
     for (var i = 0; i < terms.length; i++) {
       if (zL.indexOf(terms[i]) >= 0) feats.left.push(terms[i]);
+    }
+    // 从chip中补充
+    if (allMx.length && feats.left.length === 0) {
+      for (var j = 0; j < terms.length; j++) {
+        if (allMx.indexOf(terms[j]) >= 0) feats.left.push(terms[j]);
+      }
     }
   }
   if (zLF) {
@@ -208,9 +221,14 @@ function extractZXCFeatures(formData) {
     else if (zLF.indexOf('有力') >= 0 || zLF === '弦硬') feats.force = '实';
   }
 
-  if (zR) {
-    for (var j = 0; j < terms.length; j++) {
-      if (zR.indexOf(terms[j]) >= 0) feats.right.push(terms[j]);
+  if (zR || allMx.length) {
+    for (var k = 0; k < terms.length; k++) {
+      if (zR.indexOf(terms[k]) >= 0) feats.right.push(terms[k]);
+    }
+    if (allMx.length && feats.right.length === 0) {
+      for (var l = 0; l < terms.length; l++) {
+        if (allMx.indexOf(terms[l]) >= 0) feats.right.push(terms[l]);
+      }
     }
   }
   if (zRF) {
@@ -218,11 +236,26 @@ function extractZXCFeatures(formData) {
     else if (zRF.indexOf('有力') >= 0 || zRF === '弦硬') feats.force = '实';
   }
 
+  // 力度: 从六部force收集中补充
+  if (!feats.force) {
+    var forceCount = { '有力': 0, '无力': 0, '弦硬': 0 };
+    ['zx_cunLF','zx_guanLF','zx_chiLF','zx_cunRF','zx_guanRF','zx_chiRF'].forEach(function(k){
+      var v = formData[k] || '';
+      if (v === '有力' || v === '弦硬') forceCount['有力']++;
+      if (v === '无力') forceCount['无力']++;
+    });
+    if (forceCount['有力'] > forceCount['无力']) feats.force = '实';
+    else if (forceCount['无力'] > 0) feats.force = '虚';
+  }
+
   // 速率
   if (zL && zL.indexOf('数') >= 0) feats.speed = '数';
   else if (zL && zL.indexOf('迟') >= 0) feats.speed = '迟';
   else if (zR && zR.indexOf('数') >= 0) feats.speed = '数';
   else if (zR && zR.indexOf('迟') >= 0) feats.speed = '迟';
+  // 从chip中补充
+  if (!feats.speed && allMx.indexOf('数') >= 0) feats.speed = '数';
+  if (!feats.speed && allMx.indexOf('迟') >= 0) feats.speed = '迟';
 
   return feats;
 }

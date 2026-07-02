@@ -832,7 +832,9 @@ function runAll(){
   // 并行加载数据
   var promises = datasNeeded.map(function(id) { return loadData(id); });
   
-  Promise.all(promises).then(function() {
+  var TIMEOUT_MS = 12000; // 12秒超时
+  var timeoutP = new Promise(function(_, reject) { setTimeout(function() { reject(new Error('数据加载超时（12秒），请检查网络后刷新重试')); }, TIMEOUT_MS); });
+  Promise.race([Promise.all(promises), timeoutP]).then(function() {
     var html = '';
     for (var i = 0; i < selIds.length; i++) {
       var sid = selIds[i];
@@ -871,8 +873,20 @@ function runAll(){
     }
     
     document.getElementById('results').innerHTML = html;
+    // 同步更新 zxResult：分析完成后展示张锡纯专属结论摘要
+    var zxR = document.getElementById('zxResult');
+    if (zxR) {
+      var zxBox = document.querySelector('#results .result-box'); // 取第一家结果区
+      if (zxBox) {
+        zxR.innerHTML = zxBox.outerHTML;
+      } else {
+        zxR.innerHTML = '<div style="text-align:center;padding:12px;color:#6b4c2a">分析完成，请查看下方辨证结果</div>';
+      }
+    }
   }).catch(function(e) {
     document.getElementById('results').innerHTML = '<div class="result-box" style="display:block;border-left-color:#c0392b"><div class="output">数据加载异常：' + e.message + '。使用离线简化逻辑重试...</div></div>';
+    var zxR = document.getElementById('zxResult');
+    if (zxR) zxR.innerHTML = '<div style="text-align:center;padding:12px;color:#c0392b">分析失败：' + e.message + '</div>';
   });
 }
 

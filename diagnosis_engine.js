@@ -599,106 +599,109 @@ function simpleCJGDiagnose(formData) {
 // ========== 胡希恕 八纲六经辨证 + 三步法脉诊（含脉象权重表）==========
 // 脉象权重表：症状×3 + 脉象八纲×2 + 特征脉×5
 var HXS_PULSE_WEIGHTS = [
-  // === 太阳病 ===
-  { formula: '桂枝汤', liujing: '太阳', bagang: '表虚', triggers: ['恶风','汗出','项强','头痛','发热','鼻鸣','干呕'], patterns: [
-    {p:['浮'], w:5}, {p:['缓'], w:3}, {p:['浮','缓'], w:8}, {p:['弱'], w:2}
-  ]},
-  { formula: '麻黄汤', liujing: '太阳', bagang: '表实', triggers: ['恶寒','无汗','身痛','骨节痛','喘','头痛','发热'], patterns: [
-    {p:['浮','紧'], w:8}, {p:['浮'], w:4}, {p:['紧'], w:5}
-  ]},
-  { formula: '桂麻各半汤', liujing: '太阳', bagang: '表', triggers: ['身痒','面赤','无汗','烦躁','如疟状','发热恶寒'], patterns: [
-    {p:['浮'], w:4}, {p:['浮','紧'], w:5}
-  ]},
-  { formula: '葛根汤', liujing: '太阳阳明', bagang: '表实', triggers: ['项背强','无汗','恶风','下利'], patterns: [
-    {p:['浮','紧'], w:5}, {p:['浮'], w:3}
-  ]},
-  { formula: '大青龙汤', liujing: '太阳阳明', bagang: '表实里热', triggers: ['烦躁','无汗','恶寒','身重','发热'], patterns: [
-    {p:['浮','紧'], w:6}, {p:['浮','数'], w:4}
-  ]},
-  { formula: '小青龙汤', liujing: '太阳太阴', bagang: '表实里寒', triggers: ['咳喘','干呕','不渴','痰稀白','背冷','发热'], patterns: [
-    {p:['浮'], w:4}, {p:['弦'], w:3}, {p:['浮','弦'], w:5}
-  ]},
-  { formula: '五苓散', liujing: '太阳太阴', bagang: '表里', triggers: ['小便不利','口渴','水逆','吐涎沫','水肿','小便短少'], patterns: [
-    {p:['浮'], w:3}, {p:['滑'], w:2}
-  ]},
-  { formula: '桃核承气汤', liujing: '太阳阳明', bagang: '实热', triggers: ['少腹急结','如狂','经闭','小便自利','血瘀'], patterns: [
-    {p:['沉','涩'], w:5}, {p:['涩'], w:3}, {p:['沉','紧'], w:4}
-  ]},
-  // === 阳明病 ===
-  { formula: '调胃承气汤', liujing: '阳明', bagang: '实热', triggers: ['腹胀满','大便不通','谵语','潮热','心烦','蒸蒸发热'], patterns: [
-    {p:['数','有力'], w:6}, {p:['滑','数'], w:5}, {p:['沉','有力'], w:4}
-  ]},
-  { formula: '小承气汤', liujing: '阳明', bagang: '实热', triggers: ['腹大满','大便硬','潮热','谵语'], patterns: [
-    {p:['滑','数'], w:5}, {p:['沉','滑'], w:4}, {p:['有力'], w:3}
-  ]},
-  { formula: '大承气汤', liujing: '阳明', bagang: '实热极', triggers: ['腹满痛','大便硬结不下','潮热','手足汗出','绕脐痛','目中不了了'], patterns: [
-    {p:['沉','滑','数'], w:8}, {p:['沉','有力'], w:5}, {p:['滑','数'], w:5}
-  ]},
-  { formula: '白虎汤', liujing: '阳明', bagang: '实热', triggers: ['大热','大汗','大渴','脉洪大','烦躁','面赤'], patterns: [
-    {p:['洪'], w:8}, {p:['大'], w:5}, {p:['数','有力'], w:5}
-  ]},
-  { formula: '白虎加人参汤', liujing: '阳明', bagang: '实热津伤', triggers: ['大渴引饮','烦渴','口渴','大汗','疲劳'], patterns: [
-    {p:['洪'], w:6}, {p:['数'], w:4}, {p:['大而芤'], w:7}
-  ]},
-  { formula: '茵陈蒿汤', liujing: '阳明', bagang: '湿热', triggers: ['黄疸','身黄如橘','小便不利','腹胀满','口干','头汗出'], patterns: [
-    {p:['滑','数'], w:5}, {p:['沉'], w:3}
-  ]},
-  // === 少阳病 ===
-  { formula: '小柴胡汤', liujing: '少阳', bagang: '半表半里', triggers: ['胸胁苦满','往来寒热','默默不欲食','心烦喜呕','口苦','咽干','目眩','耳聋'], patterns: [
-    {p:['弦'], w:6}, {p:['弦','细'], w:5}, {p:['弦','数'], w:4}
-  ]},
-  { formula: '大柴胡汤', liujing: '少阳阳明', bagang: '半表半里实', triggers: ['心下急','呕不止','郁郁微烦','便秘','胸胁苦满','腹痛'], patterns: [
-    {p:['弦','数'], w:6}, {p:['沉','弦'], w:6}, {p:['弦','有力'], w:5}
-  ]},
-  { formula: '柴胡加龙骨牡蛎汤', liujing: '少阳阳明', bagang: '半表半里', triggers: ['胸满','烦惊','谵语','小便不利','身重','失眠','惊悸'], patterns: [
-    {p:['弦'], w:5}, {p:['数'], w:3}
-  ]},
-  // === 太阴病 ===
-  { formula: '理中汤', liujing: '太阴', bagang: '里虚寒', triggers: ['腹满','下利','吐清水','不渴','腹痛喜按','手足冷','纳差','神疲'], patterns: [
-    {p:['沉','弱'], w:8}, {p:['弱'], w:5}, {p:['沉','细'], w:4}
-  ]},
-  { formula: '桂枝人参汤', liujing: '太阳太阴', bagang: '表里虚寒', triggers: ['下利','心下痞','恶寒','发热','腹痛'], patterns: [
-    {p:['弱'], w:5}, {p:['沉'], w:3}
-  ]},
-  // === 少阴病 ===
-  { formula: '四逆汤', liujing: '少阴', bagang: '里虚寒极', triggers: ['手足厥逆','恶寒蜷卧','下利清谷','神衰','冷汗','脉微细','但欲寐'], patterns: [
-    {p:['微','细'], w:10},{p:['沉','微'], w:9},{p:['微'], w:7},{p:['弱','沉'], w:6}
-  ]},
-  { formula: '真武汤', liujing: '少阴太阴', bagang: '里虚寒水泛', triggers: ['心下悸','头眩','身瞤动','小便不利','四肢沉重','浮肿','腹痛下利'], patterns: [
-    {p:['沉'], w:5}, {p:['弱'], w:4}, {p:['沉','细'], w:5}
-  ]},
-  { formula: '黄连阿胶汤', liujing: '少阴', bagang: '里虚热', triggers: ['心烦不寐','心中烦','口干咽燥','手足心热','心悸'], patterns: [
-    {p:['细','数'], w:7}, {p:['数'], w:4}
-  ]},
-  { formula: '附子汤', liujing: '少阴', bagang: '里虚寒', triggers: ['身体骨节痛','手足寒','背恶寒','口中和','肢冷'], patterns: [
-    {p:['沉','微'], w:8}, {p:['沉'], w:5}, {p:['微'], w:6}
-  ]},
-  // === 厥阴病 ===
-  { formula: '乌梅丸', liujing: '厥阴', bagang: '寒热错杂', triggers: ['蛔厥','消渴','气上撞心','心中疼热','饥不欲食','吐蛔','久利'], patterns: [
-    {p:['弦'], w:4}, {p:['细'], w:3}
-  ]},
-  { formula: '当归四逆汤', liujing: '厥阴', bagang: '血虚寒厥', triggers: ['手足厥寒','肢冷','脉微欲绝','冻疮','腹痛','经痛'], patterns: [
-    {p:['细','欲绝'], w:8}, {p:['微','细'], w:7}, {p:['沉','细'], w:6}
-  ]},
-  { formula: '吴茱萸汤', liujing: '厥阴/阳明', bagang: '里寒', triggers: ['干呕','吐涎沫','头痛','烦躁欲死'], patterns: [
-    {p:['弦','迟'], w:6}, {p:['沉'], w:3}
-  ]},
-  // === 水气/痰饮/血瘀 ===
-  { formula: '苓桂术甘汤', liujing: '太阴', bagang: '里虚水', triggers: ['心下逆满','头眩','气上冲胸','心悸','小便不利'], patterns: [
-    {p:['弦'], w:5}, {p:['沉','弦'], w:5}
-  ]},
-  { formula: '桂枝茯苓丸', liujing: '太阳太阴', bagang: '血瘀', triggers: ['癥瘕','经闭','少腹痛','漏下不止','血瘀'], patterns: [
-    {p:['涩'], w:5}, {p:['沉','涩'], w:6}
-  ]},
-  { formula: '半夏泻心汤', liujing: '厥阴', bagang: '寒热错杂', triggers: ['心下痞','呕而肠鸣','下利','心下痞硬','口苦'], patterns: [
-    {p:['弦'], w:4}, {p:['滑'], w:3}
-  ]},
-  { formula: '甘草泻心汤', liujing: '厥阴', bagang: '寒热错杂', triggers: ['心下痞硬','下利日数十行','谷不化','心烦','干呕'], patterns: [
-    {p:['弱'], w:2}, {p:['弦'], w:3}
-  ]},
-  { formula: '旋覆代赭汤', liujing: '太阴', bagang: '里虚气逆', triggers: ['心下痞硬','噫气不除','嗳气频','反胃'], patterns: [
-    {p:['弦'], w:4}, {p:['弱'], w:3}
-  ]}
+  { formula: '桂枝汤', liujing: '太阳', bagang: '表阳·虚·中风', triggers: ["发热", "汗出", "恶风", "头项强痛", "鼻鸣干呕"], patterns: [{"p": ["浮", "缓"], "w": 8}, {"p": ["浮", "弱"], "w": 8}] },
+  { formula: '桂枝加葛根汤', liujing: '太阳', bagang: '表阳·虚·中风兼项背强', triggers: ["汗出", "恶风", "项背强几几"], patterns: [{"p": ["浮", "缓"], "w": 8}] },
+  { formula: '桂枝加厚朴杏子汤', liujing: '太阳', bagang: '表阳·虚·中风兼喘', triggers: ["汗出", "恶风", "喘"], patterns: [{"p": ["浮", "缓"], "w": 8}] },
+  { formula: '桂枝加附子汤', liujing: '太阳→少阴', bagang: '表阴·虚·过汗亡阳', triggers: ["汗漏不止", "恶风", "小便难", "四肢微急难以屈伸"], patterns: [{"p": ["浮", "弱", "微"], "w": 10}] },
+  { formula: '桂枝去芍药汤', liujing: '太阳', bagang: '表阳·虚·胸阳不振', triggers: ["恶风发热", "胸满", "脉促"], patterns: [{"p": ["沉", "浮", "促"], "w": 10}] },
+  { formula: '桂枝去芍药加附子汤', liujing: '太阳→少阴', bagang: '表阴·虚·胸阳衰微', triggers: ["恶风寒", "胸满", "脉微"], patterns: [{"p": ["微"], "w": 5}] },
+  { formula: '桂枝加芍药生姜各一两人参三两新加汤', liujing: '太阳', bagang: '表阳·虚·气血不足', triggers: ["发汗后身疼痛", "脉沉迟"], patterns: [{"p": ["沉", "迟"], "w": 8}] },
+  { formula: '麻黄汤', liujing: '太阳', bagang: '表阳·实·伤寒', triggers: ["发热恶寒", "无汗", "身疼腰痛", "骨节疼痛", "喘"], patterns: [{"p": ["浮", "紧"], "w": 8}] },
+  { formula: '葛根汤', liujing: '太阳', bagang: '表阳·实·伤寒兼项背强', triggers: ["发热恶寒", "无汗", "项背强几几"], patterns: [{"p": ["浮", "紧"], "w": 8}] },
+  { formula: '葛根加半夏汤', liujing: '太阳阳明合病', bagang: '表阳·实·兼呕', triggers: ["发热恶寒", "无汗", "项背强", "不下利但呕"], patterns: [{"p": ["浮", "紧"], "w": 8}] },
+  { formula: '葛根黄芩黄连汤', liujing: '太阳阳明合病', bagang: '表阳未解·里热', triggers: ["汗出而喘", "下利", "喘而汗出"], patterns: [{"p": ["沉", "浮", "促"], "w": 10}] },
+  { formula: '大青龙汤', liujing: '太阳阳明合病', bagang: '表阳·实·外寒里热', triggers: ["恶寒发热", "无汗", "烦躁", "身疼痛", "不汗出而烦躁"], patterns: [{"p": ["浮", "紧"], "w": 8}] },
+  { formula: '小青龙汤', liujing: '太阳太阴合病', bagang: '表阳·实·外寒内饮', triggers: ["恶寒发热", "无汗", "咳喘", "干呕", "不渴", "或利/噎/小便不利/少腹满"], patterns: [{"p": ["浮", "弦", "紧"], "w": 10}] },
+  { formula: '麻黄杏仁甘草石膏汤', liujing: '太阳阳明合病', bagang: '表邪未尽·里热壅肺', triggers: ["汗出", "喘", "无大热"], patterns: [{"p": ["浮", "数"], "w": 8}] },
+  { formula: '桂枝麻黄各半汤', liujing: '太阳', bagang: '表阳·微邪·小邪在表', triggers: ["发热恶寒如疟状", "热多寒少", "面有热色", "身痒"], patterns: [{"p": ["浮", "微"], "w": 8}] },
+  { formula: '桂枝二麻黄一汤', liujing: '太阳', bagang: '表阳·虚多实少', triggers: ["发热恶寒形似疟", "一日再发"], patterns: [{"p": ["浮", "缓", "微"], "w": 10}] },
+  { formula: '桂枝二越婢一汤', liujing: '太阳阳明', bagang: '表阳·微邪兼微热', triggers: ["发热恶寒", "热多寒少", "微烦"], patterns: [{"p": ["弱", "微"], "w": 8}] },
+  { formula: '桂枝去桂加茯苓白术汤', liujing: '太阳太阴', bagang: '表未全解·水饮内停', triggers: ["头项强痛", "翕翕发热", "无汗", "心下满微痛", "小便不利"], patterns: [] },
+  { formula: '五苓散', liujing: '太阳太阴合病', bagang: '表未解·水蓄膀胱', triggers: ["脉浮", "小便不利", "微热消渴", "烦渴", "水入即吐"], patterns: [{"p": ["浮", "数"], "w": 8}] },
+  { formula: '茯苓桂枝白术甘草汤', liujing: '太阴（兼太阳）', bagang: '里阴·虚·水饮上冲', triggers: ["心下逆满", "气上冲胸", "起则头眩", "身为振振摇"], patterns: [{"p": ["沉", "紧"], "w": 8}] },
+  { formula: '茯苓甘草汤', liujing: '太阳太阴', bagang: '表未解·胃中水停', triggers: ["厥而心下悸"], patterns: [] },
+  { formula: '桂枝甘草汤', liujing: '太阳', bagang: '表阳·虚·心阳虚', triggers: ["叉手自冒心", "心下悸", "欲得按"], patterns: [] },
+  { formula: '桂枝甘草龙骨牡蛎汤', liujing: '太阳', bagang: '表阳·虚·心阳虚烦躁', triggers: ["烦躁", "心悸"], patterns: [] },
+  { formula: '桂枝去芍药加蜀漆牡蛎龙骨救逆汤', liujing: '太阳', bagang: '表阳·虚·亡阳惊狂', triggers: ["惊狂", "卧起不安"], patterns: [] },
+  { formula: '桂枝加桂汤', liujing: '太阳', bagang: '表阳·虚·奔豚', triggers: ["气从少腹上冲心"], patterns: [] },
+  { formula: '桂枝加芍药汤', liujing: '太阴', bagang: '里阴·虚·腹满时痛', triggers: ["腹满时痛"], patterns: [] },
+  { formula: '桂枝加大黄汤', liujing: '太阴阳明合病', bagang: '里阴兼里实', triggers: ["腹满大实痛"], patterns: [] },
+  { formula: '麻黄附子细辛汤', liujing: '少阴', bagang: '表阴·虚寒', triggers: ["但恶寒", "不发热", "反发热", "无汗", "脉沉"], patterns: [{"p": ["细", "沉"], "w": 8}] },
+  { formula: '麻黄附子甘草汤', liujing: '少阴', bagang: '表阴·虚寒（轻证）', triggers: ["恶寒", "无汗", "得之二三日"], patterns: [{"p": ["沉"], "w": 5}] },
+  { formula: '附子汤', liujing: '少阴', bagang: '表阴·虚寒·身痛', triggers: ["背恶寒", "身体痛", "手足寒", "骨节痛"], patterns: [{"p": ["沉"], "w": 5}] },
+  { formula: '真武汤', liujing: '少阴太阴合病', bagang: '里阴·虚·水气泛滥', triggers: ["心下悸", "头眩", "身瞤动", "振振欲擗地", "腹痛", "小便不利", "四肢沉重疼痛", "下利"], patterns: [{"p": ["沉", "弦"], "w": 8}] },
+  { formula: '四逆汤', liujing: '少阴太阴', bagang: '里阴·虚寒·亡阳', triggers: ["四肢厥逆", "下利清谷", "恶寒踡卧", "但欲寐", "大汗出", "热不去"], patterns: [{"p": ["细", "微"], "w": 8}, {"p": ["沉", "微"], "w": 8}] },
+  { formula: '四逆加人参汤', liujing: '少阴', bagang: '里阴·虚寒·亡阳兼亡津液', triggers: ["恶寒", "脉微", "下利", "利止亡血"], patterns: [{"p": ["微"], "w": 5}] },
+  { formula: '通脉四逆汤', liujing: '少阴', bagang: '里阴·虚寒·阴盛格阳', triggers: ["下利清谷", "里寒外热", "手足厥逆", "身反不恶寒", "面色赤"], patterns: [{"p": ["微"], "w": 5}] },
+  { formula: '白通汤', liujing: '少阴', bagang: '里阴·虚寒·阴盛戴阳', triggers: ["下利", "恶寒", "脉微", "面赤"], patterns: [{"p": ["微"], "w": 5}] },
+  { formula: '白通加猪胆汁汤', liujing: '少阴', bagang: '里阴·虚寒·阴盛格阳兼阴竭', triggers: ["下利不止", "厥逆无脉", "干呕烦"], patterns: [] },
+  { formula: '干姜附子汤', liujing: '少阴', bagang: '里阴·虚寒·昼躁夜静', triggers: ["昼日烦躁不得眠", "夜而安静", "不呕不渴无表证"], patterns: [{"p": ["沉", "微"], "w": 8}] },
+  { formula: '茯苓四逆汤', liujing: '少阴', bagang: '里阴·虚寒·阴阳两虚烦躁', triggers: ["烦躁", "恶寒", "下利", "厥逆"], patterns: [{"p": ["细", "微"], "w": 8}] },
+  { formula: '芍药甘草附子汤', liujing: '少阴', bagang: '里阴·虚·阴阳两虚', triggers: ["发汗后恶寒", "脚挛急"], patterns: [] },
+  { formula: '甘草干姜汤', liujing: '太阴少阴', bagang: '里阴·虚寒·肺痿', triggers: ["吐涎沫", "不咳", "遗尿", "小便数", "眩"], patterns: [] },
+  { formula: '芍药甘草汤', liujing: '太阳（变证）', bagang: '阴血不足', triggers: ["脚挛急", "或腹挛痛"], patterns: [] },
+  { formula: '桂枝加附子汤(重出)', liujing: '太阳少阴', bagang: '表阳转表阴·过汗亡阳', triggers: ["发汗遂漏不止", "恶风", "小便难", "四肢微急"], patterns: [{"p": ["浮", "弱"], "w": 8}] },
+  { formula: '白虎汤', liujing: '阳明', bagang: '里阳·实·热', triggers: ["大热", "大汗出", "口大渴", "心烦"], patterns: [{"p": ["洪", "大"], "w": 8}, {"p": ["浮", "滑"], "w": 8}] },
+  { formula: '白虎加人参汤', liujing: '阳明', bagang: '里阳·实·热盛伤津', triggers: ["大热", "大渴", "口舌干燥", "欲饮水数升", "心烦", "背微恶寒"], patterns: [{"p": ["洪", "大", "芤"], "w": 10}] },
+  { formula: '调胃承气汤', liujing: '阳明', bagang: '里阳·实·燥热', triggers: ["蒸蒸发热", "腹胀满", "心烦", "大便不通"], patterns: [{"p": ["实"], "w": 5}] },
+  { formula: '小承气汤', liujing: '阳明', bagang: '里阳·实·痞满实', triggers: ["腹大满", "大便硬", "谵语", "潮热"], patterns: [{"p": ["滑"], "w": 5}] },
+  { formula: '大承气汤', liujing: '阳明', bagang: '里阳·实·痞满燥实', triggers: ["潮热", "谵语", "手足濈然汗出", "腹满硬痛拒按", "大便硬结不通"], patterns: [{"p": ["沉", "实"], "w": 8}, {"p": ["沉", "迟", "有力"], "w": 10}] },
+  { formula: '麻子仁丸', liujing: '阳明', bagang: '里阳·实·脾约', triggers: ["大便硬", "小便数", "不更衣十日无所苦"], patterns: [{"p": ["浮", "涩"], "w": 8}] },
+  { formula: '蜜煎导方', liujing: '阳明', bagang: '里阳·津亏便秘（外用）', triggers: ["大便硬", "欲解不能"], patterns: [] },
+  { formula: '栀子豉汤', liujing: '阳明（余热）', bagang: '里热·虚烦', triggers: ["虚烦不得眠", "心中懊憹", "反复颠倒"], patterns: [] },
+  { formula: '栀子甘草豉汤', liujing: '阳明（余热）', bagang: '里热·虚烦·兼气虚', triggers: ["虚烦不得眠", "心中懊憹", "少气"], patterns: [] },
+  { formula: '栀子生姜豉汤', liujing: '阳明（余热）', bagang: '里热·虚烦·兼呕', triggers: ["虚烦不得眠", "心中懊憹", "呕"], patterns: [] },
+  { formula: '栀子厚朴汤', liujing: '阳明太阴', bagang: '里热兼气滞', triggers: ["心烦", "腹满", "卧起不安"], patterns: [] },
+  { formula: '栀子干姜汤', liujing: '阳明太阴', bagang: '上热下寒', triggers: ["身热", "微烦", "下利"], patterns: [] },
+  { formula: '茵陈蒿汤', liujing: '阳明', bagang: '里阳·实·湿热黄疸', triggers: ["身黄如橘子色", "小便不利", "腹微满", "头汗出身无汗"], patterns: [] },
+  { formula: '猪苓汤', liujing: '阳明少阴', bagang: '里热·水热互结·伤阴', triggers: ["发热", "渴欲饮水", "小便不利", "心烦不得眠"], patterns: [{"p": ["浮"], "w": 5}] },
+  { formula: '桃核承气汤', liujing: '太阳阳明合病', bagang: '表未解·血热结于下焦', triggers: ["少腹急结", "其人如狂"], patterns: [] },
+  { formula: '抵当汤', liujing: '太阳阳明', bagang: '里实·蓄血重证', triggers: ["少腹硬满", "其人发狂", "善忘", "大便黑"], patterns: [{"p": ["沉", "结"], "w": 8}, {"p": ["沉", "微"], "w": 8}] },
+  { formula: '抵当丸', liujing: '太阳阳明', bagang: '里实·蓄血轻证', triggers: ["少腹满", "小便自利"], patterns: [] },
+  { formula: '十枣汤', liujing: '太阳', bagang: '表解里实·悬饮', triggers: ["心下痞硬满", "引胁下痛", "干呕短气", "头痛"], patterns: [{"p": ["沉", "弦"], "w": 8}] },
+  { formula: '小柴胡汤', liujing: '少阳', bagang: '半表半里·阳', triggers: ["往来寒热", "胸胁苦满", "默默不欲饮食", "心烦喜呕", "口苦咽干目眩"], patterns: [{"p": ["细", "弦"], "w": 8}, {"p": ["弦", "数"], "w": 8}] },
+  { formula: '大柴胡汤', liujing: '少阳阳明合病', bagang: '半表半里阳证兼里实', triggers: ["呕不止", "心下急", "郁郁微烦", "热结在里", "心中痞硬", "下利"], patterns: [{"p": ["弦", "数", "有力"], "w": 10}] },
+  { formula: '柴胡加芒硝汤', liujing: '少阳阳明', bagang: '半表半里阳证兼燥结', triggers: ["胸胁满而呕", "日晡潮热", "微利"], patterns: [] },
+  { formula: '柴胡桂枝汤', liujing: '少阳太阳合病', bagang: '少阳兼表', triggers: ["发热微恶寒", "支节烦疼", "微呕", "心下支结"], patterns: [] },
+  { formula: '柴胡桂枝干姜汤', liujing: '少阳太阴合病', bagang: '半表半里阳证兼中寒水饮', triggers: ["胸胁满微结", "小便不利", "渴而不呕", "头汗出", "往来寒热", "心烦"], patterns: [] },
+  { formula: '柴胡加龙骨牡蛎汤', liujing: '少阳', bagang: '半表半里·邪气弥漫·烦惊', triggers: ["胸满", "烦惊", "小便不利", "谵语", "一身尽重不可转侧"], patterns: [] },
+  { formula: '黄芩汤', liujing: '少阳阳明合病', bagang: '半表半里热·下利', triggers: ["下利", "腹痛", "身热口苦"], patterns: [] },
+  { formula: '黄芩加半夏生姜汤', liujing: '少阳', bagang: '半表半里热·下利兼呕', triggers: ["下利", "腹痛", "呕"], patterns: [] },
+  { formula: '黄连汤', liujing: '少阳太阴', bagang: '上热下寒', triggers: ["胸中有热", "胃中有邪气", "腹中痛", "欲呕吐"], patterns: [] },
+  { formula: '理中汤（理中丸）', liujing: '太阴', bagang: '里阴·虚寒', triggers: ["腹满而吐", "食不下", "自利益甚", "时腹自痛", "不渴"], patterns: [] },
+  { formula: '桂枝人参汤', liujing: '太阴兼太阳', bagang: '里阴·虚寒·表里同病', triggers: ["心下痞硬", "下利不止", "表里不解", "恶寒发热"], patterns: [] },
+  { formula: '厚朴生姜半夏甘草人参汤', liujing: '太阴', bagang: '里阴·虚·气滞', triggers: ["腹胀满", "食后胀甚"], patterns: [] },
+  { formula: '赤石脂禹余粮汤', liujing: '太阴', bagang: '里阴·虚·滑脱下利', triggers: ["下利不止", "滑脱不禁"], patterns: [] },
+  { formula: '旋覆代赭汤', liujing: '太阴', bagang: '里阴·虚·胃虚痰阻', triggers: ["心下痞硬", "噫气不除"], patterns: [] },
+  { formula: '小建中汤', liujing: '太阴', bagang: '里阴·虚·中焦虚寒', triggers: ["腹中急痛", "心中悸而烦", "手足烦热", "咽干口燥"], patterns: [{"p": ["涩"], "w": 5}, {"p": ["弦"], "w": 5}] },
+  { formula: '桂枝去芍药加麻黄细辛附子汤', liujing: '太阴少阴太阳合病', bagang: '里阴·阳虚水停·表不解', triggers: ["心下坚", "大如盘", "边如旋杯"], patterns: [] },
+  { formula: '乌梅丸', liujing: '厥阴', bagang: '半表半里·阴·寒热错杂', triggers: ["消渴", "气上撞心", "心中疼热", "饥而不欲食", "食则吐蛔", "久利"], patterns: [] },
+  { formula: '当归四逆汤', liujing: '厥阴', bagang: '半表半里·阴·血虚寒凝', triggers: ["手足厥寒", "四肢冷", "或腹中痛", "或肩背腰腿寒痛"], patterns: [{"p": ["细"], "w": 5}, {"p": ["细", "沉"], "w": 8}] },
+  { formula: '当归四逆加吴茱萸生姜汤', liujing: '厥阴', bagang: '半表半里·阴·血虚寒凝兼内有久寒', triggers: ["手足厥寒", "脉细欲绝", "久寒", "呕", "吐涎沫", "巅顶痛"], patterns: [{"p": ["细"], "w": 5}] },
+  { formula: '麻黄升麻汤', liujing: '厥阴', bagang: '半表半里·阴·上热下寒·正虚邪陷', triggers: ["手足厥逆", "咽喉不利", "唾脓血", "泄利不止", "寸脉沉迟"], patterns: [{"p": ["沉", "迟"], "w": 8}] },
+  { formula: '干姜黄芩黄连人参汤', liujing: '厥阴', bagang: '半表半里·阴·上热下寒（寒格）', triggers: ["食入口即吐", "下利"], patterns: [] },
+  { formula: '白头翁汤', liujing: '厥阴', bagang: '里热·热利下重', triggers: ["下利", "便脓血", "里急后重", "腹痛", "渴欲饮水"], patterns: [] },
+  { formula: '半夏泻心汤', liujing: '太阴阳明合病', bagang: '寒热错杂·痞证', triggers: ["心下痞", "呕", "腹中雷鸣", "下利"], patterns: [] },
+  { formula: '生姜泻心汤', liujing: '太阴阳明合病', bagang: '寒热错杂·痞证·水饮食滞', triggers: ["心下痞硬", "干噫食臭", "腹中雷鸣", "下利"], patterns: [] },
+  { formula: '甘草泻心汤', liujing: '太阴阳明合病', bagang: '寒热错杂·痞证·胃虚', triggers: ["心下痞硬而满", "下利日数十行", "谷不化", "腹中雷鸣", "干呕心烦不得安"], patterns: [] },
+  { formula: '大黄黄连泻心汤', liujing: '阳明', bagang: '里热·痞证（热痞）', triggers: ["心下痞", "按之濡", "其脉关上浮"], patterns: [{"p": ["浮"], "w": 5}] },
+  { formula: '附子泻心汤', liujing: '阳明少阴', bagang: '上热下寒·热痞兼阳虚', triggers: ["心下痞", "恶寒", "汗出"], patterns: [] },
+  { formula: '大陷胸汤', liujing: '太阳阳明合病', bagang: '里阳·实·水热互结', triggers: ["心下痛", "按之石硬", "从心下至少腹硬满而痛不可近", "不大便", "日晡潮热"], patterns: [{"p": ["沉", "紧"], "w": 8}] },
+  { formula: '大陷胸丸', liujing: '太阳阳明合病', bagang: '里阳·实·水热在上', triggers: ["结胸", "项强如柔痉状"], patterns: [] },
+  { formula: '小陷胸汤', liujing: '太阳阳明', bagang: '里阳·实·痰热互结', triggers: ["正在心下", "按之则痛"], patterns: [{"p": ["浮", "滑"], "w": 8}] },
+  { formula: '文蛤散', liujing: '太阳', bagang: '表热·渴', triggers: ["渴欲饮水不止"], patterns: [] },
+  { formula: '瓜蒂散', liujing: '太阳', bagang: '实·痰食在上', triggers: ["胸中痞硬", "气上冲咽喉不得息"], patterns: [] },
+  { formula: '吴茱萸汤', liujing: '阳明少阴厥阴', bagang: '里阴·虚寒·肝胃虚寒', triggers: ["食谷欲呕", "吐利", "手足逆冷", "烦躁欲死", "干呕吐涎沫头痛"], patterns: [] },
+  { formula: '炙甘草汤', liujing: '太阳少阴', bagang: '阴血虚·心阴阳两虚', triggers: ["心动悸", "脉结代"], patterns: [{"p": ["结", "代"], "w": 8}] },
+  { formula: '竹叶石膏汤', liujing: '阳明', bagang: '里热·气津两伤', triggers: ["虚羸少气", "气逆欲吐", "发热", "烦渴"], patterns: [] },
+  { formula: '牡蛎泽泻散', liujing: '太阳', bagang: '水气·腰以下肿', triggers: ["腰以下有水气", "肿"], patterns: [] },
+  { formula: '烧裈散', liujing: '阴阳易', bagang: '', triggers: ["身重少气", "少腹里急", "阴中拘挛", "热上冲胸", "头重不欲举"], patterns: [] },
+  { formula: '黄连阿胶汤', liujing: '少阴', bagang: '阴虚火旺（少阴热化）', triggers: ["心中烦", "不得卧"], patterns: [] },
+  { formula: '猪肤汤', liujing: '少阴', bagang: '阴虚咽痛', triggers: ["下利", "咽痛", "胸满", "心烦"], patterns: [] },
+  { formula: '苦酒汤', liujing: '少阴', bagang: '痰热咽伤', triggers: ["咽中伤生疮", "不能语言", "声不出"], patterns: [] },
+  { formula: '半夏散及汤', liujing: '少阴', bagang: '寒痰咽痛', triggers: ["咽中痛"], patterns: [] },
+  { formula: '四逆散', liujing: '少阴（辨为少阳）', bagang: '气郁阳郁', triggers: ["四逆（手足冷）", "或咳", "或悸", "或小便不利", "或腹中痛", "或泄利下重"], patterns: [] },
+  { formula: '桃花汤', liujing: '少阴', bagang: '里阴·虚寒·滑脱', triggers: ["下利不止", "便脓血", "腹痛", "小便不利"], patterns: [] }
 ];
 
 function diagnoseHuXishu(formData, symptoms, complaint) {

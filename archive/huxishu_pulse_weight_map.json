@@ -1,0 +1,380 @@
+[
+  {
+    "name": "胡希恕六经八纲脉象权重映射表",
+    "version": "1.0",
+    "source": "《辨证施治概论》第三节脉诊 + 《胡希恕讲仲景脉学》 + 《胡希恕医论医案集粹》医案提炼",
+    "notes": "脉象权重用于症状+脉象双驱动辨证。脉诊在胡希恕体系中为验证层，非推导起点。缓和迟必须区分：缓=脉管弛缓/张力低（因汗出津伤），迟=搏动频率慢。",
+    "entries": [
+
+      /* ========== 太阳病（表阳）========== */
+      {
+        "id": "TY_01",
+        "formula": "麻黄汤证",
+        "liujing": "太阳病",
+        "bagang": "表阳·寒实",
+        "pulse_patterns": [
+          {"pattern": ["浮","紧"], "weight": 5, "note": "原文第1条：脉浮紧，太阳伤寒"},
+          {"pattern": ["浮","弦"], "weight": 4, "note": "太阳伤寒兼项强"},
+          {"pattern": ["浮","有力"], "weight": 4, "note": "表实无汗"}
+        ],
+        "symptom_triggers": ["恶寒","发热","无汗","身痛","头项强痛"],
+        "source": "《辨证施治概论》治则简介"
+      },
+      {
+        "id": "TY_02",
+        "formula": "桂枝汤证",
+        "liujing": "太阳病",
+        "bagang": "表阳·营卫不和",
+        "pulse_patterns": [
+          {"pattern": ["浮","缓"], "weight": 5, "note": "第2条：阳浮而阴弱，阳浮者热自发，阴弱者汗自出。缓=脉管弛缓，非迟"},
+          {"pattern": ["浮","弱"], "weight": 5, "note": "阴弱=沉取弱，因汗出津伤"},
+          {"pattern": ["浮","无力"], "weight": 4, "note": "表虚中风"}
+        ],
+        "symptom_triggers": ["恶风","汗出","发热","头痛"],
+        "source": "《辨证施治概论》治则简介"
+      },
+      {
+        "id": "TY_03",
+        "formula": "大青龙汤证",
+        "liujing": "太阳病",
+        "bagang": "表阳·寒郁化热",
+        "pulse_patterns": [
+          {"pattern": ["浮","紧","数"], "weight": 5, "note": "第38条：脉浮紧，发热恶寒身疼痛，不汗出而烦躁"},
+          {"pattern": ["浮","有力","数"], "weight": 4, "note": "寒郁化热烦躁"}
+        ],
+        "symptom_triggers": ["恶寒发热","无汗","烦躁","身痛"],
+        "source": "《伤寒论》第38条"
+      },
+      {
+        "id": "TY_04",
+        "formula": "小青龙汤证",
+        "liujing": "太阳病",
+        "bagang": "表阳·寒饮",
+        "pulse_patterns": [
+          {"pattern": ["浮","弦"], "weight": 4, "note": "外寒内饮，脉浮弦"},
+          {"pattern": ["浮","紧"], "weight": 3, "note": "寒饮咳喘"}
+        ],
+        "symptom_triggers": ["恶寒发热","无汗","咳喘","痰稀白"],
+        "source": "胡希恕医案常用"
+      },
+      {
+        "id": "TY_05",
+        "formula": "葛根汤证",
+        "liujing": "太阳病",
+        "bagang": "表阳·经输不利",
+        "pulse_patterns": [
+          {"pattern": ["浮","紧"], "weight": 4, "note": "第31条：太阳病，项背强几几，无汗"},
+          {"pattern": ["浮","弦"], "weight": 3, "note": "项背强几几"}
+        ],
+        "symptom_triggers": ["项背强几几","无汗","恶寒"],
+        "source": "《伤寒论》第31条"
+      },
+      {
+        "id": "TY_06",
+        "formula": "五苓散证",
+        "liujing": "太阳病",
+        "bagang": "表阳·蓄水",
+        "pulse_patterns": [
+          {"pattern": ["浮"], "weight": 3, "note": "第71条：脉浮，微热消渴，水入则吐"},
+          {"pattern": ["浮","数"], "weight": 3, "note": "表未解，热入水结"}
+        ],
+        "symptom_triggers": ["小便不利","消渴","水入即吐","微热"],
+        "source": "《伤寒论》第71-74条"
+      },
+
+      /* ========== 少阴病（表阴）========== */
+      {
+        "id": "SY_01",
+        "formula": "四逆汤证",
+        "liujing": "少阴病",
+        "bagang": "表阴·阳衰阴盛",
+        "pulse_patterns": [
+          {"pattern": ["微","细"], "weight": 5, "note": "第281条提纲：脉微细，但欲寐。微=阳气极虚"},
+          {"pattern": ["沉","微"], "weight": 5, "note": "少阴本脉"},
+          {"pattern": ["沉","细","无力"], "weight": 5, "note": "少阴脉细无力，四逆汤急温"},
+          {"pattern": ["微","迟"], "weight": 4, "note": "少阴寒化，脉微迟"}
+        ],
+        "symptom_triggers": ["手足厥冷","下利清谷","恶寒","但欲寐"],
+        "source": "《辨证施治概论》第281条"
+      },
+      {
+        "id": "SY_02",
+        "formula": "麻黄附子细辛汤证",
+        "liujing": "少阴病",
+        "bagang": "表阴·寒凝",
+        "pulse_patterns": [
+          {"pattern": ["沉","细"], "weight": 5, "note": "第301条：少阴病始得之，反发热，脉沉者"},
+          {"pattern": ["沉","弦"], "weight": 4, "note": "少阴兼弦，寒凝"}
+        ],
+        "symptom_triggers": ["发热","恶寒","脉沉细","但欲寐"],
+        "source": "《伤寒论》第301条"
+      },
+      {
+        "id": "SY_03",
+        "formula": "真武汤证",
+        "liujing": "少阴病",
+        "bagang": "表阴·阳虚水饮",
+        "pulse_patterns": [
+          {"pattern": ["沉","细","弦"], "weight": 4, "note": "第82条：太阳病发汗，其人仍发热，心下悸，头眩，身瞤动"},
+          {"pattern": ["沉","弦"], "weight": 4, "note": "阳虚水饮，脉沉弦"}
+        ],
+        "symptom_triggers": ["发热","心下悸","头眩","身瞤动","小便不利"],
+        "source": "《伤寒论》第82条"
+      },
+      {
+        "id": "SY_04",
+        "formula": "桂枝加附子汤证",
+        "liujing": "少阴病/太阳少阴并病",
+        "bagang": "表·阳虚漏汗",
+        "pulse_patterns": [
+          {"pattern": ["浮","微"], "weight": 4, "note": "第20条：太阳病发汗，遂漏不止，其人恶风，小便难，四肢微急"},
+          {"pattern": ["浮","无力"], "weight": 4, "note": "表未解而阳虚"}
+        ],
+        "symptom_triggers": ["汗漏不止","恶风","小便难","四肢拘急"],
+        "source": "《伤寒论》第20条"
+      },
+      {
+        "id": "SY_05",
+        "formula": "附子汤证",
+        "liujing": "少阴病",
+        "bagang": "表阴·阳虚身痛",
+        "pulse_patterns": [
+          {"pattern": ["沉","微"], "weight": 4, "note": "第304-305条：少阴病，身体痛，手足寒，骨节痛，脉沉者"}
+        ],
+        "symptom_triggers": ["身体痛","手足寒","骨节痛","背恶寒"],
+        "source": "《伤寒论》第304-305条"
+      },
+
+      /* ========== 阳明病（里阳）========== */
+      {
+        "id": "YM_01",
+        "formula": "白虎汤证/白虎加人参汤证",
+        "liujing": "阳明病",
+        "bagang": "里阳·经热",
+        "pulse_patterns": [
+          {"pattern": ["洪","大"], "weight": 5, "note": "第176条：伤寒脉浮滑，此以表有热里有寒（白虎汤证）"},
+          {"pattern": ["洪","数"], "weight": 5, "note": "阳明经热，脉洪数"},
+          {"pattern": ["滑","数"], "weight": 4, "note": "热盛血行通畅"}
+        ],
+        "symptom_triggers": ["大热","大汗出","大渴","心烦"],
+        "source": "《伤寒论》第176条"
+      },
+      {
+        "id": "YM_02",
+        "formula": "大承气汤证",
+        "liujing": "阳明病",
+        "bagang": "里阳·腑实",
+        "pulse_patterns": [
+          {"pattern": ["沉","实"], "weight": 5, "note": "第208条：阳明病，脉迟，虽汗出，不恶寒，身重短气，腹满而喘"},
+          {"pattern": ["沉","迟","有力"], "weight": 5, "note": "阳明腑实，脉道充实，迟而有力（迟≠寒，腑实气滞）"},
+          {"pattern": ["沉","滑"], "weight": 4, "note": "宿食实热，第209条"}
+        ],
+        "symptom_triggers": ["潮热","谵语","腹满硬痛","不大便","手足濈然汗出"],
+        "source": "《辨证施治概论》第四节食毒"
+      },
+      {
+        "id": "YM_03",
+        "formula": "小承气汤证",
+        "liujing": "阳明病",
+        "bagang": "里阳·腑实轻证",
+        "pulse_patterns": [
+          {"pattern": ["沉","数","有力"], "weight": 4, "note": "第208条：阳明病脉迟，若汗出多，微发热恶寒者，外未解也"},
+          {"pattern": ["沉","有力"], "weight": 4, "note": "腹大满不通，未至硬痛"}
+        ],
+        "symptom_triggers": ["腹大满","大便硬","潮热","谵语轻"],
+        "source": "《伤寒论》第208、213条"
+      },
+      {
+        "id": "YM_04",
+        "formula": "栀子豉汤证",
+        "liujing": "阳明病/太阳转属",
+        "bagang": "里阳·虚烦",
+        "pulse_patterns": [
+          {"pattern": ["浮"], "weight": 3, "note": "第76条：发汗后，水药不得入口，虚烦不得眠"},
+          {"pattern": ["数","无力"], "weight": 3, "note": "虚烦，热扰胸膈"}
+        ],
+        "symptom_triggers": ["虚烦不得眠","心中懊憹","反复颠倒"],
+        "source": "《伤寒论》第76-78条"
+      },
+
+      /* ========== 少阳病（半表半里阳）========== */
+      {
+        "id": "SYO_01",
+        "formula": "小柴胡汤证",
+        "liujing": "少阳病",
+        "bagang": "半表半里阳·枢机不利",
+        "pulse_patterns": [
+          {"pattern": ["弦"], "weight": 5, "note": "第96条：伤寒五六日，中风，往来寒热，胸胁苦满，默默不欲饮食，心烦喜呕，脉弦"},
+          {"pattern": ["弦","数"], "weight": 5, "note": "少阳热象，弦数"},
+          {"pattern": ["弦","细"], "weight": 4, "note": "少阳兼血虚心神不宁"}
+        ],
+        "symptom_triggers": ["往来寒热","胸胁苦满","默默不欲饮食","心烦喜呕","口苦","咽干","目眩"],
+        "source": "《辨证施治概论》第263条"
+      },
+      {
+        "id": "SYO_02",
+        "formula": "大柴胡汤证",
+        "liujing": "少阳阳明并病",
+        "bagang": "半表半里阳·里实",
+        "pulse_patterns": [
+          {"pattern": ["弦","有力"], "weight": 5, "note": "第103条：太阳病过经十余日，反二三下之，呕不止，心下急，郁郁微烦者"},
+          {"pattern": ["弦","数","有力"], "weight": 5, "note": "少阳兼阳明腑实，脉弦数有力"},
+          {"pattern": ["弦","沉","有力"], "weight": 4, "note": "心下急，里实已成"}
+        ],
+        "symptom_triggers": ["呕不止","心下急","郁郁微烦","不大便","潮热"],
+        "source": "《伤寒论》第103、165条"
+      },
+      {
+        "id": "SYO_03",
+        "formula": "柴胡加龙骨牡蛎汤证",
+        "liujing": "少阳病",
+        "bagang": "半表半里阳·烦惊",
+        "pulse_patterns": [
+          {"pattern": ["弦","数"], "weight": 4, "note": "第107条：伤寒八九日，下之，胸满烦惊，小便不利，谵语，一身尽重"}
+        ],
+        "symptom_triggers": ["胸满","烦惊","小便不利","谵语","一身尽重"],
+        "source": "《伤寒论》第107条"
+      },
+
+      /* ========== 太阴病（里阴）========== */
+      {
+        "id": "TYI_01",
+        "formula": "理中汤证",
+        "liujing": "太阴病",
+        "bagang": "里阴·虚寒",
+        "pulse_patterns": [
+          {"pattern": ["沉","弱"], "weight": 5, "note": "第273条提纲：太阴病，腹满而吐，食不下，自利益甚，脉沉弱"},
+          {"pattern": ["沉","迟","无力"], "weight": 5, "note": "太阴虚寒，脉沉迟无力"},
+          {"pattern": ["缓","弱"], "weight": 4, "note": "缓≠迟，缓是脉管弛缓，太阴津伤"}
+        ],
+        "symptom_triggers": ["腹满","吐","食不下","自利","时腹自痛"],
+        "source": "《辨证施治概论》太阴病提纲"
+      },
+      {
+        "id": "TYI_02",
+        "formula": "桂枝加芍药汤证/桂枝加大黄汤证",
+        "liujing": "太阴病/太阳太阴并病",
+        "bagang": "里阴·腹痛",
+        "pulse_patterns": [
+          {"pattern": ["浮","弱"], "weight": 3, "note": "第279条：本太阳病，医反下之，因尔腹满时痛者"}
+        ],
+        "symptom_triggers": ["腹满时痛","大便溏","脉沉弱"],
+        "source": "《伤寒论》第279条"
+      },
+      {
+        "id": "TYI_03",
+        "formula": "小建中汤证",
+        "liujing": "太阴病/少阳太阴并病",
+        "bagang": "里阴·气血两虚",
+        "pulse_patterns": [
+          {"pattern": ["弦","细","弱"], "weight": 5, "note": "第100条：伤寒阳脉涩，阴脉弦，法当腹中急痛，先与小建中汤"},
+          {"pattern": ["弦","细"], "weight": 4, "note": "气血两虚，弦细为主"}
+        ],
+        "symptom_triggers": ["腹中急痛","心中悸","手足烦热","咽干口燥"],
+        "source": "《伤寒论》第100条"
+      },
+
+      /* ========== 厥阴病（半表半里阴）========== */
+      {
+        "id": "JY_01",
+        "formula": "乌梅丸证",
+        "liujing": "厥阴病",
+        "bagang": "半表半里阴·寒热错杂",
+        "pulse_patterns": [
+          {"pattern": ["弦","细"], "weight": 4, "note": "第326条提纲：厥阴病，消渴，气上撞心，心中疼热，饥不欲食"},
+          {"pattern": ["弦","微"], "weight": 3, "note": "阴阳错杂，脉弦微"}
+        ],
+        "symptom_triggers": ["消渴","气上撞心","心中疼热","饥不欲食","呕吐"],
+        "source": "《辨证施治概论》第326条"
+      },
+      {
+        "id": "JY_02",
+        "formula": "当归四逆汤证",
+        "liujing": "厥阴病",
+        "bagang": "半表半里阴·血虚寒凝",
+        "pulse_patterns": [
+          {"pattern": ["细","弦"], "weight": 5, "note": "第351条：手足厥寒，脉细欲绝者，当归四逆汤主之"},
+          {"pattern": ["细","欲绝"], "weight": 5, "note": "脉细欲绝，血虚寒凝"},
+          {"pattern": ["沉","细"], "weight": 4, "note": "血虚寒凝，脉沉细"}
+        ],
+        "symptom_triggers": ["手足厥寒","脉细欲绝","腰腹痛","寒疝"],
+        "source": "《伤寒论》第351条"
+      },
+      {
+        "id": "JY_03",
+        "formula": "白头翁汤证",
+        "liujing": "厥阴病",
+        "bagang": "半表半里阴·热利",
+        "pulse_patterns": [
+          {"pattern": ["数","弦"], "weight": 4, "note": "第371条：热利下重者，白头翁汤主之"},
+          {"pattern": ["数","滑"], "weight": 4, "note": "热利，脉数滑"}
+        ],
+        "symptom_triggers": ["下利","便脓血","里急后重","渴欲饮水"],
+        "source": "《伤寒论》第371条"
+      },
+      {
+        "id": "JY_04",
+        "formula": "吴茱萸汤证",
+        "liujing": "厥阴病/少阴病/阳明病",
+        "bagang": "阴·寒逆",
+        "pulse_patterns": [
+          {"pattern": ["沉","弦"], "weight": 4, "note": "第378条：干呕吐涎沫，头痛者，吴茱萸汤主之"},
+          {"pattern": ["沉","迟"], "weight": 3, "note": "胃寒上逆，脉沉迟"}
+        ],
+        "symptom_triggers": ["干呕","吐涎沫","头痛","食谷欲呕"],
+        "source": "《伤寒论》第378条"
+      },
+
+      /* ========== 特征脉专项（跨方证服用）========== */
+      {
+        "id": "CHAR_01",
+        "formula": "炙甘草汤证",
+        "liujing": "少阳/厥阴",
+        "bagang": "阴·气血两虚·心动悸",
+        "pulse_patterns": [
+          {"pattern": ["结","代"], "weight": 5, "note": "第177条：脉结代，心动悸，炙甘草汤主之。结代=心律不齐"},
+          {"pattern": ["结"], "weight": 5, "note": "结脉主气血虚衰"},
+          {"pattern": ["代"], "weight": 5, "note": "代脉主脏气衰微"}
+        ],
+        "symptom_triggers": ["心动悸","脉结代","虚羸少气","舌光少苔"],
+        "source": "《伤寒论》第177条"
+      },
+      {
+        "id": "CHAR_02",
+        "formula": "苓桂术甘汤证",
+        "liujing": "太阳病/太阴病",
+        "bagang": "阳虚水饮",
+        "pulse_patterns": [
+          {"pattern": ["弦","沉"], "weight": 4, "note": "《金匮》胸痹：阳微阴弦。弦主水饮，沉主寒凝"},
+          {"pattern": ["弦"], "weight": 3, "note": "目眩、心下悸，脉弦"}
+        ],
+        "symptom_triggers": ["心下悸","眩晕","气上冲胸","胸胁支满"],
+        "source": "《金匮要略》痰饮咳嗽病篇"
+      },
+      {
+        "id": "CHAR_03",
+        "formula": "桃核承气汤证",
+        "liujing": "太阳病/阳明病",
+        "bagang": "瘀热互结",
+        "pulse_patterns": [
+          {"pattern": ["沉","涩"], "weight": 4, "note": "第106条：太阳病不解，热结膀胱，其人如狂。涩主瘀血"},
+          {"pattern": ["沉","数","涩"], "weight": 4, "note": "瘀血化热，脉沉数涩"}
+        ],
+        "symptom_triggers": ["如狂","少腹急结","小便自利","大便色黑"],
+        "source": "《辨证施治概论》第四节瘀血"
+      },
+      {
+        "id": "CHAR_04",
+        "formula": "瓜蒂散证",
+        "liujing": "阳明病",
+        "bagang": "痰食壅塞胸中",
+        "pulse_patterns": [
+          {"pattern": ["浮","大","涩"], "weight": 4, "note": "宿食在上脘：寸口脉浮大而按之反涩，尺中亦微而涩，大承气汤/瓜蒂散"},
+          {"pattern": ["紧"], "weight": 3, "note": "第201条引文：脉紧如转索无常者，有宿食也"}
+        ],
+        "symptom_triggers": ["胸中痞硬","气上冲咽喉","不得息","饮食停滞上脘"],
+        "source": "《辨证施治概论》第四节食毒"
+      }
+    ]
+  }
+]

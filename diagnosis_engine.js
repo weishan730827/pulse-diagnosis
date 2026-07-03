@@ -196,29 +196,107 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
   else if (d.leftChi.shape||d.rightChi.shape) steps.push('第四步·尺部虚里：尺脉有根 → 预后可治');
   else steps.push('第四步·尺部虚里：尺部未提供 → 建议补充以决预后');
 
-  // 第五步：方证锁定
+  // 第五步：数据驱动方证匹配（pulse_match_zxc_compact_v3.json，293条方证特征，源自772原始医案）
   var formulas=[], direction=formData.zx_direction||'';
-  if (direction==='sink'||qiDir==='sinking'||qiDir==='mixed') {
-    if (allText.indexOf('身冷')>=0||allText.indexOf('恶寒')>=0||allText.indexOf('心肺阳虚')>=0) formulas.push({name:'回阳升陷汤',score:10,herbs:'生黄芪、干姜、当归身、桂枝炭、甘草',note:'大气下陷兼心肺阳虚'});
-    if (allText.indexOf('胸中满痛')>=0||allText.indexOf('胁胀')>=0) formulas.push({name:'理郁升陷汤',score:10,herbs:'生黄芪、知母、当归身、桂枝尖、柴胡、乳香、没药',note:'大气下陷兼气分郁结'});
-    if (allText.indexOf('小便不禁')>=0||allText.indexOf('脾气虚')>=0) formulas.push({name:'醒脾升陷汤',score:10,herbs:'生黄芪、白术、桑寄生、川断、萸肉、龙骨、牡蛎',note:'大气下陷兼脾气虚极'});
-    if (formulas.length===0) formulas.push({name:'升陷汤',score:8,herbs:'生黄芪六钱、知母三钱、柴胡一钱五分、桔梗一钱五分、升麻一钱',note:'大气下陷标准方'});
-  }
-  if (direction==='up'||qiDir==='counterflow'||qiDir==='mixed') {
-    if (xuanMatched.indexOf('弦硬')>=0||rightStr.indexOf('弦硬')>=0) formulas.push({name:'参赭镇气汤',score:10,herbs:'野台参、生赭石、生芡实、生山药、萸肉、清半夏、茯苓',note:'冲气上冲+阴分亏虚'});
-    if (allText.indexOf('呕吐')>=0||allText.indexOf('胃气上逆')>=0||allText.indexOf('呃逆')>=0) formulas.push({name:'镇逆汤',score:8,herbs:'生赭石、清半夏、生姜、竹茹',note:'冲胃并逆'});
-    if (allText.indexOf('吐血')>=0||allText.indexOf('衄血')>=0||allText.indexOf('咳血')>=0) {
-      if (allText.indexOf('洪')>=0&&allText.indexOf('滑')>=0) formulas.push({name:'寒降汤',score:8,herbs:'生赭石、清半夏、瓜蒌仁、生杭芍、竹茹、牛蒡子、甘草',note:'吐衄+阳明实热'});
-      else formulas.push({name:'温降汤',score:7,herbs:'生赭石、清半夏、干姜、生怀山药、生姜',note:'吐衄+虚寒'});
+  var data = DataCache['zhangxichun'];
+
+  if (data && !data._error && !data._no_data && Array.isArray(data)) {
+    // 构建用户脉象搜索池：总按 + 力度 + 六部
+    var pulsePool = (zL + ' ' + (zLF||'') + ' ' + zR + ' ' + (zRF||''));
+    for (var pi2=0; pi2<6; pi2++) {
+      var ps2 = formData[posKeys[pi2]] || [];
+      var pf2 = formData[posForceKeys[pi2]] || '';
+      if (ps2.length) pulsePool += ' ' + ps2.join(',');
+      if (pf2) pulsePool += ' ' + pf2;
     }
-    if (formulas.length===0) formulas.push({name:'参赭镇气汤',score:6,herbs:'野台参、生赭石、生芡实、生山药、萸肉、清半夏、茯苓',note:'冲逆基础方'});
+
+    // 逐条匹配打分
+    for (var ei=0; ei<data.length; ei++) {
+      var entry = data[ei], feats = entry.feats;
+      if (!feats) continue;
+      var score = 0, reasons = [];
+
+      // 总体脉象
+      if (feats.总体) {
+        for (var fj=0; fj<feats.总体.length; fj++) {
+          if (pulsePool.indexOf(feats.总体[fj]) >= 0) { score += 3; reasons.push('脉:'+feats.总体[fj]); }
+        }
+      }
+      // 左脉
+      if (feats.左) {
+        for (var fj=0; fj<feats.左.length; fj++) {
+          if (zL.indexOf(feats.左[fj]) >= 0) { score += 4; reasons.push('左:'+feats.左[fj]); }
+        }
+      }
+      // 右脉
+      if (feats.右) {
+        for (var fj=0; fj<feats.右.length; fj++) {
+          if (zR.indexOf(feats.右[fj]) >= 0) { score += 4; reasons.push('右:'+feats.右[fj]); }
+        }
+      }
+      // 力度
+      if (feats.力度 && feats.力度 !== '') {
+        if (zLF===feats.力度 || zRF===feats.力度 || (zLF+' '+zRF).indexOf(feats.力度)>=0) {
+          score += 3; reasons.push('力度:'+feats.力度);
+        }
+      }
+      // 速率（含数字如 "数" "迟" "5" "6"）
+      if (feats.速率 && feats.速率 !== '') {
+        if (pulsePool.indexOf('数')>=0 && feats.速率==='数') { score += 3; reasons.push('速率:数'); }
+        else if (pulsePool.indexOf('迟')>=0 && feats.速率==='迟') { score += 3; reasons.push('速率:迟'); }
+        else if (pulsePool.indexOf(feats.速率)>=0) { score += 2; reasons.push('速率:'+feats.速率); }
+      }
+      // 医案数量加权（>5案加1分, >15案加2分）
+      if (entry.case_count >= 15) score += 2;
+      else if (entry.case_count >= 5) score += 1;
+
+      if (score > 0) {
+        formulas.push({
+          name: entry.formula,
+          score: score,
+          reasons: reasons,
+          case_count: entry.case_count || 0
+        });
+      }
+    }
+    formulas.sort(function(a,b){ return b.score - a.score; });
+
+    if (formulas.length > 0) {
+      var topN = Math.min(5, formulas.length);
+      steps.push('第五步·数据驱动方证匹配：共匹配'+formulas.length+'条方剂（源自772医案），Top '+topN+'：'
+        + formulas.slice(0,topN).map(function(f){ return f.name+'('+f.score+'分/'+f.case_count+'案)'; }).join(' > '));
+    }
   }
-  formulas.sort(function(a,b){return b.score-a.score;});
-  if (formulas.length>0) {
-    steps.push('第五步·方证锁定：'+formulas.slice(0,3).map(function(f){return f.name+'('+f.score+'分)';}).join(' > '));
-    var top=formulas[0];
-    result='推荐方剂：'+top.name; if(top.herbs) result+=' 组成：'+top.herbs; if(top.note) result+=' 依据：'+top.note;
-    herbs=top.herbs?top.herbs.split('、'):[];
+
+  // 回退层：数据不可用或匹配为空时，启用硬编码基础方剂（评分降低以区分）
+  if (formulas.length === 0) {
+    if (direction==='sink'||qiDir==='sinking'||qiDir==='mixed') {
+      if (allText.indexOf('身冷')>=0||allText.indexOf('恶寒')>=0||allText.indexOf('心肺阳虚')>=0) formulas.push({name:'回阳升陷汤',score:5,reasons:['关键词:心肺阳虚']});
+      if (allText.indexOf('胸中满痛')>=0||allText.indexOf('胁胀')>=0) formulas.push({name:'理郁升陷汤',score:5,reasons:['关键词:气分郁结']});
+      if (allText.indexOf('小便不禁')>=0||allText.indexOf('脾气虚')>=0) formulas.push({name:'醒脾升陷汤',score:5,reasons:['关键词:脾气虚极']});
+      if (formulas.length===0) formulas.push({name:'升陷汤',score:3,reasons:['大气下陷基础方']});
+    }
+    if (direction==='up'||qiDir==='counterflow'||qiDir==='mixed') {
+      if (xuanMatched&&xuanMatched.indexOf('弦硬')>=0||rightStr.indexOf('弦硬')>=0) formulas.push({name:'参赭镇气汤',score:5,reasons:['关键词:弦硬冲逆']});
+      if (allText.indexOf('呕吐')>=0||allText.indexOf('胃气上逆')>=0||allText.indexOf('呃逆')>=0) formulas.push({name:'镇逆汤',score:4,reasons:['关键词:冲胃并逆']});
+      if (allText.indexOf('吐血')>=0||allText.indexOf('衄血')>=0||allText.indexOf('咳血')>=0) {
+        if (allText.indexOf('洪')>=0&&allText.indexOf('滑')>=0) formulas.push({name:'寒降汤',score:4,reasons:['关键词:吐衄阳明实热']});
+        else formulas.push({name:'温降汤',score:3,reasons:['关键词:吐衄虚寒']});
+      }
+      if (formulas.filter(function(f){return f.score>=5;}).length===0) formulas.push({name:'参赭镇气汤',score:2,reasons:['冲逆基础方(回退)']});
+    }
+    formulas.sort(function(a,b){return b.score-a.score;});
+    if (formulas.length>0) {
+      steps.push('第五步·方证锁定(回退模式)：'+formulas.slice(0,3).map(function(f){return f.name+'('+f.score+'分)';}).join(' > '));
+    }
+  }
+
+  if (formulas.length > 0) {
+    var top = formulas[0];
+    result = '推荐方剂：'+top.name;
+    if (top.case_count) result += '（源自'+top.case_count+'则医案）';
+    if (top.reasons && top.reasons.length) result += ' 脉象依据：'+top.reasons.join('，');
+    herbs = [];
   }
   return {steps:steps, result:result, herbs:herbs, matchedCases:matchedCases, warn:warn||''};
 }

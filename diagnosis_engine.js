@@ -76,9 +76,9 @@ function getCunForceLevels(d) {
   return result;
 }
 
-// ========== 张锡纯 气机升降辨证（v8：三步漏斗 + 原著脉案匹配）==========
-// 数据文件：pulse_match_zxc_compact_v2.json（172方，从原著提取）
-// 辨证流程：Step1方向 → Step2方剂 → Step3脉诊确认
+// ========== 张锡纯 气机升降辨证（v9：数据驱动方证匹配，源自772原始医案）==========
+// 数据文件：pulse_match_zxc_compact_v3.json（293条方证特征）
+// 辨证流程：Step1气机 → Step2脉诊 → Step3左右 → Step4尺部 → Step5数据匹配
 function diagnoseZhangXichun(formData, symptoms, complaint) {
   // ===== 构建 text 描述 =====
   var textParts = [];

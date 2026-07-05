@@ -1104,6 +1104,7 @@ function diagnoseZhangZhongjing(formData, symptoms, complaint) {
 function diagnoseHuangYuanyu(formData) {
   var data = DataCache['huangyuanyu'];
   var g = formData.hy_guan || '', gf = formData.hy_guanF || '';
+  var left = formData.hy_left || '', right = formData.hy_right || '';
   var steps = [], result = '', herbs = [];
   
   if (!g) {
@@ -1114,8 +1115,9 @@ function diagnoseHuangYuanyu(formData) {
   
   steps.push('右关：' + g + (gf ? '/' + gf : ''));
   
-  // 加载compact数据
-  if (data && !data._no_data && !data._error) {
+  // 数据驱动：加载规则
+  var dataOk = data && !data._no_data && !data._error;
+  if (dataOk) {
     var ds = data.diagnosis_sequence;
     if (ds) {
       for (var i = 0; i < ds.length; i++) {
@@ -1123,23 +1125,60 @@ function diagnoseHuangYuanyu(formData) {
       }
     }
     steps.push('核心规则：' + (data.core_rules ? data.core_rules.length : 0) + '条，脉象对：' + (data.pulse_pairs ? data.pulse_pairs.length : 0) + '组');
+    
+    // 第一步：判中气 - 匹配右关规则
+    var step1Rules = (ds && ds[0] && ds[0].rules) ? ds[0].rules : null;
+    if (step1Rules) {
+      for (var ri = 0; ri < step1Rules.length; ri++) {
+        var rule = step1Rules[ri];
+        if (rule.pulse.indexOf(g) >= 0 || g.indexOf(rule.pulse.replace('右关','').replace('两关','')) >= 0) {
+          steps.push('→ ' + rule.pulse + '：' + rule.diagnosis);
+          if (!result) result = rule.diagnosis;
+          break;
+        }
+      }
+    }
+    
+    // 第二步：定升降 - 匹配脉象组合规则
+    var step2Rules = (ds && ds[1] && ds[1].rules) ? ds[1].rules : null;
+    if (step2Rules) {
+      var combinedPulse = g + ' ' + (gf||'') + ' ' + left + ' ' + right;
+      var best = null, bestCount = 0;
+      for (var ri = 0; ri < step2Rules.length; ri++) {
+        var r2 = step2Rules[ri];
+        var kws = r2.pulse.split('+');
+        var matched = 0;
+        for (var ki = 0; ki < kws.length; ki++) {
+          if (combinedPulse.indexOf(kws[ki].trim()) >= 0) matched++;
+        }
+        if (matched > bestCount) { bestCount = matched; best = r2; }
+      }
+      if (best && bestCount >= 1) {
+        steps.push('→ 脉对匹配(' + bestCount + '/' + (best.pulse.split('+').length) + '项)：' + best.pattern + (best.fang ? ' → ' + best.fang : ''));
+        result = best.pattern + (best.fang ? '。方剂：' + best.fang : '');
+        if (best.fang) herbs = best.fang.split('/');
+      }
+    }
   }
   
-  if (g === '弱' || g === '缓' || g === '濡') {
-    steps.push('右关弱/缓/濡 → 中气不足，脾土不运');
-    result = '黄芽汤/理中汤方向。黄元御：中气衰则升降窒，黄芽汤运中气。';
-    herbs = ['人参', '干姜', '甘草', '茯苓'];
-  } else if (g === '弦' || g === '硬') {
-    steps.push('右关弦/硬 → 木郁克土，肝木横逆犯脾');
-    result = '达郁汤合下气汤。黄元御：木郁则贼土，达郁汤疏木培土。';
-    herbs = ['桂枝', '鳖甲', '茯苓', '甘草', '白芍'];
-  } else if (g === '滑') {
-    steps.push('右关滑 → 中焦痰湿');
-    result = '姜苓半夏汤。湿阻中焦，化痰运脾。';
-    herbs = ['茯苓', '半夏', '生姜', '甘草'];
-  } else if (g === '浮') {
-    steps.push('右关浮 → 中气外越，脾不统血');
-    result = '需加固涩。黄元御：中气浮散为危象。';
+  // 回退层：无数据或无命中
+  if (!result) {
+    if (g === '弱' || g === '缓' || g === '濡') {
+      steps.push('右关弱/缓/濡 → 中气不足');
+      result = '黄芽汤/理中汤方向。黄元御：中气衰则升降窒。';
+      herbs = ['人参', '干姜', '甘草', '茯苓'];
+    } else if (g === '弦' || g === '硬') {
+      steps.push('右关弦/硬 → 木郁克土');
+      result = '达郁汤合下气汤方向。';
+      herbs = ['桂枝', '鳖甲', '茯苓', '甘草', '白芍'];
+    } else if (g === '滑') {
+      steps.push('右关滑 → 中焦痰湿');
+      result = '姜苓半夏汤方向。';
+      herbs = ['茯苓', '半夏', '生姜', '甘草'];
+    } else if (g === '浮') {
+      steps.push('右关浮 → 中气外越');
+      result = '需加固涩。黄元御：中气浮散为危象。';
+    }
   }
   
   return { steps: steps, result: result, herbs: herbs };
@@ -1162,8 +1201,10 @@ function diagnoseZhengQinan(formData) {
   
   steps.push('左尺：' + (lchi || '?') + ' | 右尺：' + (rchi || '?'));
   
-  // 加载compact数据
-  if (data && !data._no_data && !data._error) {
+  var dataOk = data && !data._no_data && !data._error;
+  var yangScore = 0, yinScore = 0;
+  
+  if (dataOk) {
     var ds = data.diagnosis_sequence;
     if (ds) {
       for (var i = 0; i < ds.length; i++) {
@@ -1172,19 +1213,69 @@ function diagnoseZhengQinan(formData) {
       }
     }
     steps.push('核心规则：' + (data.core_rules ? data.core_rules.length : 0) + '条');
+    
+    // 第三步：辨舌脉 - 匹配尺脉规则 (ds[2])
+    var pulseRules = (ds && ds[2] && ds[2].rules) ? ds[2].rules : null;
+    if (pulseRules) {
+      for (var ri = 0; ri < pulseRules.length; ri++) {
+        var pr = pulseRules[ri];
+        var chiStr = lchi + lchiF + rchi + rchiF;
+        var matchCount = 0;
+        for (var si = 0; si < pr.signs.length; si++) {
+          if (chiStr.indexOf(pr.signs[si]) >= 0) matchCount++;
+        }
+        if (matchCount > 0) {
+          if (pr.diagnosis === '阳虚') yangScore += matchCount * 3;
+          else if (pr.diagnosis === '阴虚') yinScore += matchCount * 3;
+          steps.push('脉象匹配：' + pr.diagnosis + '（命中' + matchCount + '项）');
+        }
+      }
+    }
+    
+    // 第二步：辨二便 (ds[1])
+    var stoolRules = (ds && ds[1] && ds[1].rules) ? ds[1].rules : null;
+    if (stoolRules && stool) {
+      for (var ri = 0; ri < stoolRules.length; ri++) {
+        var sr = stoolRules[ri];
+        for (var si = 0; si < sr.signs.length; si++) {
+          if (stool.indexOf(sr.signs[si]) >= 0) {
+            if (sr.diagnosis === '阳虚') yangScore += 2;
+            else if (sr.diagnosis === '阴虚') yinScore += 2;
+          }
+        }
+      }
+    }
+    
+    // 第四步：辨饮 (ds[3])
+    var thirstRules = (ds && ds[3] && ds[3].rules) ? ds[3].rules : null;
+    if (thirstRules && thirst) {
+      for (var ri = 0; ri < thirstRules.length; ri++) {
+        var tr = thirstRules[ri];
+        for (var si = 0; si < tr.signs.length; si++) {
+          if (thirst.indexOf(tr.signs[si]) >= 0) {
+            if (tr.diagnosis === '阳虚') yangScore += 2;
+            else if (tr.diagnosis === '阴虚') yinScore += 2;
+          }
+        }
+      }
+    }
+    
+    if (yangScore > 0 || yinScore > 0) {
+      steps.push('阴阳评分：阳虚=' + yangScore + ' | 阴虚=' + yinScore);
+    }
   }
   
+  // 综合判定
   var chiWeak = (lchi === '弱' || lchi === '微' || rchi === '弱' || rchi === '微' || 
                  lchiF === '无力' || lchiF === '按之即无' || rchiF === '无力' || rchiF === '按之即无');
   
-  if (chiWeak) {
-    steps.push('尺脉虚 → 真阳不足');
-    
+  if (yangScore > yinScore || (yangScore === 0 && yinScore === 0 && chiWeak)) {
+    // 阳虚方向
+    if (chiWeak) steps.push('尺脉虚 → 真阳不足');
     if (hot === '发热') {
       steps.push('发热+尺虚 → 假热真寒！');
-      warn = '虽有发热但尺脉虚，此为阴盛逼阳外越——郑氏核心鉴别点！'
+      warn = '虽有发热但尺脉虚，此为阴盛逼阳外越——郑氏核心鉴别点！';
     }
-    
     if (stool === '便溏') {
       steps.push('便溏+尺虚 → 脾肾阳虚');
       result = '四逆汤/附子理中汤。郑钦安：尺脉弱而便溏，四逆汤温肾暖脾。';
@@ -1194,15 +1285,21 @@ function diagnoseZhengQinan(formData) {
       result = '四逆汤证。郑钦安：不渴为无热之征，尺虚为阳衰之象。';
       herbs = ['附子', '干姜', '炙甘草'];
     } else {
-      result = '阳虚为本。四逆汤/附子理中汤。需结合三问进一步定方。';
+      result = '阳虚为本。四逆汤/附子理中汤方向。';
       herbs = ['附子', '干姜', '炙甘草'];
     }
+  } else if (yinScore > yangScore) {
+    steps.push('阴虚方向（数据驱动判定）');
+    result = '阴虚为本，建议滋阴降火方向。郑钦安：阴虚则阳亢。';
   } else {
-    steps.push('尺脉可 → 结合三问');
-    if (hot === '畏寒' && (thirst === '不渴' || stool === '便溏')) {
+    // 均衡，需综合分析
+    if (chiWeak) {
+      result = '阳虚倾向但数据均衡。四逆汤方向。';
+      herbs = ['附子', '干姜', '炙甘草'];
+    } else if (hot === '畏寒' && (thirst === '不渴' || stool === '便溏')) {
       result = '阳虚倾向，但尺脉未衰 → 理中汤/建中汤方向';
     } else if (hot === '发热' && stool === '便秘' && thirst === '渴喜冷饮') {
-      result = '阳证倾向 → 承气/白虎方向（非郑氏火神派主攻方向）';
+      result = '阳证倾向 → 承气/白虎方向';
     } else {
       result = '三问信息不完整，建议补充寒热、二便、渴饮以定阴阳';
     }
@@ -1224,24 +1321,63 @@ function diagnoseYaoMeiling(formData) {
   steps.push('六维：位=' + (wei || '?') + ' | 体=' + (ti || '?') + ' | 力=' + (li || '?') + ' | 率=' + (lv || '?') + ' | 律=' + (lu || '?') + ' | 形=' + (xing || '?'));
   steps.push('已采集 ' + dims + '/5 主维度');
   
-  // 加载compact数据
-  if (data && !data._no_data && !data._error) {
+  // 数据驱动：加载六维和关键脉诊定义
+  var dataOk = data && !data._no_data && !data._error;
+  if (dataOk) {
     if (data.six_dimensions) {
-      steps.push('六维体系：' + Object.keys(data.six_dimensions).map(function(k) { return data.six_dimensions[k].name; }).join(' / '));
+      var dimKeys = Object.keys(data.six_dimensions);
+      steps.push('六维体系：' + dimKeys.map(function(k) { return data.six_dimensions[k]['定义']; }).join(' / '));
     }
     if (data.key_pulse_diagnosis) {
       steps.push('独处藏奸：' + data.key_pulse_diagnosis.principle);
     }
+    
+    // 匹配用户输入的脉象类型到key_pulse_diagnosis
+    if (data.key_pulse_diagnosis) {
+      var allInput = [wei, ti, li, lv, lu, xing].join(' ');
+      var matchedPulses = [];
+      var pulseKeys = Object.keys(data.key_pulse_diagnosis);
+      for (var pk = 0; pk < pulseKeys.length; pk++) {
+        var pkey = pulseKeys[pk];
+        if (pkey === 'principle') continue;
+        if (allInput.indexOf(pkey) >= 0) {
+          var pulseInfo = data.key_pulse_diagnosis[pkey];
+          var meanings = pulseInfo['诊断意义'] || [];
+          matchedPulses.push({ key: pkey, meanings: meanings });
+          steps.push('→ 命中' + pkey + '脉：' + (meanings.length > 0 ? meanings[0] : ''));
+        }
+      }
+      
+      if (matchedPulses.length > 0) {
+        var allMeanings = [];
+        for (var mp = 0; mp < matchedPulses.length; mp++) {
+          allMeanings = allMeanings.concat(matchedPulses[mp].meanings.slice(0, 2));
+        }
+        result = '姚梅龄六维分析：' + matchedPulses.map(function(m){return m.key;}).join('、') + '脉。' + (allMeanings.length > 0 ? allMeanings.slice(0,3).join('；') : '');
+      } else {
+        result = '';
+      }
+    }
+    
+    // 独处藏奸判断：某维明显异常
+    if (!result && data.key_pulse_diagnosis) {
+      if (dims >= 3) {
+        result = '维度充分，请参考姚氏《临证脉学十六讲》深度辨证。';
+      }
+    }
   }
   
-  if (dims >= 4) {
-    steps.push('维度充分 → 姚氏六维分层分析启动');
-    if (lr) steps.push('左右差异：' + lr);
-    result = '姚梅龄六维分层分析。建议参考《临证脉学十六讲》进行深度辨证。';
-  } else if (dims >= 2) {
-    result = '部分维度可用，但需至少4个维度才能全面启动姚氏脉学分析。';
-  } else {
-    result = '请补充脉位、脉体、脉力、脉率、脉律中至少4项。';
+  // 回退层
+  if (!result) {
+    if (dims >= 4) {
+      steps.push('维度充分 → 姚氏六维分层分析启动');
+      if (lr) steps.push('左右差异：' + lr);
+      result = '姚梅龄六维分层分析。建议参考《临证脉学十六讲》。';
+    } else if (dims >= 2) {
+      result = '部分维度可用，但需至少4个维度才能全面启动姚氏脉学分析。';
+    } else {
+      result = '请补充脉位、脉体、脉力、脉率、脉律中至少4项。';
+    }
   }
   
   return { steps: steps, result: result, herbs: [] };
@@ -1255,8 +1391,9 @@ function diagnoseLiuDuzhou(symptoms, complaint) {
   
   steps.push('【症状驱动辨证】脉象辅助六经定位');
   
-  // 加载compact数据
-  if (data && !data._no_data && !data._error) {
+  var dataOk = data && !data._no_data && !data._error;
+  
+  if (dataOk) {
     var ds = data.diagnosis_sequence;
     if (ds && ds.length >= 2) {
       steps.push('六经提纲：' + ds[1].name + '已加载');
@@ -1266,42 +1403,87 @@ function diagnoseLiuDuzhou(symptoms, complaint) {
       steps.push('十论体系：' + shiNames.join('、'));
     }
     steps.push('核心规则：' + (data.core_rules ? data.core_rules.length : 0) + '条');
-  }
-  
-  if (all.indexOf('小便') >= 0 || all.indexOf('浮肿') >= 0 || all.indexOf('眩') >= 0 || all.indexOf('悸') >= 0) {
-    trig.push('水证论');
-  }
-  if (all.indexOf('胁') >= 0 || all.indexOf('口苦') >= 0 || all.indexOf('呕') >= 0 || (all.indexOf('痞') >= 0)) {
-    trig.push('气机论');
-  }
-  if (all.indexOf('食') >= 0 || all.indexOf('腹') >= 0 || all.indexOf('泄') >= 0 || all.indexOf('便') >= 0) {
-    trig.push('脾胃论');
-  }
-  if (all.indexOf('痰') >= 0 || all.indexOf('饮') >= 0 || all.indexOf('咳') >= 0) {
-    trig.push('痰饮论');
-  }
-  if (all.indexOf('热') >= 0 || all.indexOf('火') >= 0 || all.indexOf('烦') >= 0) {
-    trig.push('火证论');
-  }
-  if (all.indexOf('湿') >= 0 || all.indexOf('重') >= 0) {
-    trig.push('湿证论');
-  }
-  
-  if (trig.length > 0) {
-    steps.push('触发分论：' + trig.join('、'));
-    // 提取对应用药建议
-    if (data && data.shi_lun) {
-      for (var t = 0; t < trig.length; t++) {
-        var sl = data.shi_lun[trig[t].replace('证论','').replace('论','')];
-        if (sl) {
-          steps.push(trig[t] + '核心：' + (sl.core || '').substring(0, 60));
+    
+    // 读六经规则逐条匹配 (ds[1].rules)
+    var meridianRules = (ds && ds[1] && ds[1].rules) ? ds[1].rules : null;
+    if (meridianRules) {
+      var meridianMatches = [];
+      for (var ri = 0; ri < meridianRules.length; ri++) {
+        var mr = meridianRules[ri];
+        var mScore = 0;
+        var matchedSx = [];
+        if (mr.key_symptoms) {
+          var sxList = mr.key_symptoms.split('、');
+          for (var si = 0; si < sxList.length; si++) {
+            if (all.indexOf(sxList[si]) >= 0) { mScore++; matchedSx.push(sxList[si]); }
+          }
+        }
+        if (mScore > 0) {
+          meridianMatches.push({ meridian: mr.meridian, score: mScore, matched: matchedSx, fang: mr.key_fang });
+        }
+      }
+      if (meridianMatches.length > 0) {
+        meridianMatches.sort(function(a,b){return b.score-a.score;});
+        for (var mm = 0; mm < Math.min(3, meridianMatches.length); mm++) {
+          var m = meridianMatches[mm];
+          steps.push('六经匹配：' + m.meridian + '(' + m.score + '项：' + m.matched.join('/') + ')' + (m.fang ? ' → ' + m.fang : ''));
         }
       }
     }
-    result = '可进入对应分论深度辨证。刘渡舟十论体系详见 liu_duzhou_decision_tree.md';
+    
+    // 读十论触发
+    if (data.shi_lun) {
+      var shiKeys = Object.keys(data.shi_lun);
+      for (var sk = 0; sk < shiKeys.length; sk++) {
+        var skName = shiKeys[sk];
+        var shiData = data.shi_lun[skName];
+        // 用十论名中的关键词触发
+        var triggerKw = skName.replace('论','').replace('证','');
+        if (triggerKw && all.indexOf(triggerKw) >= 0) {
+          trig.push(skName);
+          steps.push('触发' + skName + '：' + (shiData.core || '').substring(0, 60));
+        }
+      }
+      // 备用触发：症状关键词
+      if (trig.length === 0) {
+        if (all.indexOf('小便') >= 0 || all.indexOf('浮肿') >= 0 || all.indexOf('眩') >= 0 || all.indexOf('悸') >= 0) trig.push('水证论');
+        if (all.indexOf('胁') >= 0 || all.indexOf('口苦') >= 0 || all.indexOf('呕') >= 0 || all.indexOf('痞') >= 0) trig.push('气机论');
+        if (all.indexOf('食') >= 0 || all.indexOf('腹') >= 0 || all.indexOf('泄') >= 0 || all.indexOf('便') >= 0) trig.push('脾胃论');
+        if (all.indexOf('痰') >= 0 || all.indexOf('饮') >= 0 || all.indexOf('咳') >= 0) trig.push('痰饮论');
+        if (all.indexOf('热') >= 0 || all.indexOf('火') >= 0 || all.indexOf('烦') >= 0) trig.push('火证论');
+        if (all.indexOf('湿') >= 0 || all.indexOf('重') >= 0) trig.push('湿证论');
+        for (var tk = 0; tk < trig.length; tk++) {
+          var tn = trig[tk];
+          if (data.shi_lun[tn]) {
+            steps.push('触发' + tn + '（关键词）：' + (data.shi_lun[tn].core || '').substring(0, 60));
+          }
+        }
+      }
+    }
+    
+    if (trig.length > 0) {
+      steps.push('触发分论：' + trig.join('、'));
+      result = '可进入对应分论深度辨证。刘渡舟十论体系。';
+    } else {
+      steps.push('十论分支未触发');
+      result = '需补充小便/浮肿/眩/胁/口苦/腹胀等关键词以触发十论分诊';
+    }
   } else {
-    steps.push('十论分支未触发');
-    result = '需补充小便/浮肿/眩/胁/口苦/腹胀等关键词以触发十论分诊';
+    // 回退层：十论无数据
+    if (all.indexOf('小便') >= 0 || all.indexOf('浮肿') >= 0 || all.indexOf('眩') >= 0 || all.indexOf('悸') >= 0) trig.push('水证论');
+    if (all.indexOf('胁') >= 0 || all.indexOf('口苦') >= 0 || all.indexOf('呕') >= 0 || all.indexOf('痞') >= 0) trig.push('气机论');
+    if (all.indexOf('食') >= 0 || all.indexOf('腹') >= 0 || all.indexOf('泄') >= 0 || all.indexOf('便') >= 0) trig.push('脾胃论');
+    if (all.indexOf('痰') >= 0 || all.indexOf('饮') >= 0 || all.indexOf('咳') >= 0) trig.push('痰饮论');
+    if (all.indexOf('热') >= 0 || all.indexOf('火') >= 0 || all.indexOf('烦') >= 0) trig.push('火证论');
+    if (all.indexOf('湿') >= 0 || all.indexOf('重') >= 0) trig.push('湿证论');
+    
+    if (trig.length > 0) {
+      steps.push('触发分论（回退模式）：' + trig.join('、'));
+      result = '可进入对应分论深度辨证。';
+    } else {
+      steps.push('十论分支未触发');
+      result = '需补充小便/浮肿/眩/胁/口苦/腹胀等关键词以触发十论分诊';
+    }
   }
   
   return { steps: steps, result: result, herbs: [] };

@@ -1310,7 +1310,7 @@ function diagnoseLiuDuzhou(symptoms, complaint) {
 // ========== 统一入口 ==========
 function diagnose(schoolId, formData, symptoms, complaint) {
   switch(schoolId) {
-    case 'zhangxichun': return diagnoseZhangXichun(formData);
+    case 'zhangxichun': return diagnoseZhangXichun(formData, symptoms, complaint);
     case 'chenjianguo': return diagnoseChenJianguo(formData);
     case 'huxishu': return diagnoseHuXishu(formData, symptoms, complaint);
     case 'caoyingfu': return diagnoseCaoYingfu(formData);

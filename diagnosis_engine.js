@@ -24,7 +24,8 @@ function loadData(schoolId) {
       'huangyuanyu': 'huang_yuanyu_compact.json',
       'zhengqinan': 'zheng_qinan_compact.json',
       'yaomeiling': 'yao_meiling_compact.json',
-      'liuduzhou': 'liu_duzhou_compact.json'
+      'liuduzhou': 'liu_duzhou_compact.json',
+      'zxc_skills': 'zxc_skills_v1.json'
     };
     
     var url = urls[schoolId];
@@ -298,7 +299,42 @@ function diagnoseZhangXichun(formData, symptoms, complaint) {
     if (top.reasons && top.reasons.length) result += ' 脉象依据：'+top.reasons.join('，');
     herbs = [];
   }
-  return {steps:steps, result:result, herbs:herbs, matchedCases:matchedCases, warn:warn||''};
+  // ===== Skill蒸馏匹配（基于首批9个Skill模块） =====
+  var matchedSkill = null, skillPrescription = '', skillIfThen = [];
+  var skills = DataCache['zxc_skills'];
+  if (skills && !skills._no_data && !skills._error && formulas.length > 0) {
+    var topName = formulas[0].name;
+    var allText = (symptoms||[]).join(',') + ' ' + (complaint||'');
+    
+    for (var si = 0; si < skills.length; si++) {
+      if (skills[si].formula === topName || topName.indexOf(skills[si].formula) >= 0) {
+        matchedSkill = skills[si];
+        break;
+      }
+    }
+    
+    if (matchedSkill) {
+      skillPrescription = matchedSkill.base;
+      for (var it = 0; it < matchedSkill.if_then.length; it++) {
+        var r = matchedSkill.if_then[it];
+        if (allText && r['if'] && allText.indexOf(r['if']) >= 0) {
+          skillPrescription = r['then'];
+          skillIfThen.push(r);
+        }
+      }
+      if (skillIfThen.length === 0) {
+        skillPrescription = matchedSkill.base;
+        skillIfThen.push({if:'无额外触发', then:'使用基础方'});
+      }
+      steps.push('🔧 Skill激活: ' + matchedSkill.formula + ' | ' + matchedSkill.group);
+      steps.push('   基础方: ' + matchedSkill.base);
+      steps.push('   辨证: ' + matchedSkill.core_logic);
+      steps.push('   加减触发: ' + skillIfThen.map(function(r2){return r2['if']+' → '+r2['then'];}).join('; '));
+      if (matchedSkill.note) steps.push('   ⚠ ' + matchedSkill.note);
+    }
+  }
+
+  return {steps:steps, result:result, herbs:herbs, matchedCases:matchedCases, warn:warn||'', matchedSkill:matchedSkill, skillPrescription:skillPrescription, skillIfThen:skillIfThen};
 }
 
 

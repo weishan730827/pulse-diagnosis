@@ -1527,6 +1527,7 @@ function diagnoseLiuDuzhou(symptoms, complaint) {
 
 // ========== 统一入口 ==========
 function diagnose(schoolId, formData, symptoms, complaint) {
+  if (schoolId === 'zhangxichun') loadData('zxc_skills'); // 预加载Skill
   switch(schoolId) {
     case 'zhangxichun': return diagnoseZhangXichun(formData, symptoms, complaint);
     case 'chenjianguo': return diagnoseChenJianguo(formData);

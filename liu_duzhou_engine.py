@@ -11,10 +11,39 @@ from typing import Dict, List, Optional, Tuple
 
 _OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _OUTPUT_DIR)
+sys.path.insert(0, os.path.join(_OUTPUT_DIR, ".."))
 from formula_utils import is_zhongjing
 
 
+def extract_formula_name(raw: str) -> str:
+    import re
+    raw = raw.strip()
+    raw = re.sub(r'[（(].*?[）)]', '', raw)
+    raw = re.sub(r'【.*?】', '', raw)
+    return raw.strip()
+
+
 class LiuDuZhouEngine:
+
+    def __init__(self):
+        import os, json
+        _output_dir = os.path.dirname(os.path.abspath(__file__))
+        skills_path = os.path.join(_output_dir, "ldz_skills_v1.json")
+        if os.path.exists(skills_path):
+            with open(skills_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self._skills = {}
+            for item in data:
+                if "_meta" in item:
+                    continue
+                core = extract_formula_name(item.get("formula", ""))
+                self._skills[core] = item
+        else:
+            self._skills = {}
+
+    def _match_skill(self, formula_name: str) -> dict:
+        core = extract_formula_name(formula_name)
+        return self._skills.get(core)
     """刘渡舟引擎：抓主证→方证锁定。全部经方。"""
 
     # 主证→方剂映射（伤寒论127方精选）
@@ -112,6 +141,15 @@ class LiuDuZhouEngine:
                     rationales.add(r)
                 for r in rationales:
                     lines.append(f"  → {fang}  ({r})")
+            top = result["ranked_formulas"][0][0]
+            skill = self._match_skill(top)
+            if skill:
+                lines.append(f"\n【Skill蒸馏 {skill['id']}】{skill.get('group','')}")
+                lines.append(f"  辨证逻辑: {skill['core_logic'][:150]}...")
+                lines.append(f"  基础方药: {skill['base']}")
+                if skill.get("if_then"):
+                    for rule in skill["if_then"][:3]:
+                        lines.append(f"    · {rule['if']} → {rule['then']}")
         return "\n".join(lines)
 
 

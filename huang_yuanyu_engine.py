@@ -13,7 +13,16 @@ from typing import Dict, List
 
 _OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _OUTPUT_DIR)
+sys.path.insert(0, os.path.join(_OUTPUT_DIR, ".."))
 from formula_utils import is_zhongjing, SELF_CREATED
+
+
+def extract_formula_name(raw: str) -> str:
+    import re
+    raw = raw.strip()
+    raw = re.sub(r'[（(].*?[）)]', '', raw)
+    raw = re.sub(r'【.*?】', '', raw)
+    return raw.strip()
 
 CHECKBOX_PATH = os.path.join(_OUTPUT_DIR, "黄元御一气周流辨证勾选表_v1.json")
 
@@ -88,6 +97,26 @@ class HuangYuanYuEngine:
             self.data = json.load(f)
         self._id_map: Dict[str, Dict] = {}
         self._build_maps()
+        self._skills = self._load_skills("hyy_skills_v1.json")
+
+    def _load_skills(self, filename: str) -> dict:
+        path = os.path.join(_OUTPUT_DIR, filename)
+        if not os.path.exists(path):
+            return {}
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        skill_map = {}
+        for item in data:
+            if "_meta" in item:
+                continue
+            formula_raw = item.get("formula", "")
+            core = extract_formula_name(formula_raw)
+            skill_map[core] = item
+        return skill_map
+
+    def _match_skill(self, formula_name: str) -> dict:
+        core = extract_formula_name(formula_name)
+        return self._skills.get(core)
 
     def _build_maps(self):
         for step_key in ["step1_中气轴心", "step2_四维升降", "step3_方药映射"]:
@@ -215,6 +244,12 @@ class HuangYuanYuEngine:
             for i, f in enumerate(result["formulas"]):
                 prefix = "★" if i == 0 else "  └"
                 lines.append(f"  {prefix} {f}")
+                if i == 0:
+                    skill = self._match_skill(f)
+                    if skill:
+                        lines.append(f"      【Skill蒸馏 {skill['id']}】{skill.get('group','')}")
+                        lines.append(f"        辨证: {skill['core_logic'][:100]}...")
+                        lines.append(f"        基础方: {skill['base']}")
         return "\n".join(lines)
 
 

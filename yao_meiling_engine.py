@@ -13,7 +13,16 @@ from itertools import combinations
 
 _OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _OUTPUT_DIR)
+sys.path.insert(0, os.path.join(_OUTPUT_DIR, ".."))
 from formula_utils import is_zhongjing
+
+
+def extract_formula_name(raw: str) -> str:
+    import re
+    raw = raw.strip()
+    raw = re.sub(r'[（(].*?[）)]', '', raw)
+    raw = re.sub(r'【.*?】', '', raw)
+    return raw.strip()
 
 CHECKBOX_PATH = os.path.join(_OUTPUT_DIR, "姚梅龄脉学辨证勾选表_v1.json")
 
@@ -75,6 +84,26 @@ class YaoMeiLingEngine:
     def __init__(self, checkbox_path: str = CHECKBOX_PATH):
         with open(checkbox_path, "r", encoding="utf-8") as f:
             self.data = json.load(f)
+        self._skills = self._load_skills("yml_skills_v1.json")
+
+    def _load_skills(self, filename: str) -> dict:
+        path = os.path.join(_OUTPUT_DIR, filename)
+        if not os.path.exists(path):
+            return {}
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        skill_map = {}
+        for item in data:
+            if "_meta" in item:
+                continue
+            formula_raw = item.get("formula", "")
+            core = extract_formula_name(formula_raw)
+            skill_map[core] = item
+        return skill_map
+
+    def _match_skill(self, formula_name: str) -> dict:
+        core = extract_formula_name(formula_name)
+        return self._skills.get(core)
 
     def diagnose(self, pulse_data: Dict[str, List[str]], aux_symptoms: Optional[List[str]] = None) -> Dict:
         all_pulses = []
@@ -190,6 +219,11 @@ class YaoMeiLingEngine:
             lines.append(f"\n【推荐方剂】")
             for f in result["formulas"]:
                 lines.append(f"  → {f}")
+                skill = self._match_skill(f)
+                if skill:
+                    lines.append(f"    【Skill蒸馏 {skill['id']}】{skill.get('group','')}")
+                    lines.append(f"      辨证: {skill['core_logic'][:100]}...")
+                    lines.append(f"      基础方: {skill['base']}")
         return "\n".join(lines)
 
 

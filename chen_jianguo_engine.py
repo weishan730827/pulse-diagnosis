@@ -15,6 +15,7 @@ sys.path.insert(0, _OUTPUT_DIR)
 from formula_utils import is_zhongjing
 
 CHECKBOX_PATH = os.path.join(_OUTPUT_DIR, "陈建国三部九候脉诊辨证勾选表_v1.json")
+SKILLS_PATH = os.path.join(_OUTPUT_DIR, "chen_jianguo_skills_v1.json")
 
 
 class ChenJianGuoEngine:
@@ -61,6 +62,27 @@ class ChenJianGuoEngine:
             self.data = json.load(f)
         self._sig_len_map = {fang: len(sig.split("+"))
                              for sig, fang in self.SIGNATURE_MAP.items()}
+        self._skills = self._load_skills()
+
+    def _load_skills(self) -> dict:
+        """加载Skill蒸馏库，建立方剂名→Skill索引"""
+        if not os.path.exists(SKILLS_PATH):
+            return {}
+        with open(SKILLS_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        skill_map = {}
+        for item in data:
+            if "_meta" in item:
+                continue
+            formula_raw = item.get("formula", "")
+            # 提取方剂核心名（去掉括号注释）
+            core_name = formula_raw.split("（")[0].split("(")[0].strip()
+            skill_map[core_name] = item
+        return skill_map
+
+    def _match_skill(self, formula_name: str) -> dict:
+        """按方剂名查表匹配Skill"""
+        return self._skills.get(formula_name)
 
     def diagnose(self, grid_values: Dict[str, str]) -> Dict:
         signature_parts = []
@@ -131,6 +153,19 @@ class ChenJianGuoEngine:
             lines.append(f"\n【左右对比】{result['bilateral']['summary']}")
             for f in result["bilateral"]["findings"]:
                 lines.append(f"  ⇄ {f}")
+        if result["matched_formulas"]:
+            top_fang = result["matched_formulas"][0][0]
+            skill = self._match_skill(top_fang)
+            if skill:
+                lines.append(f"\n【Skill蒸馏 {skill['id']}】{skill['group']}")
+                lines.append(f"  辨证逻辑: {skill['core_logic']}")
+                lines.append(f"  基础方药: {skill['base']}")
+                if skill.get("if_then"):
+                    lines.append("  加减法:")
+                    for rule in skill["if_then"]:
+                        lines.append(f"    · {rule['if']} → {rule['then']}")
+                if skill.get("note"):
+                    lines.append(f"  要点: {skill['note']}")
         return "\n".join(lines)
 
 

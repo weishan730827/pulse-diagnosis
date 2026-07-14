@@ -15,7 +15,16 @@ from typing import Dict, List, Tuple
 
 _OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _OUTPUT_DIR)
+sys.path.insert(0, os.path.join(_OUTPUT_DIR, ".."))
 from formula_utils import is_zhongjing, SELF_CREATED
+
+
+def extract_formula_name(raw: str) -> str:
+    import re
+    raw = raw.strip()
+    raw = re.sub(r'[（(].*?[）)]', '', raw)
+    raw = re.sub(r'【.*?】', '', raw)
+    return raw.strip()
 
 CHECKBOX_PATH = os.path.join(_OUTPUT_DIR, "郑钦安阴阳辨证勾选表_v1.json")
 
@@ -33,6 +42,26 @@ class ZhengQinAnEngine:
         self._extended_map: Dict[str, str] = {}
         self._yangxu_signals: List[str] = []
         self._build_maps()
+        self._skills = self._load_skills("zqa_skills_v1.json")
+
+    def _load_skills(self, filename: str) -> dict:
+        path = os.path.join(_OUTPUT_DIR, filename)
+        if not os.path.exists(path):
+            return {}
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        skill_map = {}
+        for item in data:
+            if "_meta" in item:
+                continue
+            formula_raw = item.get("formula", "")
+            core = extract_formula_name(formula_raw)
+            skill_map[core] = item
+        return skill_map
+
+    def _match_skill(self, formula_name: str) -> dict:
+        core = extract_formula_name(formula_name)
+        return self._skills.get(core)
 
     def _build_maps(self):
         for section in self.data["step1_核心三问"]["sections"]:
@@ -241,6 +270,16 @@ class ZhengQinAnEngine:
             lines.append(f"\n【推荐方剂】")
             for f in result["formulas"]:
                 lines.append(f"  → {f}")
+            if result["formulas"]:
+                top = result["formulas"][0]
+                skill = self._match_skill(top)
+                if skill:
+                    lines.append(f"\n【Skill蒸馏 {skill['id']}】{skill.get('group','')}")
+                    lines.append(f"  辨证逻辑: {skill['core_logic'][:150]}...")
+                    lines.append(f"  基础方药: {skill['base']}")
+                    if skill.get("if_then"):
+                        for rule in skill["if_then"][:3]:
+                            lines.append(f"    · {rule['if']} → {rule['then']}")
         return "\n".join(lines)
 
 

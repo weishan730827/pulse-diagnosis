@@ -1,1 +1,1093 @@
-WwogIHsKICAgICJfbWV0YSI6IHsKICAgICAgInZlcnNpb24iOiAiMS4wIiwKICAgICAgInRvdGFsIjogNywKICAgICAgImF1dGhvciI6ICLliJjmuKHoiJ8iCiAgICB9CiAgfSwKICB7CiAgICAiX21ldGEiOiB7CiAgICAgICJ2ZXJzaW9uIjogIjEuMCIsCiAgICAgICJ0b3RhbCI6IDYsCiAgICAgICJhdXRob3IiOiAi5YiY5rih6IifIgogICAgfQogIH0sCiAgewogICAgImlkIjogIlNLSUxMX0xEWl8wMDEiLAogICAgImdyb3VwIjogIuWSjOino+WwkemYsyIsCiAgICAiZm9ybXVsYSI6ICLlsI/mn7Tog6HmsaTvvIjliJjmsI/ljJboo4HvvIkiLAogICAgImNhc2VfY291bnQiOiA1LAogICAgInRyaWdnZXIiOiB7CiAgICAgICLkuLvnl4ciOiBbCiAgICAgICAgIuW+gOadpeWvkueDrSIsCiAgICAgICAgIuiDuOiDgeiLpua7oSIsCiAgICAgICAgIum7mOm7mOS4jeassumlrumjnyIsCiAgICAgICAgIuW/g+eDpuWWnOWRlSIsCiAgICAgICAgIuWPo+iLpuWSveW5siIsCiAgICAgICAgIuebruecqSIKICAgICAgXSwKICAgICAgIuiEieixoV/mgLvkvZMiOiBbCiAgICAgICAgIuW8piIsCiAgICAgICAgIuW8pue7hiIsCiAgICAgICAgIuW8puaVsCIKICAgICAgXSwKICAgICAgIuWKm+mBkyI6ICLmnInlipsiLAogICAgICAi6YCf546HIjogIuaVsCIKICAgIH0sCiAgICAiY29yZV9sb2dpYyI6ICLliJjmuKHoiJ/vvJrlsJHpmLPmnqLmnLrkuI3liKnigJTigJQn5L2G6KeB5LiA6K+B5L6/5piv77yM5LiN5b+F5oKJ5YW3J+OAguaftOiDoeino+WwkemYs+S5i+mDgeS4uuWQm++8m+m7hOiKqea4heiDhuiFkeS5i+eDreS4uuiHo++8m+WNiuWkjy/nlJ/lp5zlkozog4PpmY3pgIbvvJvkurrlj4Iv55SY6I2JL+Wkp+aeo+aJtuato+S7peWKqempsemCquOAguWImOawj+W8uuiwg+Wwj+aftOiDoeaxpOeahOeyvumrk+WcqOS6jiflkown5rOV4oCU4oCU5ZKM6Kej6KGo6YeM44CB6LCD5ZKM5a+S54Ot44CB6LCD5ZKM6IKd6IS+44CCIiwKICAgICJiYXNlIjogIuaftOiDoTEyZyDpu4ToiqkxMGcg5Y2K5aSPMTBnIOS6uuWPgjEwZyDnlJ/lp5wxMGcg5aSn5p6jNeaemiDnlJjojYk2ZyIsCiAgICAiaWZfdGhlbiI6IFsKICAgICAgewogICAgICAgICJpZiI6ICLlj6PmuLTvvIjmtKXkvKTvvIkiLAogICAgICAgICJ0aGVuIjogIuWOu+WNiuWkj+WKoOWkqeiKseeyiTEyZ+eUn+a0peatoua4tCIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLohbnnl5vvvIjmnKjlhYvlnJ/vvIkiLAogICAgICAgICJ0aGVuIjogIuWOu+m7hOiKqeWKoOeZveiKjTEyZ+aflOiCneatoueXmyIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLog4HkuIvnl57noawiLAogICAgICAgICJ0aGVuIjogIuWOu+Wkp+aeo+WKoOeJoeibjjIwZ+i9r+WdmuaVo+e7kyIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlv4PmgrjvvIjmsLTmsJTlh4zlv4PvvIkiLAogICAgICAgICJ0aGVuIjogIuWOu+m7hOiKqeWKoOiMr+iLkzE1Z+WIqeawtOWugeW/gyIKICAgICAgfQogICAgXSwKICAgICJub3RlIjogIuWImOa4oeiIn+WvueWwj+aftOiDoeaxpOWKoOWHj+azleeglOeptuaegea3seKAlOKAlOatpOaWueWFseacieS4g+enjeWKoOWHj+azle+8jOavj+enjeWdh+WvueW6lOS4gOS4quaguOW/g+eXheacuui9rOWMluOAgifmn7Tog6Hor4Hku43lnKgn5piv5Yqg5YeP55qE5bqV57q/4oCU4oCU5Y+q6KaB5b6A5p2l5a+S54Ot5a2Y77yM5Y2z5Y+v5a6I5L2P5p+06IOh44CCIgogIH0sCiAgewogICAgImlkIjogIlNLSUxMX0xEWl8wMDIiLAogICAgImdyb3VwIjogIuWMluawlOihjOawtCIsCiAgICAiZm9ybXVsYSI6ICLkupToi5PmlaPvvIjliJjmsI/ljJboo4HvvIkiLAogICAgImNhc2VfY291bnQiOiA0LAogICAgInRyaWdnZXIiOiB7CiAgICAgICLkuLvnl4ciOiBbCiAgICAgICAgIuWwj+S+v+S4jeWIqSIsCiAgICAgICAgIuWPo+a4tOassumlriIsCiAgICAgICAgIumlruawtOWNs+WQkCIsCiAgICAgICAgIuawtOiCvyIsCiAgICAgICAgIuiEkOS4i+aCuOWKqCIsCiAgICAgICAgIuiIjOiLlOeZvea7kSIKICAgICAgXSwKICAgICAgIuiEieixoV/mgLvkvZMiOiBbCiAgICAgICAgIua1riIsCiAgICAgICAgIua1ruaVsCIsCiAgICAgICAgIua1rua7kSIKICAgICAgXSwKICAgICAgIuWKm+mBkyI6ICLmnInlipsiLAogICAgICAi6YCf546HIjogIuaVsCIKICAgIH0sCiAgICAiY29yZV9sb2dpYyI6ICLliJjmuKHoiJ/vvJrohoDog7HmsJTljJbkuI3liKnigJTigJQn5aSq6Ziz6JOE5rC06K+BJ++8jOihqOmCquWFpemHjOS4juawtOe7k+S6juiGgOiDseOAguahguaenemAmumYs+WMluawlOS4uuWQm++8m+eMquiLky/ojK/oi5Mv5rO95rO75Yip5rC05riX5rm/77yb55m95pyv5YGl6IS+5Yi25rC044CC5YiY5rCP54m55Yir5by66LCD5qGC5p6d5Zyo5LqU6IuT5pWj5Lit55qE5qC45b+D5Zyw5L2N77yaJ+aXoOahguaeneWImeS4jeaIkOS6lOiLkyfjgIIiLAogICAgImJhc2UiOiAi5qGC5p6dMTBnIOiMr+iLkzE1ZyDnjKroi5MxMGcg5rO95rO7MTVnIOeZveacrzEyZyIsCiAgICAiaWZfdGhlbiI6IFsKICAgICAgewogICAgICAgICJpZiI6ICLmsLTpgIbvvIjppa7msLTljbPlkJDvvIkiLAogICAgICAgICJ0aGVuIjogIuWKoOWNiuWkjzEwZ+OAgeeUn+WnnDE1Z+mZjemAhuatouWRlSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLmsLTogr/mmI7mmL4iLAogICAgICAgICJ0aGVuIjogIuWKoOi9puWJjeWtkDE1Z++8iOWMheeFju+8ieOAgeWGrOeTnOearjIwZ+WIqeawtCIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlj6PmuLTnlJoiLAogICAgICAgICJ0aGVuIjogIuWKoOWkqeiKseeyiTEyZ+eUn+a0pSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlsI/kvr/ng63nl5vvvIjlhbzng63vvIkiLAogICAgICAgICJ0aGVuIjogIuWKoOa7keefszE1Z+OAgeeZveiMheaguTIwZ+a4heeDreWIqeWwvyIKICAgICAgfQogICAgXSwKICAgICJub3RlIjogIuWImOa4oeiIn+iuuuS6lOiLk+aVo+S5i+a4tO+8mifmsLTok4TohoDog7HjgIHmtKXkuI3kuIrmib/igJTigJTkuI3mmK/nvLrmsLTvvIzogIzmmK/msLTooqvloLXkvY/kuobkuIrkuI3ljrvjgILliKnmsLTljbPmiYDku6XmraLmuLTvvIzmraTmsrvmuLTkuYvlj5jms5XkuZ/jgIIn5LiO55m96JmO5rGk5LmL5ri06Ym05Yir77ya55m96JmO5ri06ICM54Om6LqB5aSn54Ot77yM5LqU6IuT5ri06ICM5bCP5L6/5LiN5Yip44CCIgogIH0sCiAgewogICAgImlkIjogIlNLSUxMX0xEWl8wMDMiLAogICAgImdyb3VwIjogIuWvkueDremUmeadgiIsCiAgICAiZm9ybXVsYSI6ICLljYrlpI/ms7vlv4PmsaTvvIjliJjmsI/ljJboo4HvvIkiLAogICAgImNhc2VfY291bnQiOiA0LAogICAgInRyaWdnZXIiOiB7CiAgICAgICLkuLvnl4ciOiBbCiAgICAgICAgIuW/g+S4i+eXnua7oSIsCiAgICAgICAgIuWRleWQkCIsCiAgICAgICAgIuiCoOm4o+S4i+WIqSIsCiAgICAgICAgIuiDg+WPo+S4jeS9syIsCiAgICAgICAgIuS4iueDreS4i+WvkiIKICAgICAgXSwKICAgICAgIuiEieixoV/mgLvkvZMiOiBbCiAgICAgICAgIuW8puaVsCIsCiAgICAgICAgIua7keaVsCIsCiAgICAgICAgIua/oeaVsCIKICAgICAgXSwKICAgICAgIuWKm+mBkyI6ICLmnInlipsiLAogICAgICAi6YCf546HIjogIuaVsCIKICAgIH0sCiAgICAiY29yZV9sb2dpYyI6ICLliJjmuKHoiJ/vvJrkuK3nhKblr5Lng63plJnmnYLkuYvnl57igJTigJTpu4Tov54v6buE6Iqp5riF5LiK54Sm5LmL54Ot5Li65ZCb77yb5bmy5aec5rip5Lit54Sm5LmL5a+S77yb5Y2K5aSP6ZmN6YCG5q2i5ZGV77yb5Lq65Y+CL+eUmOiNiS/lpKfmnqPooaXkuK3jgILlhajmlrnovpvlvIDoi6bpmY3nlJjooaXkuInms5XlubbnlKjvvIznnIvkvLznn5vnm77lrp7liJnnsr7lppnigJTigJQn5Lul6L6b5byA5LmL44CB5Lul6Ium5rOE5LmL44CB5Lul55SY6KGl5LmLJ+OAgiIsCiAgICAiYmFzZSI6ICLljYrlpI8xMmcg6buE6L+eNmcg6buE6IqpMTBnIOW5suWnnDEwZyDkurrlj4IxMGcg55SY6I2JNmcg5aSn5p6jNeaemiIsCiAgICAiaWZfdGhlbiI6IFsKICAgICAgewogICAgICAgICJpZiI6ICLohbnog4Dmu6HmmI7mmL4iLAogICAgICAgICJ0aGVuIjogIuWKoOaes+WunjEwZ+OAgeWOmuactDEwZ+ihjOawlOa2iOeXniIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLkuIvliKnkuI3mraIiLAogICAgICAgICJ0aGVuIjogIuWKoOeZveacrzE1Z+OAgeiMr+iLkzE1Z+WBpeiEvuatouazuyIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlkZXlkJDpopHnuYEiLAogICAgICAgICJ0aGVuIjogIuWNiuWkj+WKoOiHszE1Z++8jOWKoOeUn+WnnOaxgTEwbWzlhZHmnI0iCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWYiOiAi5a+S6YeN54Ot6L2777yI5LiL5Yip5riF56iA77yJIiwKICAgICAgICAidGhlbiI6ICLpu4Tov57lh4/oh7MzZ++8jOWKoOWQtOiMseiQuDNn5rip5LitIgogICAgICB9CiAgICBdLAogICAgIm5vdGUiOiAi5YiY5rih6Iif5a+55Y2K5aSP5rO75b+D5rGk55qE6L+Q55So6K+A56qN77ya6buE6L+e5LiO5bmy5aec55qE6YWN5q+U5piv5qC45b+D4oCU4oCU6buE6L+ePuW5suWnnOWImeWBj+a4heeDre+8jOW5suWnnD7pu4Tov57liJnlgY/muKnkuK3jgILlhbjlnovmr5TkvosyOjPvvIzmoLnmja7oiIzosaHosIPoioLvvJroiIzoi5Tpu4Tljprlop7pu4Tov57vvIzoiIzoi5Tnmb3mu5Hlop7lubLlp5zjgIIiCiAgfSwKICB7CiAgICAiaWQiOiAiU0tJTExfTERaXzAwNCIsCiAgICAiZ3JvdXAiOiAi5riF5a6j6YOB54OtIiwKICAgICJmb3JtdWxhIjogIuaggOWtkOixieaxpO+8iOWImOawj+WMluijge+8iSIsCiAgICAiY2FzZV9jb3VudCI6IDMsCiAgICAidHJpZ2dlciI6IHsKICAgICAgIuS4u+eXhyI6IFsKICAgICAgICAi5b+D5Lit5oeK5oa5IiwKICAgICAgICAi6Jma54Om5LiN5b6X55ygIiwKICAgICAgICAi6IO45Lit56qS6Ze3IiwKICAgICAgICAi5Y+N6KaG6aKg5YCSIiwKICAgICAgICAi6IiM57qi6IuU5b6u6buEIgogICAgICBdLAogICAgICAi6ISJ6LGhX+aAu+S9kyI6IFsKICAgICAgICAi5pWwIiwKICAgICAgICAi5rWu5pWwIiwKICAgICAgICAi5ruR5pWwIgogICAgICBdLAogICAgICAi5Yqb6YGTIjogIuacieWKmyIsCiAgICAgICLpgJ/njociOiAi5pWwIgogICAgfSwKICAgICJjb3JlX2xvZ2ljIjogIuWImOa4oeiIn++8mueDremDgeiDuOiGiOKAlOKAlCfngavpg4Hlj5HkuYsn44CC5qCA5a2Q5riF5LiJ54Sm6YOB54Ot5Li65ZCb77yb6LGG6LGJ6L275riF5a6j6YCP77yM5L2/6YOB54Ot5LuO6KGo6ICM5pWj5Li66Iej44CC5LqM5ZGz5Z2H6L275riF54G15Yqo77yM5pei5LiN6Ium5a+S5Lyk6IOD77yM5Y+I5LiN5Y+R5pWj6ICX5rCU44CC5YiY5rCP5Yqg6L+e57+Y5aKe5by66YCP54Ot5LmL5Yqb44CCIiwKICAgICJiYXNlIjogIuaggOWtkDEwZyDmt6HosYbosYkxMmcg6L+e57+YMTBnIiwKICAgICJpZl90aGVuIjogWwogICAgICB7CiAgICAgICAgImlmIjogIuiZmueDpuS4jeecoOeUmiIsCiAgICAgICAgInRoZW4iOiAi5Yqg6YW45p6j5LuBMTVn44CB55+l5q+NMTBn5riF54Ot5a6J56WeIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIuWFvOacieWRleWQkCIsCiAgICAgICAgInRoZW4iOiAi5Yqg5Y2K5aSPMTBn44CB56u56Iy5MTBn5riF6IOD6ZmN6YCGIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIuiDuOmXt+awlOefrSIsCiAgICAgICAgInRoZW4iOiAi5Yqg5p6z5aOzMTBn44CB6YOB6YeRMTBn55CG5rCU6Kej6YOBIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIueDreeUmuS8pOmYtO+8iOWPo+W5su+8iSIsCiAgICAgICAgInRoZW4iOiAi5Yqg6bqm5YasMTJn44CB5rKZ5Y+CMTVn5YW76Zi05riF54OtIgogICAgICB9CiAgICBdLAogICAgIm5vdGUiOiAi5YiY5rih6Iif5by66LCD5qCA5a2Q6LGJ5rGk6K+B5LiO5om/5rCU6K+B6Ym05Yir77yaJ+aJv+awlOivgeKAlOKAlOiFueeXm+aLkuaMie+8m+aggOWtkOixieivgeKAlOKAlOiDuOS4reeqkumXt+OAguS4gOS4quWcqOiFuemDqO+8jOS4gOS4quWcqOiDuOmDqOOAguiEieixoeS4iu+8muaJv+awlOayieWunuacieWKm++8jOaggOWtkOixiea1ruaVsOOAgiciCiAgfSwKICB7CiAgICAiaWQiOiAiU0tJTExfTERaXzAwNSIsCiAgICAiZ3JvdXAiOiAi5rip6Ziz5Yip5rC0IiwKICAgICJmb3JtdWxhIjogIuiLk+ahguacr+eUmOaxpO+8iOWImOawj+WMluijge+8iSIsCiAgICAiY2FzZV9jb3VudCI6IDQsCiAgICAidHJpZ2dlciI6IHsKICAgICAgIuS4u+eXhyI6IFsKICAgICAgICAi5b+D5LiL6YCG5ruhIiwKICAgICAgICAi5rCU5LiK5Yay6IO4IiwKICAgICAgICAi6LW35YiZ5aS055ypIiwKICAgICAgICAi5b+D5oK455+t5rCUIiwKICAgICAgICAi6IOM5a+S5aaC5o6M5aSnIiwKICAgICAgICAi6IiM5reh6IuU55m95ruRIgogICAgICBdLAogICAgICAi6ISJ6LGhX+aAu+S9kyI6IFsKICAgICAgICAi5bymIiwKICAgICAgICAi5rKJ5bymIiwKICAgICAgICAi5bym57SnIgogICAgICBdLAogICAgICAi5Yqb6YGTIjogIuacieWKmyIsCiAgICAgICLpgJ/njociOiAi57yTIgogICAgfSwKICAgICJjb3JlX2xvZ2ljIjogIuWImOa4oeiIn++8muawtOawlOS4iuWGsuKAlOKAlOS4reeEpumYs+iZmu+8jOawtOmlruWGheWBnO+8jOS4iuWHjOS6juW/g+OAguiMr+iLk+a3oea4l+WIqeawtOS4uuWQm++8m+ahguaenemAmumYs+WMluawlOmZjeWGsumAhuS4uuiHo++8m+eZveacr+WBpeiEvuWItuawtO+8m+eUmOiNieihpeS4reOAguWFqOaWuemHjeWcqCfmuKnoja/lkozkuYsn4oCU4oCU5rip6ICM5LiN54el77yM5Yip6ICM5LiN5bO744CCIiwKICAgICJiYXNlIjogIuiMr+iLkzIwZyDmoYLmnp0xMmcg55m95pyvMTJnIOeUmOiNiTZnIiwKICAgICJpZl90aGVuIjogWwogICAgICB7CiAgICAgICAgImlmIjogIuecqeaZleeUmu+8iOe+juWwvOWwlOawj++8iSIsCiAgICAgICAgInRoZW4iOiAi5Yqg5rO95rO7MjVn44CB5Y2K5aSPMTBn77yI5rO95rO75rGk5ZCI5pa577yJ5Yip5rC05a6a55ypIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIuW/g+aCuOaAlOW/oSIsCiAgICAgICAgInRoZW4iOiAi5Yqg6b6Z6aqoMjBn44CB54mh6JuOMjBn6YeN6ZWH5a6J56WeIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIumdouebrua1ruiCvyIsCiAgICAgICAgInRoZW4iOiAi5Yqg6L2m5YmN5a2QMTVn77yI5YyF54WO77yJ44CB55Sf5aec55quMTBn5Yip5rC05raI6IK/IgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIuiDjOWvkuWmguaOjOWkpyIsCiAgICAgICAgInRoZW4iOiAi5Yqg6ZmE5a2QNmflhYjnhY7muKnpmLPmlaPlr5IiCiAgICAgIH0KICAgIF0sCiAgICAibm90ZSI6ICLliJjmuKHoiJ/orrroi5PmoYLliYLns7vliJfvvJroi5PmoYLmnK/nlJjmsaTvvIjkuK3nhKbmsLTppa7vvInihpIg6IuT5qGC5p6j55SY5rGk77yI5LiL54Sm5rC06aWu5qyy5L2c5aWU6LGa77yJ4oaSIOiLk+ahguWnnOeUmOaxpO+8iOiDg+S4reWBnOawtO+8ieOAguaguOW/g+mJtOWIq+WcqCfmgrgn55qE5L2N572u77ya5b+D5LiL5oK44oaS6IuT5qGC5pyv55SY77yb6ISQ5LiL5oK44oaS6IuT5qGC5p6j55SY44CCIgogIH0sCiAgewogICAgImlkIjogIlNLSUxMX0xEWl8wMDYiLAogICAgImdyb3VwIjogIua7i+mYtOWIqeawtCIsCiAgICAiZm9ybXVsYSI6ICLnjKroi5PmsaTvvIjliJjmsI/ljJboo4HvvIkiLAogICAgImNhc2VfY291bnQiOiAzLAogICAgInRyaWdnZXIiOiB7CiAgICAgICLkuLvnl4ciOiBbCiAgICAgICAgIuWwj+S+v+S4jeWIqSIsCiAgICAgICAgIua4tOassumlruawtCIsCiAgICAgICAgIuW/g+eDpuS4jeecoCIsCiAgICAgICAgIuWwv+ihgOaIluWwv+eXmyIsCiAgICAgICAgIuiIjOe6ouWwkeiLlCIKICAgICAgXSwKICAgICAgIuiEieixoV/mgLvkvZMiOiBbCiAgICAgICAgIue7huaVsCIsCiAgICAgICAgIua1ruaVsCIsCiAgICAgICAgIuW8pue7huaVsCIKICAgICAgXSwKICAgICAgIuWKm+mBkyI6ICLml6DlipsiLAogICAgICAi6YCf546HIjogIuaVsCIKICAgIH0sCiAgICAiY29yZV9sb2dpYyI6ICLliJjmuKHoiJ/vvJrpmLTomZrmsLTng63kupLnu5PigJTigJQn6Zi05Lyk5LiO5rC05YGc5bm25a2YJ+OAgueMquiLky/ojK/oi5Mv5rO95rO75Yip5rC05Li65ZCb77yb6Zi/6IO25ruL6Zi05YW76KGA5Li66Iej77yb5ruR55+z5riF54Ot5Yip56qN44CC5LiO5LqU6IuT5pWj55qE5Yy65Yir77ya5LqU6IuT5rK76Ziz6Jma5rC05YGc77yI5qGC5p6d5rip6Ziz77yJ77yM54yq6IuT5rK76Zi06Jma5rC054Ot77yI6Zi/6IO25ruL6Zi077yJ44CCIiwKICAgICJiYXNlIjogIueMquiLkzEyZyDojK/oi5MxNWcg5rO95rO7MTJnIOmYv+iDtjEwZ++8iOeDiuWMlu+8iSDmu5Hnn7MxNWciLAogICAgImlmX3RoZW4iOiBbCiAgICAgIHsKICAgICAgICAiaWYiOiAi5bC/6KGA5piO5pi+IiwKICAgICAgICAidGhlbiI6ICLliqDlsI/ok58xNWfjgIHnmb3ojIXmoLkzMGflh4nooYDmraLooYAiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWYiOiAi5b+D54Om5LiN55yg55SaIiwKICAgICAgICAidGhlbiI6ICLliqDmoIDlrZAxMGfjgIHphbjmnqPku4ExNWfmuIXng63lronnpZ4iCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWYiOiAi5bCP5L6/5rap55ebIiwKICAgICAgICAidGhlbiI6ICLliqDovabliY3ojYkxNWfjgIHph5HpkrHojYkyMGfpgJrmt4vmraLnl5siCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWYiOiAi6Zi06Jma55Sa77yI6IiM5YWJ5peg6IuU77yJIiwKICAgICAgICAidGhlbiI6ICLliqDnlJ/lnLAxNWfjgIHpuqblhqwxMmflhbvpmLQiCiAgICAgIH0KICAgIF0sCiAgICAibm90ZSI6ICLliJjmuKHoiJ/njKroi5PmsaTkuI7kupToi5PmlaPnmoTlr7nmr5TigJTigJQn5LqU6IuT5pWj77ya6ISJ5rWu44CB6IuU55m95ruR44CB5ri06ICM5bCP5L6/5LiN5Yip77yI6Ziz6Jma5rC05YGc77yJ77yb54yq6IuT5rGk77ya6ISJ5rWu57uG5pWw44CB6IiM57qi5bCR6IuU44CB5b+D54Om5LiN55yg77yI6Zi06Jma5rC054Ot77yJ44CCJ+S4gOeUqOahguaene+8jOS4gOeUqOmYv+iDtu+8jOaIqueEtuS4jeWQjOOAgiIKICB9Cl0=
+[
+  {
+    "_meta": {
+      "version": "2.0",
+      "total": 25,
+      "author": "刘渡舟"
+    }
+  },
+  {
+    "id": "SKILL_LDZ_001",
+    "group": "和解少阳",
+    "formula": "小柴胡汤（刘氏化裁）",
+    "case_count": 5,
+    "trigger": {
+      "主症": [
+        "往来寒热",
+        "胸胁苦满",
+        "默默不欲饮食",
+        "心烦喜呕",
+        "口苦咽干",
+        "目眩"
+      ],
+      "脉象_总体": [
+        "弦",
+        "弦细",
+        "弦数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：少阳枢机不利——'但见一证便是，不必悉具'。柴胡解少阳之郁为君；黄芩清胆腑之热为臣；半夏/生姜和胃降逆；人参/甘草/大枣扶正以助驱邪。刘氏强调小柴胡汤的精髓在于'和'法——和解表里、调和寒热、调和肝脾。",
+    "base": "柴胡12g 黄芩10g 半夏10g 人参10g 生姜10g 大枣5枚 甘草6g",
+    "if_then": [
+      {
+        "if": "口渴（津伤）",
+        "then": "去半夏加天花粉12g生津止渴"
+      },
+      {
+        "if": "腹痛（木克土）",
+        "then": "去黄芩加白芍12g柔肝止痛"
+      },
+      {
+        "if": "胁下痞硬",
+        "then": "去大枣加牡蛎20g软坚散结"
+      },
+      {
+        "if": "心悸（水气凌心）",
+        "then": "去黄芩加茯苓15g利水宁心"
+      }
+    ],
+    "note": "刘渡舟对小柴胡汤加减法研究极深——此方共有七种加减法。'柴胡证仍在'是加减底线——只要往来寒热存，即可守住柴胡。"
+  },
+  {
+    "id": "SKILL_LDZ_002",
+    "group": "化气行水",
+    "formula": "五苓散（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "小便不利",
+        "口渴欲饮",
+        "饮水即吐",
+        "水肿",
+        "脐下悸动",
+        "舌苔白滑"
+      ],
+      "脉象_总体": [
+        "浮",
+        "浮数",
+        "浮滑"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：膀胱气化不利——'太阳蓄水证'。桂枝通阳化气为君；猪苓/茯苓/泽泻利水渗湿；白术健脾制水。刘氏特别强调桂枝在五苓散中的核心地位：'无桂枝则不成五苓'。",
+    "base": "桂枝10g 茯苓15g 猪苓10g 泽泻15g 白术12g",
+    "if_then": [
+      {
+        "if": "水逆（饮水即吐）",
+        "then": "加半夏10g、生姜15g降逆止呕"
+      },
+      {
+        "if": "水肿明显",
+        "then": "加车前子15g（包煎）、冬瓜皮20g利水"
+      },
+      {
+        "if": "口渴甚",
+        "then": "加天花粉12g生津"
+      },
+      {
+        "if": "小便热痛（兼热）",
+        "then": "加滑石15g、白茅根20g清热利尿"
+      }
+    ],
+    "note": "刘渡舟论五苓散之渴：'水蓄膀胱、津不上承——不是缺水，而是水被堵住了上不去。利水即所以止渴，此治渴之变法也。'"
+  },
+  {
+    "id": "SKILL_LDZ_003",
+    "group": "寒热错杂",
+    "formula": "半夏泻心汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "心下痞满",
+        "呕吐",
+        "肠鸣下利",
+        "胃口不佳",
+        "上热下寒"
+      ],
+      "脉象_总体": [
+        "弦数",
+        "滑数",
+        "濡数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：中焦寒热错杂之痞——黄连/黄芩清上焦之热为君；干姜温中焦之寒；半夏降逆止呕；人参/甘草/大枣补中。全方辛开苦降甘补三法并用。",
+    "base": "半夏12g 黄连6g 黄芩10g 干姜10g 人参10g 甘草6g 大枣5枚",
+    "if_then": [
+      {
+        "if": "腹胀满明显",
+        "then": "加枳实10g、厚朴10g行气消痞"
+      },
+      {
+        "if": "下利不止",
+        "then": "加白术15g、茯苓15g健脾止泻"
+      },
+      {
+        "if": "呕吐频繁",
+        "then": "半夏加至15g，加生姜汁10ml兑服"
+      },
+      {
+        "if": "寒重热轻（下利清稀）",
+        "then": "黄连减至3g，加吴茱萸3g温中"
+      }
+    ],
+    "note": "刘渡舟诀窍：黄连与干姜配比是核心——黄连>干姜偏清热，干姜>黄连偏温中。典型比例2:3，根据舌象调节。"
+  },
+  {
+    "id": "SKILL_LDZ_004",
+    "group": "清宣郁热",
+    "formula": "栀子豉汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "心中懊憹",
+        "虚烦不得眠",
+        "胸中窒闷",
+        "反覆颠倒",
+        "舌红苔微黄"
+      ],
+      "脉象_总体": [
+        "数",
+        "浮数",
+        "滑数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：热郁胸膈——'火郁发之'。栀子清三焦郁热为君；豆豉轻清宣透，使郁热从表而散为臣。二味均轻清灵动，刘氏加连翘增强透热之力。",
+    "base": "栀子10g 淡豆豉12g 连翘10g",
+    "if_then": [
+      {
+        "if": "虚烦不眠甚",
+        "then": "加酸枣仁15g、知母10g清热安神"
+      },
+      {
+        "if": "兼有呕吐",
+        "then": "加半夏10g、竹茹10g清胃降逆"
+      },
+      {
+        "if": "胸闷气短",
+        "then": "加枳壳10g、郁金10g理气解郁"
+      },
+      {
+        "if": "热甚伤阴（口干）",
+        "then": "加麦冬12g、沙参15g养阴清热"
+      }
+    ],
+    "note": "刘渡舟强调鉴别：承气证腹痛拒按；栀子豉证胸中窒闷。承气沉实有力，栀子豉浮数。"
+  },
+  {
+    "id": "SKILL_LDZ_005",
+    "group": "温阳利水",
+    "formula": "苓桂术甘汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "心下逆满",
+        "气上冲胸",
+        "起则头眩",
+        "心悸短气",
+        "背寒如掌大",
+        "舌淡苔白滑"
+      ],
+      "脉象_总体": [
+        "弦",
+        "沉弦",
+        "弦紧"
+      ],
+      "力道": "有力",
+      "速率": "缓"
+    },
+    "core_logic": "刘渡舟：水气上冲——中焦阳虚，水饮内停。茯苓淡渗利水为君；桂枝通阳化气降冲逆为臣；白术健脾制水；甘草补中。全方重在'温药和之'。",
+    "base": "茯苓20g 桂枝12g 白术12g 甘草6g",
+    "if_then": [
+      {
+        "if": "眩晕甚（美尼尔氏）",
+        "then": "加泽泻25g、半夏10g（泽泻汤合方）"
+      },
+      {
+        "if": "心悸怔忡",
+        "then": "加龙骨20g、牡蛎20g重镇安神"
+      },
+      {
+        "if": "面目浮肿",
+        "then": "加车前子15g、生姜皮10g利水消肿"
+      },
+      {
+        "if": "背寒如掌大",
+        "then": "加附子6g先煎温阳散寒"
+      }
+    ],
+    "note": "刘渡舟论苓桂剂系列：苓桂术甘汤（中焦）→苓桂枣甘汤（下焦奔豚）→苓桂姜甘汤（胃中停水）。核心鉴别在'悸'的位置。"
+  },
+  {
+    "id": "SKILL_LDZ_006",
+    "group": "滋阴利水",
+    "formula": "猪苓汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "小便不利",
+        "渴欲饮水",
+        "心烦不眠",
+        "尿血或尿痛",
+        "舌红少苔"
+      ],
+      "脉象_总体": [
+        "细数",
+        "浮数",
+        "弦细数"
+      ],
+      "力道": "无力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：阴虚水热互结——猪苓/茯苓/泽泻利水为君；阿胶滋阴养血为臣；滑石清热利窍。与五苓散区别：五苓阳虚水停（桂枝温阳），猪苓阴虚水热（阿胶滋阴）。",
+    "base": "猪苓12g 茯苓15g 泽泻12g 阿胶10g（烊化） 滑石15g",
+    "if_then": [
+      {
+        "if": "尿血明显",
+        "then": "加小蓟15g、白茅根30g凉血止血"
+      },
+      {
+        "if": "心烦不眠甚",
+        "then": "加栀子10g、酸枣仁15g清热安神"
+      },
+      {
+        "if": "小便涩痛",
+        "then": "加车前草15g、金钱草20g通淋止痛"
+      },
+      {
+        "if": "阴虚甚（舌光无苔）",
+        "then": "加生地15g、麦冬12g养阴"
+      }
+    ],
+    "note": "五苓脉浮苔白滑（阳虚水停）；猪苓脉浮细数舌红少苔（阴虚水热）。一用桂枝，一用阿胶，截然不同。"
+  },
+  {
+    "id": "SKILL_LDZ_007",
+    "group": "太阳伤寒",
+    "formula": "麻黄汤（刘氏化裁）",
+    "case_count": 5,
+    "trigger": {
+      "主症": [
+        "恶寒发热",
+        "无汗而喘",
+        "头身疼痛",
+        "骨节疼痛"
+      ],
+      "脉象_总体": [
+        "浮紧",
+        "浮数有力"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：太阳伤寒——'有一分恶寒即有一分表证'。麻黄开腠理发汗为君，桂枝助麻黄通阳，杏仁降肺平喘，甘草调和。刘氏强调麻黄汤证以'无汗'为眼目，脉浮紧为的据。刘氏临床麻黄常用6-9g，体弱者减至3-6g配苏叶。",
+    "base": "麻黄9g 桂枝6g 杏仁9g 甘草3g",
+    "if_then": [
+      {
+        "if": "项背强几几",
+        "then": "加葛根12g→葛根汤法"
+      },
+      {
+        "if": "烦躁（兼里热）",
+        "then": "加石膏30g→大青龙汤法"
+      },
+      {
+        "if": "咳喘痰多",
+        "then": "加厚朴10g、半夏10g降气化痰"
+      },
+      {
+        "if": "体弱不耐峻汗",
+        "then": "麻黄减至6g加苏叶10g、生姜10g"
+      }
+    ],
+    "note": "刘渡舟：麻黄汤为发汗峻剂，体虚、咽干、淋家、疮家、衄家、亡血家均禁。服药后取微汗为度，不可令如水流漓。"
+  },
+  {
+    "id": "SKILL_LDZ_008",
+    "group": "太阳中风",
+    "formula": "桂枝汤（刘氏化裁）",
+    "case_count": 5,
+    "trigger": {
+      "主症": [
+        "发热汗出",
+        "恶风",
+        "鼻鸣干呕",
+        "头痛"
+      ],
+      "脉象_总体": [
+        "浮缓",
+        "浮弱",
+        "浮虚"
+      ],
+      "力道": "无力",
+      "速率": "缓"
+    },
+    "core_logic": "刘渡舟：太阳中风——'群方之冠'。桂枝解肌发表为君；白芍敛阴和营为臣；姜枣调营卫；甘草补中。刘氏强调服药后'啜热稀粥以助药力'是取效关键，不可省略。桂枝汤证以汗出恶风脉浮弱为三大主症。",
+    "base": "桂枝9g 白芍9g 生姜9g 大枣12枚 甘草6g",
+    "if_then": [
+      {
+        "if": "项背强痛",
+        "then": "加葛根12g（桂枝加葛根汤）"
+      },
+      {
+        "if": "喘咳",
+        "then": "加厚朴10g、杏仁10g降气平喘"
+      },
+      {
+        "if": "汗漏不止恶风甚",
+        "then": "加附子6g先煎（桂枝加附子汤）"
+      },
+      {
+        "if": "腹痛",
+        "then": "白芍加至18g（桂枝加芍药汤）"
+      }
+    ],
+    "note": "刘渡舟：桂枝汤为和剂非发汗剂——以调和营卫取效。'外证得之解肌和营卫，内证得之化气调阴阳'。"
+  },
+  {
+    "id": "SKILL_LDZ_009",
+    "group": "阳明经证",
+    "formula": "白虎加人参汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "大热",
+        "大汗",
+        "大渴引饮",
+        "烦渴不解",
+        "舌干少津"
+      ],
+      "脉象_总体": [
+        "洪大",
+        "洪数",
+        "滑数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：阳明经证→热盛伤津。石膏辛寒清热为君，知母滋阴润燥，粳米/甘草护胃，人参益气生津。刘氏认为'四大证'中渴最要紧——渴而能饮为白虎，渴而饮水即吐为五苓。白虎以洪大有力脉为的据。",
+    "base": "石膏30g 知母12g 粳米30g 甘草6g 人参10g",
+    "if_then": [
+      {
+        "if": "表不解（兼恶寒）",
+        "then": "加桂枝10g→白虎加桂枝汤"
+      },
+      {
+        "if": "热盛神昏",
+        "then": "加安宫牛黄丸半粒化服"
+      },
+      {
+        "if": "大便秘结",
+        "then": "加大黄10g后下通腑泄热"
+      },
+      {
+        "if": "兼湿",
+        "then": "加苍术12g→白虎加苍术汤"
+      }
+    ],
+    "note": "刘渡舟：表不解不可与白虎——'伤寒脉浮，发热无汗，其表不解，不可与白虎汤'。四大证备方可径投。"
+  },
+  {
+    "id": "SKILL_LDZ_010",
+    "group": "阳明腑实",
+    "formula": "大承气汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "潮热",
+        "谵语",
+        "腹满硬痛拒按",
+        "大便秘结不通",
+        "舌苔焦黄起刺"
+      ],
+      "脉象_总体": [
+        "沉实",
+        "沉数有力",
+        "滑数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：阳明腑实重症——痞满燥实坚五证具备。大黄攻下泄热为君，芒硝软坚润燥，枳朴破气除满。刘氏认为'目中不了了，睛不和'是急下存阴之候。大承气必见潮热谵语+腹满痛+便秘。",
+    "base": "大黄12g（后下） 芒硝10g（兑服） 枳实12g 厚朴15g",
+    "if_then": [
+      {
+        "if": "痞满为主燥实不显",
+        "then": "去芒硝→小承气汤"
+      },
+      {
+        "if": "燥实为主痞满不显",
+        "then": "去枳朴加甘草10g→调胃承气汤"
+      },
+      {
+        "if": "阴液大伤",
+        "then": "加玄参30g、生地20g→增液承气汤"
+      },
+      {
+        "if": "热结旁流",
+        "then": "仍用大承气汤通因通用"
+      }
+    ],
+    "note": "刘渡舟：阳明三急下——目中不了了睛不和、发热汗多、腹满痛。三症皆是津液将竭之危候。"
+  },
+  {
+    "id": "SKILL_LDZ_011",
+    "group": "少阴寒化",
+    "formula": "四逆汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "四肢厥逆",
+        "下利清谷",
+        "恶寒踡卧",
+        "但欲寐",
+        "舌淡苔白滑"
+      ],
+      "脉象_总体": [
+        "沉微",
+        "脉微欲绝",
+        "沉细弱"
+      ],
+      "力道": "极无力",
+      "速率": "迟"
+    },
+    "core_logic": "刘渡舟：少阴寒化——阳衰阴盛。附子回阳救逆为君，干姜温中散寒为臣，甘草缓和。刘氏强调四逆汤以'脉微细但欲寐'为的据，少阴病阳虚已极非此不可救。附子必先煎一小时去毒。",
+    "base": "附子15g（先煎1小时） 干姜10g 甘草6g",
+    "if_then": [
+      {
+        "if": "下利不止脉微欲绝",
+        "then": "加人参15g（四逆加人参汤）"
+      },
+      {
+        "if": "阴盛格阳面赤",
+        "then": "加葱白4茎→白通汤"
+      },
+      {
+        "if": "腹痛厥逆甚",
+        "then": "加吴茱萸6g温肝祛寒"
+      },
+      {
+        "if": "汗出不止",
+        "then": "加龙骨30g、牡蛎30g潜阳固脱"
+      }
+    ],
+    "note": "刘渡舟：四逆汤以脉沉微为的据——若脉不沉微，虽厥亦当细辨。少阴病阳虚已极，不急用四逆则阳脱难救。"
+  },
+  {
+    "id": "SKILL_LDZ_012",
+    "group": "太阴虚寒",
+    "formula": "理中汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "腹痛喜按",
+        "呕吐清涎",
+        "下利清谷",
+        "不欲饮食",
+        "手足不温",
+        "舌淡苔白"
+      ],
+      "脉象_总体": [
+        "沉细",
+        "沉迟",
+        "微弱"
+      ],
+      "力道": "无力",
+      "速率": "迟"
+    },
+    "core_logic": "刘渡舟：太阴虚寒——中焦阳气不足。人参补中益气为君，干姜温中散寒为臣，白术健脾燥湿，甘草和中。刘氏认为理中贵在'守而不走'——守中焦之寒，不似四逆走肾。太阴脾虚寒，温中四味最为稳当。",
+    "base": "人参10g 干姜10g 白术12g 甘草6g",
+    "if_then": [
+      {
+        "if": "下利益甚",
+        "then": "加附子6g先煎（附子理中汤）"
+      },
+      {
+        "if": "呕吐频繁",
+        "then": "加半夏10g、生姜10g和胃降逆"
+      },
+      {
+        "if": "腹痛甚",
+        "then": "加吴茱萸6g、肉桂5g后下散寒止痛"
+      },
+      {
+        "if": "兼表证",
+        "then": "加桂枝10g（桂枝人参汤）温中解表"
+      }
+    ],
+    "note": "刘渡舟：'理中者理中焦'——太阴病脉必沉弱。浮则为表，沉则为里；微则为虚，紧则为寒。"
+  },
+  {
+    "id": "SKILL_LDZ_013",
+    "group": "水证论·阳虚水泛",
+    "formula": "真武汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "小便不利",
+        "四肢沉重疼痛",
+        "心下悸",
+        "头眩",
+        "身瞤动",
+        "腹痛下利",
+        "舌淡胖苔白滑"
+      ],
+      "脉象_总体": [
+        "沉弦",
+        "沉微",
+        "弦细"
+      ],
+      "力道": "无力",
+      "速率": "缓"
+    },
+    "core_logic": "刘渡舟（水证论）：阳虚水泛——少阴阳虚，水气内停。附子温肾阳为君，白术/茯苓健脾利水，生姜散水，白芍敛阴利水防附燥。刘氏认为真武汤为治水第一方——'温阳以利水，利水不伤阳'。",
+    "base": "附子10g（先煎） 茯苓15g 白术12g 白芍10g 生姜10g",
+    "if_then": [
+      {
+        "if": "咳（水寒射肺）",
+        "then": "加干姜6g、细辛3g、五味子6g温肺化饮"
+      },
+      {
+        "if": "下利甚",
+        "then": "去白芍加干姜10g温中止利"
+      },
+      {
+        "if": "呕",
+        "then": "加半夏10g、生姜加至15g"
+      },
+      {
+        "if": "水肿明显",
+        "then": "加车前子15g、泽泻15g利水"
+      }
+    ],
+    "note": "刘渡舟水证论：真武汤治少阴阳虚水泛，苓桂术甘治中焦水饮，五苓散治膀胱蓄水——三水同治，层次分明。"
+  },
+  {
+    "id": "SKILL_LDZ_014",
+    "group": "协热下利",
+    "formula": "葛根黄芩黄连汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "下利暴注",
+        "肛门灼热",
+        "喘而汗出",
+        "口渴",
+        "身热"
+      ],
+      "脉象_总体": [
+        "促",
+        "滑数",
+        "数而有力"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：协热下利——表邪内陷化热，热迫大肠。葛根解肌升清为君，黄芩/黄连清热燥湿止利，甘草和中。刘氏认为此方关键在'喘而汗出'——热邪上蒸于肺则喘，外蒸于表则汗。",
+    "base": "葛根15g 黄芩10g 黄连6g 甘草6g",
+    "if_then": [
+      {
+        "if": "下利赤白兼有",
+        "then": "加白头翁15g、秦皮10g清热止痢"
+      },
+      {
+        "if": "腹痛明显",
+        "then": "加白芍12g缓急止痛"
+      },
+      {
+        "if": "兼表证（恶寒）",
+        "then": "加苏叶10g、防风10g解表"
+      },
+      {
+        "if": "口渴甚",
+        "then": "加天花粉12g生津止渴"
+      }
+    ],
+    "note": "刘渡舟：葛根芩连汤之促脉——表未解而邪热内陷，脉促为正气抗邪之象。'脉促者表未解也'。"
+  },
+  {
+    "id": "SKILL_LDZ_015",
+    "group": "湿热发黄",
+    "formula": "茵陈蒿汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "身黄如橘子色",
+        "小便不利色黄赤",
+        "腹满",
+        "口渴",
+        "舌苔黄腻"
+      ],
+      "脉象_总体": [
+        "滑数",
+        "沉数",
+        "濡数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：湿热郁蒸发黄——阳明瘀热在里。茵陈蒿清热利湿退黄为君，栀子清三焦郁热，大黄通腑泄热。茵陈蒿汤为治阳黄第一方，三味相辅相成——茵陈利湿、栀子清热、大黄通下。",
+    "base": "茵陈蒿30g 栀子10g 大黄10g（后下）",
+    "if_then": [
+      {
+        "if": "热重于湿（烦渴明显）",
+        "then": "加黄芩10g、连翘15g增强清热"
+      },
+      {
+        "if": "湿重于热（身重脘痞）",
+        "then": "加茯苓15g、泽泻12g利湿"
+      },
+      {
+        "if": "胁痛明显",
+        "then": "加柴胡10g、郁金10g疏肝利胆"
+      },
+      {
+        "if": "黄疸消退后",
+        "then": "去大黄加白术12g、茯苓15g健脾善后"
+      }
+    ],
+    "note": "刘渡舟：阳黄（茵陈蒿）与阴黄（茵陈术附）鉴别——阳黄鲜明如橘皮，脉滑数；阴黄晦暗如烟熏，脉沉迟。"
+  },
+  {
+    "id": "SKILL_LDZ_016",
+    "group": "外寒内饮",
+    "formula": "小青龙汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "恶寒发热无汗",
+        "咳喘",
+        "咳吐白色清稀泡沫痰",
+        "背冷如掌大",
+        "舌淡苔白滑"
+      ],
+      "脉象_总体": [
+        "浮紧",
+        "弦紧",
+        "弦滑"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：外寒内饮——表寒未解，内有水饮。麻黄/桂枝解表散寒为君，干姜/细辛/半夏温肺化饮，白芍/五味子敛肺防发散太过，甘草和中。刘氏认为小青龙以'背寒如掌大'为特异体征——水饮停于心下反射至背。",
+    "base": "麻黄9g 桂枝9g 细辛3g 干姜10g 半夏10g 白芍10g 五味子6g 甘草6g",
+    "if_then": [
+      {
+        "if": "烦躁（兼热）",
+        "then": "加石膏15g（小青龙加石膏汤）"
+      },
+      {
+        "if": "喉中水鸡声",
+        "then": "合射干麻黄汤加射干10g、紫菀10g"
+      },
+      {
+        "if": "喘甚",
+        "then": "加厚朴10g、杏仁10g降气平喘"
+      },
+      {
+        "if": "表解后咳喘不止",
+        "then": "去麻黄桂枝，干姜减半→苓甘五味姜辛汤"
+      }
+    ],
+    "note": "刘渡舟：小青龙治外寒内饮——表寒为标、水饮为本。服后若口渴为饮化之征，不必惊慌。"
+  },
+  {
+    "id": "SKILL_LDZ_017",
+    "group": "肺热喘咳",
+    "formula": "麻杏甘石汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "发热",
+        "汗出",
+        "喘咳",
+        "口渴",
+        "痰黄黏稠",
+        "舌红苔黄"
+      ],
+      "脉象_总体": [
+        "滑数",
+        "浮数",
+        "洪数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：肺热壅盛——表邪化热入肺。麻黄宣肺平喘为君（取其宣散而非发汗），石膏清肺热为臣（用量大于麻黄4-6倍），杏仁降肺气，甘草和中。刘氏强调石膏必大于麻黄——'汗出而用麻黄，不配石膏则汗出不止'。",
+    "base": "麻黄6g 杏仁10g 石膏30g 甘草6g",
+    "if_then": [
+      {
+        "if": "痰黄稠难咳",
+        "then": "加瓜蒌15g、浙贝母10g清热化痰"
+      },
+      {
+        "if": "高热不退",
+        "then": "石膏加至60g、加知母12g增强清热"
+      },
+      {
+        "if": "喘促气急",
+        "then": "加葶苈子10g、桑白皮12g泻肺平喘"
+      },
+      {
+        "if": "后期伤阴",
+        "then": "加麦冬12g、沙参15g养阴润肺"
+      }
+    ],
+    "note": "刘渡舟：'汗出而喘无大热者，可与麻杏甘石汤'——汗出说明表已解，喘为肺热未清。石膏量必大于麻黄方能制其辛温。"
+  },
+  {
+    "id": "SKILL_LDZ_018",
+    "group": "气机论·胃虚痰阻",
+    "formula": "旋覆代赭汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "心下痞硬",
+        "噫气不除",
+        "呕吐痰涎",
+        "胃脘胀满",
+        "纳差"
+      ],
+      "脉象_总体": [
+        "弦滑",
+        "濡滑",
+        "弦而无力"
+      ],
+      "力道": "偏无力",
+      "速率": "缓"
+    },
+    "core_logic": "刘渡舟（气机论）：胃虚痰阻、气逆不降。旋覆花下气消痰为君，代赭石重镇降逆为臣，半夏/生姜和胃化痰，人参/大枣/甘草补中。刘氏认为此方重在'补虚降逆'——代赭石量不宜过大（9-15g），过重则药过病所直趋下焦。",
+    "base": "旋覆花10g（包煎） 代赭石15g 半夏10g 生姜15g 人参10g 大枣5枚 甘草6g",
+    "if_then": [
+      {
+        "if": "胃寒甚（呕吐清涎）",
+        "then": "加吴茱萸6g、丁香3g温胃降逆"
+      },
+      {
+        "if": "气滞腹胀",
+        "then": "加枳壳10g、木香6g行气消胀"
+      },
+      {
+        "if": "痰多",
+        "then": "加陈皮10g、茯苓15g化痰"
+      },
+      {
+        "if": "反酸烧心",
+        "then": "加煅瓦楞子20g、海螵蛸15g制酸"
+      }
+    ],
+    "note": "刘渡舟气机论：旋覆代赭汤治胃虚气逆——与半夏泻心汤同治心下痞，彼为寒热错杂，此为胃虚痰阻气逆。"
+  },
+  {
+    "id": "SKILL_LDZ_019",
+    "group": "肝胃虚寒",
+    "formula": "吴茱萸汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "食后欲呕",
+        "呕吐清涎冷沫",
+        "巅顶头痛",
+        "烦躁欲死",
+        "手足逆冷",
+        "舌淡苔白滑"
+      ],
+      "脉象_总体": [
+        "沉弦",
+        "弦迟",
+        "细弦"
+      ],
+      "力道": "偏无力",
+      "速率": "迟"
+    },
+    "core_logic": "刘渡舟：肝胃虚寒——厥阴寒邪上逆。吴茱萸温肝暖胃降逆为君，生姜散寒止呕为臣（生姜量大于吴茱萸），人参/大枣补虚。刘氏认为吴茱萸汤证以'干呕吐涎沫、头痛'为特异——肝经寒邪循经上巅。",
+    "base": "吴茱萸6g 生姜18g 人参10g 大枣12枚",
+    "if_then": [
+      {
+        "if": "头痛剧烈",
+        "then": "加川芎10g、白芷10g祛风止痛"
+      },
+      {
+        "if": "呕吐不止",
+        "then": "加半夏10g、代赭石15g降逆止呕"
+      },
+      {
+        "if": "腹痛",
+        "then": "加肉桂5g后下、白芍10g温中止痛"
+      },
+      {
+        "if": "四肢厥冷甚",
+        "then": "加附子10g先煎温阳"
+      }
+    ],
+    "note": "刘渡舟：吴茱萸汤证属厥阴——'干呕吐涎沫头痛者，吴茱萸汤主之'。头痛在巅顶，为厥阴肝经循行部位。"
+  },
+  {
+    "id": "SKILL_LDZ_020",
+    "group": "火证论·少阴热化",
+    "formula": "黄连阿胶汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "心中烦",
+        "不得卧",
+        "口干咽燥",
+        "心悸",
+        "舌红少苔或舌光绛"
+      ],
+      "脉象_总体": [
+        "细数",
+        "弦细数",
+        "沉细数"
+      ],
+      "力道": "无力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟（火证论）：少阴热化——阴虚火旺，心肾不交。黄连/黄芩清心火为君，阿胶/白芍/鸡子黄滋肾阴为臣。刘氏认为此方核心在'以寒制热、以阴配阳'——火炎于上，阴亏于下，非此不能交泰。鸡子黄必待药液稍凉后搅入。",
+    "base": "黄连6g 黄芩10g 白芍12g 阿胶10g（烊化） 鸡子黄2枚（药液温热时搅入）",
+    "if_then": [
+      {
+        "if": "心烦甚",
+        "then": "加栀子10g、莲子心3g增强清心"
+      },
+      {
+        "if": "心悸怔忡",
+        "then": "加龙骨20g、牡蛎20g重镇安神"
+      },
+      {
+        "if": "盗汗",
+        "then": "加煅牡蛎30g、浮小麦30g固表止汗"
+      },
+      {
+        "if": "阴虚甚",
+        "then": "加生地15g、麦冬12g、五味子6g养阴"
+      }
+    ],
+    "note": "刘渡舟火证论：黄连阿胶汤治少阴热化——'少阴病，得之二三日以上，心中烦不得卧'。与栀子豉鉴别：栀子豉胸中窒闷，黄连阿胶彻夜不眠。"
+  },
+  {
+    "id": "SKILL_LDZ_021",
+    "group": "血虚寒厥",
+    "formula": "当归四逆汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "手足厥寒",
+        "脉细欲绝",
+        "四肢关节冷痛",
+        "肢体麻木",
+        "舌淡苔白"
+      ],
+      "脉象_总体": [
+        "细欲绝",
+        "沉细",
+        "微细"
+      ],
+      "力道": "无力",
+      "速率": "迟"
+    },
+    "core_logic": "刘渡舟：血虚寒凝——素体血虚，寒邪外束。当归/白芍养血为君，桂枝/细辛散寒通脉为臣，通草通利血脉，大枣/甘草补中。刘氏强调当归四逆汤厥的特点：'手足厥寒而脉细欲绝'——因血虚而非阳虚，故不用姜附。",
+    "base": "当归15g 桂枝10g 白芍10g 细辛3g 通草6g 大枣25枚 甘草6g",
+    "if_then": [
+      {
+        "if": "内有久寒",
+        "then": "加吴茱萸6g、生姜15g→当归四逆加吴茱萸生姜汤"
+      },
+      {
+        "if": "手部冻疮",
+        "then": "加红花6g、鸡血藤15g活血通络"
+      },
+      {
+        "if": "关节痛甚",
+        "then": "加威灵仙12g、独活10g祛风除湿"
+      },
+      {
+        "if": "肢体麻木明显",
+        "then": "加黄芪20g、川芎10g益气活血"
+      }
+    ],
+    "note": "刘渡舟：当归四逆汤与四逆汤鉴别——四逆汤阳虚厥逆脉沉微，当归四逆血虚寒厥脉细欲绝。一用姜附温阳，一用归芍养血。"
+  },
+  {
+    "id": "SKILL_LDZ_022",
+    "group": "气机论·阳郁四逆",
+    "formula": "四逆散（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "手足不温",
+        "胸胁胀满",
+        "脘腹疼痛",
+        "脉弦",
+        "或咳或悸或小便不利"
+      ],
+      "脉象_总体": [
+        "弦",
+        "弦细",
+        "弦而有力"
+      ],
+      "力道": "有力",
+      "速率": "不数"
+    },
+    "core_logic": "刘渡舟（气机论）：阳郁不达——肝气郁结，阳气内郁不达四末。柴胡疏肝解郁为君，枳实行气破滞为臣，白芍柔肝缓急，甘草调和。四逆散所治之'逆'非阳虚之厥，而是阳气郁遏不能外达——'四逆散证脉必不微'。",
+    "base": "柴胡12g 枳实10g 白芍12g 甘草6g",
+    "if_then": [
+      {
+        "if": "咳（肺气郁）",
+        "then": "加五味子6g、干姜6g"
+      },
+      {
+        "if": "悸（水气凌心）",
+        "then": "加桂枝10g、茯苓15g"
+      },
+      {
+        "if": "小便不利",
+        "then": "加茯苓15g"
+      },
+      {
+        "if": "腹痛（肝郁克脾）",
+        "then": "加香附10g、元胡10g理气止痛"
+      }
+    ],
+    "note": "刘渡舟气机论：四逆散为疏肝解郁第一方——与四逆汤名近实异。四逆散脉弦不微，四逆汤脉沉微欲绝。气郁与阳虚之辨全在脉象。"
+  },
+  {
+    "id": "SKILL_LDZ_023",
+    "group": "少阳阳明",
+    "formula": "大柴胡汤（刘氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "往来寒热",
+        "胸胁苦满",
+        "呕不止",
+        "心下急（痞硬）",
+        "郁郁微烦",
+        "大便秘结",
+        "舌苔黄厚"
+      ],
+      "脉象_总体": [
+        "弦数",
+        "弦实",
+        "沉弦有力"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：少阳兼阳明里实——少阳未解，热结阳明。柴胡/黄芩和解少阳为君，大黄/枳实通下阳明为臣，白芍缓急，半夏/生姜/大枣和胃。刘氏认为大柴胡汤为'双解之剂'——'少阳之邪不可下，但兼阳明者可下'。",
+    "base": "柴胡15g 黄芩10g 半夏10g 生姜15g 大枣5枚 白芍12g 枳实10g 大黄10g（后下）",
+    "if_then": [
+      {
+        "if": "右上腹痛剧（胆绞痛）",
+        "then": "加金钱草30g、郁金15g、延胡索12g利胆止痛"
+      },
+      {
+        "if": "黄疸",
+        "then": "加茵陈蒿30g、栀子10g利胆退黄"
+      },
+      {
+        "if": "高热",
+        "then": "加石膏30g、连翘15g清热"
+      },
+      {
+        "if": "便通痛减后",
+        "then": "去大黄，加白术12g、茯苓15g健脾善后"
+      }
+    ],
+    "note": "刘渡舟：大柴胡为少阳阳明双解之剂——与小柴胡鉴别：小柴胡喜呕无声，大柴胡呕不止心下急。大柴胡去人参甘草之补，加大黄枳实之攻。"
+  },
+  {
+    "id": "SKILL_LDZ_024",
+    "group": "脾胃论·中焦虚寒",
+    "formula": "小建中汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "腹中急痛",
+        "喜温喜按",
+        "面色萎黄",
+        "神疲乏力",
+        "手足烦热",
+        "舌淡苔白"
+      ],
+      "脉象_总体": [
+        "弦涩",
+        "弦细",
+        "缓弱"
+      ],
+      "力道": "偏无力",
+      "速率": "缓"
+    },
+    "core_logic": "刘渡舟（脾胃论）：中焦虚寒，气血不足——'建中'即建立中气。桂枝汤倍白芍加饴糖。饴糖甘温补中为君，白芍/甘草酸甘化阴缓急止痛，桂枝/生姜/大枣辛甘化阳。刘氏认为小建中精髓在'甘味补中'——'阴阳俱不足者，当调以甘药'。",
+    "base": "桂枝9g 白芍18g 生姜9g 大枣12枚 甘草6g 饴糖30g（兑服）",
+    "if_then": [
+      {
+        "if": "腹痛剧烈",
+        "then": "加元胡10g、木香6g行气止痛"
+      },
+      {
+        "if": "气虚明显",
+        "then": "加黄芪15g→黄芪建中汤"
+      },
+      {
+        "if": "兼有寒象",
+        "then": "加干姜6g、吴茱萸3g温中"
+      },
+      {
+        "if": "血虚明显",
+        "then": "加当归12g→当归建中汤"
+      }
+    ],
+    "note": "刘渡舟脾胃论：'伤寒阳脉涩阴脉弦，法当腹中急痛，先与小建中汤'。涩为血少，弦为阴寒——非攻下止痛，而补中以缓急。"
+  },
+  {
+    "id": "SKILL_LDZ_025",
+    "group": "厥阴热利",
+    "formula": "白头翁汤（刘氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "下利脓血",
+        "里急后重",
+        "肛门灼热",
+        "口渴欲饮",
+        "腹痛",
+        "舌红苔黄"
+      ],
+      "脉象_总体": [
+        "滑数",
+        "弦数",
+        "沉数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "刘渡舟：厥阴热利——湿热壅滞大肠。白头翁清热凉血止痢为君，黄连/黄柏清热燥湿，秦皮收涩止痢。刘氏认为白头翁汤专治'热利下重'——'下重'（里急后重）是湿热阻滞气机的关键症。",
+    "base": "白头翁15g 黄连6g 黄柏10g 秦皮12g",
+    "if_then": [
+      {
+        "if": "便血多",
+        "then": "加地榆15g、槐花10g凉血止血"
+      },
+      {
+        "if": "腹痛里急甚",
+        "then": "加白芍15g、木香6g缓急行气"
+      },
+      {
+        "if": "热毒重",
+        "then": "加金银花15g、马齿苋30g清热解毒"
+      },
+      {
+        "if": "呕吐",
+        "then": "加半夏10g、竹茹10g降逆止呕"
+      }
+    ],
+    "note": "刘渡舟：白头翁汤治厥阴热利——'热利下重者，白头翁汤主之'。与葛根芩连汤鉴别：葛根芩连治太阳误下热陷阳明，白头翁治厥阴湿热下迫大肠。"
+  }
+]

@@ -1,1 +1,788 @@
-WwogIHsKICAgICJfbWV0YSI6IHsKICAgICAgInZlcnNpb24iOiAiMS4wIiwKICAgICAgInRvdGFsIjogNiwKICAgICAgImF1dGhvciI6ICLmm7npopbnlKsiCiAgICB9CiAgfSwKICB7CiAgICAiaWQiOiAiU0tJTExfQ1lGXzAwMSIsCiAgICAiZ3JvdXAiOiAi5Y+R5rGX6Kej6KGoIiwKICAgICJmb3JtdWxhIjogIum6u+m7hOaxpO+8iOabueawj+WMluijge+8iSIsCiAgICAiY2FzZV9jb3VudCI6IDQsCiAgICAidHJpZ2dlciI6IHsKICAgICAgIuS4u+eXhyI6IFsKICAgICAgICAi5oG25a+S5Y+R54OtIiwKICAgICAgICAi5peg5rGX6ICM5ZaYIiwKICAgICAgICAi5aS06Lqr55a855ebIiwKICAgICAgICAi6aqo6IqC55a855ebIiwKICAgICAgICAi6ISJ6Zi06Ziz5L+x57SnIgogICAgICBdLAogICAgICAi6ISJ6LGhX+aAu+S9kyI6IFsKICAgICAgICAi5rWu57SnIiwKICAgICAgICAi5rWu5pWw5pyJ5YqbIgogICAgICBdLAogICAgICAi5Yqb6YGTIjogIuacieWKmyIsCiAgICAgICLpgJ/njociOiAi5pWwIgogICAgfSwKICAgICJjb3JlX2xvZ2ljIjogIuabuemilueUq++8mum6u+m7hOaxpOS4uuWkqumYs+S8pOWvkuesrOS4gOaWueKAlOKAlCfooajmsJTpl63pg4HvvIzpnZ7purvmoYLkuI3og73lvIDkuYsn44CC6bq76buE5byA6IWg55CG5Y+R5rGX5Li65ZCb77yb5qGC5p6d5Yqp6bq76buE6YCa6Ziz6L6+6KGo5Li66Iej77yb5p2P5LuB6ZmN6IK65rCU5bmz5ZaY77yb55SY6I2J6LCD5ZKM44CC5pu55rCP55So5q2k5pa55b+F6KeBJ+aXoOaxlyfigJTigJQn5pyJ5LiA5YiG5rGX77yM5L6/5LiN55So6bq76buEJ+OAguW8uuiwg+WOn+aWueWOn+mHj++8jOS4jei9u+aYk+WKoOWHj++8jOiupOS4uuS7suaZr+mFjeS8jeW3suiHu+WujOe+juOAgiIsCiAgICAiYmFzZSI6ICLpurvpu4Q5ZyDmoYLmnp02ZyDmnY/ku4E5ZyDnlJjojYkzZyIsCiAgICAiaWZfdGhlbiI6IFsKICAgICAgewogICAgICAgICJpZiI6ICLpobnog4zlvLrlh6Dlh6AiLAogICAgICAgICJ0aGVuIjogIuWKoOiRm+aguTEyZ+iIkueti+ino+iCjO+8iOiRm+agueaxpOazle+8iSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLng6bouoHvvIjlhbzph4zng63vvIkiLAogICAgICAgICJ0aGVuIjogIuWKoOefs+iGjzIwZ+a4heeDre+8iOWkp+mdkum+meazle+8iSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlkrPllpjnl7DlpJoiLAogICAgICAgICJ0aGVuIjogIuWKoOWOmuactDEwZ+OAgeWNiuWkjzEwZ+mZjeawlOWMlueXsCIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLkvZPlvLHkuI3ogJDls7vmsZciLAogICAgICAgICJ0aGVuIjogIum6u+m7hOWHj+iHszZn77yM5Yqg6IuP5Y+2MTBn44CB55Sf5aecMTBn6Kej6KGoIgogICAgICB9CiAgICBdLAogICAgIm5vdGUiOiAi5pu56aKW55Sr57uP5pa55a6e6aqM5b2V77yaJ+m6u+m7hOaxpOivgeW/heS7peiEiee0p+S4uueahOaNruKAlOKAlOa1rue0p+iAheeUqOWOn+aWue+8jOa1rue8k+acieaxl+iAheWNs+W9k+i9rOeUqOahguaeneaxpOOAgifmm7nmsI/msrvlrabkuKXosKjvvIznu4/mlrnliqDlh4/lv4XmnKzkuo7ku7Lmma/ljp/mlofvvIzkuI3lpoTliqDkuIDlkbPjgIIiCiAgfSwKICB7CiAgICAiaWQiOiAiU0tJTExfQ1lGXzAwMiIsCiAgICAiZ3JvdXAiOiAi6Kej6IKM5ZKM6JClIiwKICAgICJmb3JtdWxhIjogIuahguaeneaxpO+8iOabueawj+WMluijge+8iSIsCiAgICAiY2FzZV9jb3VudCI6IDUsCiAgICAidHJpZ2dlciI6IHsKICAgICAgIuS4u+eXhyI6IFsKICAgICAgICAi5Y+R54Ot5rGX5Ye6IiwKICAgICAgICAi5oG26aOOIiwKICAgICAgICAi6by76bij5bmy5ZGVIiwKICAgICAgICAi5aS055ebIiwKICAgICAgICAi6ISJ5rWu57yTIgogICAgICBdLAogICAgICAi6ISJ6LGhX+aAu+S9kyI6IFsKICAgICAgICAi5rWu57yTIiwKICAgICAgICAi5rWu5byxIiwKICAgICAgICAi5rWu6JmaIgogICAgICBdLAogICAgICAi5Yqb6YGTIjogIuaXoOWKmyIsCiAgICAgICLpgJ/njociOiAi57yTIgogICAgfSwKICAgICJjb3JlX2xvZ2ljIjogIuabuemilueUq++8muahguaeneaxpOS4uue+pOaWueS5i+WGoOKAlOKAlCfosIPlkozokKXljavvvIzpnZ7mraTkuI3mtY4n44CC5qGC5p6d6Kej6IKM5Y+R5rGX5Li65ZCb77yb55m96IqN5pWb6Zi05ZKM6JCl5Li66Iej77yb55Sf5aecL+Wkp+aeo+iwg+WSjOiQpeWNq++8m+eUmOiNieihpeS4reOAguabueawj+eJueW8uuiwgyfllZzng63nqIDnsqXku6Xliqnoja/lipsn4oCU4oCU5pyN6I2v5ZCO5ZWc57Kl5piv5qGC5p6d5rGk5Y+W5pWI55qE5YWz6ZSu546v6IqC77yM5LiN5Y+v55yB55Wl44CCIiwKICAgICJiYXNlIjogIuahguaenTlnIOeZveiKjTlnIOeUn+WnnDlnIOWkp+aeozEy5p6aIOeUmOiNiTZnIiwKICAgICJpZl90aGVuIjogWwogICAgICB7CiAgICAgICAgImlmIjogIumhueiDjOW8uueXmyIsCiAgICAgICAgInRoZW4iOiAi5Yqg6JGb5qC5MTJn77yI5qGC5p6d5Yqg6JGb5qC55rGk77yJ5Y2H5rSl6IiS562LIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIuWWmOWSsyIsCiAgICAgICAgInRoZW4iOiAi5Yqg5Y6a5py0MTBn44CB5p2P5LuBMTBn6ZmN5rCU5bmz5ZaYIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIuaxl+a8j+S4jeatouaBtumjjueUmiIsCiAgICAgICAgInRoZW4iOiAi5Yqg6ZmE5a2QNmflhYjnhY7vvIjmoYLmnp3liqDpmYTlrZDmsaTvvInmuKnpmLPlm7rooagiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWYiOiAi6IW555ebIiwKICAgICAgICAidGhlbiI6ICLnmb3oio3liqDoh7MxOGfvvIjmoYLmnp3liqDoio3oja/msaTvvInlkozohL7mraLnl5siCiAgICAgIH0KICAgIF0sCiAgICAibm90ZSI6ICLmm7npopbnlKvnu4/mlrnlrp7pqozlvZXvvJon5qGC5p6d5rGk5rK75aSq6Ziz5Lit6aOO77yM5Lul6Ieq5rGX5Ye65Li655y855uu44CC5b+F5ZWc57Kl44CB5rip6KaG77yM5Y+W5b6u5Ly85pyJ5rGX6ICF5L2z77yM5LiN5Y+v5Luk5aaC5rC05rWB5ryT44CCJ+abueawj+eUqOahguaeneaxpOexu+aWueWKoOWHj+aegeWFtuWuoeaFju+8jOavj+S4gOWKoOWRs+W/heaciee7j+aWh+S+neaNruOAgiIKICB9LAogIHsKICAgICJpZCI6ICJTS0lMTF9DWUZfMDAzIiwKICAgICJncm91cCI6ICLmuIXop6PpmLPmmI4iLAogICAgImZvcm11bGEiOiAi55m96JmO5rGk77yI5pu55rCP5YyW6KOB77yJIiwKICAgICJjYXNlX2NvdW50IjogNCwKICAgICJ0cmlnZ2VyIjogewogICAgICAi5Li755eHIjogWwogICAgICAgICLlpKfng60iLAogICAgICAgICLlpKfmsZciLAogICAgICAgICLlpKfmuLQiLAogICAgICAgICLohInmtKrlpKciLAogICAgICAgICLng6bmuLTlvJXppa4iLAogICAgICAgICLpnaLotaQiLAogICAgICAgICLoiIzlubIiCiAgICAgIF0sCiAgICAgICLohInosaFf5oC75L2TIjogWwogICAgICAgICLmtKrlpKciLAogICAgICAgICLmtKrmlbAiLAogICAgICAgICLmu5HmlbAiCiAgICAgIF0sCiAgICAgICLlipvpgZMiOiAi5pyJ5YqbIiwKICAgICAgIumAn+eOhyI6ICLmlbAiCiAgICB9LAogICAgImNvcmVfbG9naWMiOiAi5pu56aKW55Sr77ya55m96JmO5rGk5rK76Ziz5piO57uP6K+B4oCU4oCUJ+Wbm+Wkp+ivgSflpIfliJnlvoTnlKjkuYvjgILnn7Poho/ovpvlr5LmuIXng63kuLrlkJvvvJvnn6Xmr43mu4vpmLTmtqbnh6XkuLroh6PvvJvnsrPnsbMv55SY6I2J5oqk6IOD5ZKM5Lit44CC5pu55rCP55So55+z6IaP5p6B5YW25p6c5pat4oCU4oCUJ+eDreiHs+Wjruebm++8jOmdnuefs+iGj+S4jeiDveaKmOWFtuWKvyfvvIzluLjnlKgzMC02MGfvvIzorqTkuLon55So5LmL5b2T5Y2z5piv6Imv6I2vJ+OAgiIsCiAgICAiYmFzZSI6ICLnn7Poho8zMGcg55+l5q+NMTJnIOeys+exszMwZyDnlJjojYk2ZyIsCiAgICAiaWZfdGhlbiI6IFsKICAgICAgewogICAgICAgICJpZiI6ICLng63nm5vkvKTmtKXjgIHlj6PmuLTnlJoiLAogICAgICAgICJ0aGVuIjogIuWKoOS6uuWPgjEwZ++8iOeZveiZjuWKoOS6uuWPguaxpO+8ieebiuawlOeUn+a0pSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlhbzmnInooajor4HvvIjmgbblr5LvvIkiLAogICAgICAgICJ0aGVuIjogIuWKoOahguaenTEwZ++8iOeZveiZjuWKoOahguaeneaxpO+8ieWFvOino+ihqOmCqiIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlpKfkvr/np5jnu5PvvIjnu4/or4HovazohZHor4HvvIkiLAogICAgICAgICJ0aGVuIjogIuWKoOWkp+m7hDEwZ+WQjuS4i+mAmuiFkeazhOeDrSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLnpZ7mmI/osLXor60iLAogICAgICAgICJ0aGVuIjogIuWKoOWuieWuq+eJm+m7hOS4uOWNiueykuWMluacjea4heW/g+W8gOeqjSIKICAgICAgfQogICAgXSwKICAgICJub3RlIjogIuabuemilueUq+e7j+aWueWunumqjOW9le+8mifnmb3omY7ku6XohInmtKrlpKfkuLrnmoTmja7vvIzoi6XohInmsonnu4bliJnkuIfkuI3lj6/nlKjjgIIn5pu55rCP5pyJ5LiA6JGX5ZCN5qGI5L6L77ya5LiA5oKj6ICF5aSn54Ot5aSn5rGX6ISJ5rSq5aSn77yM5b6E5oqV55m96JmO5LiA5YmC77yM5rGX5Ye654Ot6YCA6aG/5oSI44CCJ+S7suaZr+S5i+azle+8jOeUqOS5i+W9k+WImeaViOWmguahtOm8kyfjgIIiCiAgfSwKICB7CiAgICAiaWQiOiAiU0tJTExfQ1lGXzAwNCIsCiAgICAiZ3JvdXAiOiAi5pS75LiL6Ziz5piOIiwKICAgICJmb3JtdWxhIjogIuWkp+aJv+awlOaxpO+8iOabueawj+WMluijge+8iSIsCiAgICAiY2FzZV9jb3VudCI6IDMsCiAgICAidHJpZ2dlciI6IHsKICAgICAgIuS4u+eXhyI6IFsKICAgICAgICAi5r2u54OtIiwKICAgICAgICAi6LC16K+tIiwKICAgICAgICAi6IW55ruh56Gs55eb5ouS5oyJIiwKICAgICAgICAi5aSn5L6/56eY57uT5LiN6YCaIiwKICAgICAgICAi55uu5Lit5LiN5LqG5LqG552b5LiN5ZKMIiwKICAgICAgICAi6IiM6IuU54Sm6buE6LW35Yi6IgogICAgICBdLAogICAgICAi6ISJ6LGhX+aAu+S9kyI6IFsKICAgICAgICAi5rKJ5a6eIiwKICAgICAgICAi5rKJ5pWw5pyJ5YqbIiwKICAgICAgICAi5ruR5pWwIgogICAgICBdLAogICAgICAi5Yqb6YGTIjogIuacieWKmyIsCiAgICAgICLpgJ/njociOiAi5pWwIgogICAgfSwKICAgICJjb3JlX2xvZ2ljIjogIuabuemilueUq++8muWkp+aJv+awlOayu+mYs+aYjuiFkeWunumHjeeXh+KAlOKAlCfnl57mu6Hnh6Xlrp7lnZon5LqU6K+B5YW35aSH44CC5aSn6buE5pS75LiL5rOE54Ot5Li65ZCb77yb6IqS56Gd6L2v5Z2a5ram54el5Li66Iej77yb5p6z5a6eL+WOmuactOegtOawlOmZpOa7oeOAguabueawj+eUqOatpOaWueaegeWFtuiwqOaFjuKAlOKAlCfkuIDop4Hnm67kuK3kuI3kuobkuobvvIjnnLznnZvovazkuI3liqjvvInvvIzljbPmmK/mgKXkuIvlrZjpmLTkuYvlgJnvvIzkuI3lj6/ov5/nlpEn44CCIiwKICAgICJiYXNlIjogIuWkp+m7hDEyZ++8iOWQjuS4i++8iSDoipLnoZ0xMGfvvIjlhZHmnI3vvIkg5p6z5a6eMTJnIOWOmuactDE1ZyIsCiAgICAiaWZfdGhlbiI6IFsKICAgICAgewogICAgICAgICJpZiI6ICLnl57mu6HkuLrkuLvvvIjnh6Xlrp7kuI3mmL7vvIkiLAogICAgICAgICJ0aGVuIjogIuWOu+iKkuehne+8iOWwj+aJv+awlOaxpO+8iei9u+S4i+eDree7kyIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLnh6Xlrp7kuLrkuLvvvIjnl57mu6HkuI3mmL7vvIkiLAogICAgICAgICJ0aGVuIjogIuWOu+aes+actOWKoOeUmOiNiTEwZ++8iOiwg+iDg+aJv+awlOaxpO+8iee8k+S4i+a4heeDrSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLng63nu5Pml4HmtYHvvIjkuIvliKnmuIXmsLTvvIkiLAogICAgICAgICJ0aGVuIjogIuS7jeeUqOWkp+aJv+awlO+8jOatpOS4uifpgJrlm6DpgJrnlKgnIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIumYtOa2suWkp+S8pO+8iOiIjOeEpuaXoOa0pe+8iSIsCiAgICAgICAgInRoZW4iOiAi5Yqg546E5Y+CMjBn44CB55Sf5ZywMjBn77yI5aKe5ray5om/5rCU5rGk77yJ5aKe5rC06KGM6IifIgogICAgICB9CiAgICBdLAogICAgIm5vdGUiOiAi5pu56aKW55Sr57uP5pa55a6e6aqM5b2V77yaJ+Wkp+aJv+awlOS7peebruS4reS4jeS6huS6huOAgeedm+S4jeWSjOS4uuaApeS4i+S5i+eahOaNruKAlOKAlOatpOeDreaegea0peerreS5i+WNseWAmeOAgifmm7nmsI/pibTliKvkuInmib/msJTvvJrlpKfmib/msJTnl57mu6Hnh6Xlrp7lm5vor4HlhajvvJvlsI/mib/msJTnl57mu6HkuLrkuLvohbnlpKfnl5vvvJvosIPog4Pmib/msJTnh6Xlrp7kuLrkuLvml6Dnl57mu6HjgIIiCiAgfSwKICB7CiAgICAiaWQiOiAiU0tJTExfQ1lGXzAwNSIsCiAgICAiZ3JvdXAiOiAi5rip5Lit6KGl6JmaIiwKICAgICJmb3JtdWxhIjogIueQhuS4reaxpO+8iOabueawj+WMluijge+8iSIsCiAgICAiY2FzZV9jb3VudCI6IDMsCiAgICAidHJpZ2dlciI6IHsKICAgICAgIuS4u+eXhyI6IFsKICAgICAgICAi6IW555eb5Zac5oyJIiwKICAgICAgICAi5ZGV5ZCQ5riF5raOIiwKICAgICAgICAi5LiL5Yip5riF6LC3IiwKICAgICAgICAi5LiN5qyy6aWu6aOfIiwKICAgICAgICAi5omL6Laz5LiN5ripIiwKICAgICAgICAi6IiM5reh6IuU55m9IgogICAgICBdLAogICAgICAi6ISJ6LGhX+aAu+S9kyI6IFsKICAgICAgICAi5rKJ57uGIiwKICAgICAgICAi5rKJ6L+fIiwKICAgICAgICAi5b6u5byxIgogICAgICBdLAogICAgICAi5Yqb6YGTIjogIuaXoOWKmyIsCiAgICAgICLpgJ/njociOiAi6L+fIgogICAgfSwKICAgICJjb3JlX2xvZ2ljIjogIuabuemilueUq++8mueQhuS4reaxpOayu+WkqumYtOiZmuWvkuKAlOKAlCfkuK3nhKbomZrlr5LvvIzmuKnkuK3lm5vlkbPmnIDlt6Un44CC5Lq65Y+C6KGl5Lit55uK5rCU5Li65ZCb77yb5bmy5aec5rip5Lit5pWj5a+S5Li66Iej77yb55m95pyv5YGl6IS+54el5rm/77yb55SY6I2J5ZKM5Lit44CC5pu55rCP6K6k5Li65pys5pa56LS15ZyoJ+WuiOiAjOS4jei1sCfigJTigJTkurrlj4LlrojkuK3vvIznmb3mnK/lrojohL7vvIzlubLlp5zlrojkuK3nhKbkuYvlr5LvvIzkuI3kvLzlm5vpgIbmsaTkuYvotbDogr7jgIIiLAogICAgImJhc2UiOiAi5Lq65Y+CMTBnIOW5suWnnDEwZyDnmb3mnK8xMmcg55SY6I2JNmciLAogICAgImlmX3RoZW4iOiBbCiAgICAgIHsKICAgICAgICAiaWYiOiAi5LiL5Yip55uK55SaIiwKICAgICAgICAidGhlbiI6ICLliqDpmYTlrZA2Z+WFiOeFju+8iOmZhOWtkOeQhuS4reaxpO+8iea4qemYs+atouWIqSIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLlkZXlkJDpopHnuYEiLAogICAgICAgICJ0aGVuIjogIuWKoOWNiuWkjzEwZ+OAgeeUn+WnnDEwZ+WSjOiDg+mZjemAhiIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLohbnnl5vnlJoiLAogICAgICAgICJ0aGVuIjogIuWKoOWQtOiMseiQuDZn44CB6IKJ5qGCNWflkI7kuIvmlaPlr5LmraLnl5siCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWYiOiAi5YW85pyJ6KGo6K+BIiwKICAgICAgICAidGhlbiI6ICLliqDmoYLmnp0xMGfvvIjmoYLmnp3kurrlj4LmsaTvvInmuKnkuK3op6PooagiCiAgICAgIH0KICAgIF0sCiAgICAibm90ZSI6ICLmm7npopbnlKvorrrnkIbkuK3msaTkuYvohInvvJon5aSq6Zi055eF6ISJ5b+F5rKJ5byx4oCU4oCU5rWu5YiZ5Li66KGo77yM5rKJ5YiZ5Li66YeM77yb5b6u5YiZ5Li66Jma77yM57Sn5YiZ5Li65a+S44CC55CG5Lit6K+B6ISJ5rKJ5b6u5YW85pyJ6L+f6LGh77yM5LiN5Ly85bCR6Zi05LmL6ISJ5b6u5qyy57ud44CCJyIKICB9LAogIHsKICAgICJpZCI6ICJTS0lMTF9DWUZfMDA2IiwKICAgICJncm91cCI6ICLlm57pmLPmlZHpgIYiLAogICAgImZvcm11bGEiOiAi5Zub6YCG5rGk77yI5pu55rCP5YyW6KOB77yJIiwKICAgICJjYXNlX2NvdW50IjogMywKICAgICJ0cmlnZ2VyIjogewogICAgICAi5Li755eHIjogWwogICAgICAgICLlm5vogqLljqXpgIYiLAogICAgICAgICLkuIvliKnmuIXosLciLAogICAgICAgICLmgbblr5LouKHljaciLAogICAgICAgICLlhrfmsZfoh6rlh7oiLAogICAgICAgICLnsr7npZ7okI7pnaEiLAogICAgICAgICLoiIzmt6Hoi5Tnmb3mu5EiCiAgICAgIF0sCiAgICAgICLohInosaFf5oC75L2TIjogWwogICAgICAgICLlvq7nu4YiLAogICAgICAgICLmsonlvq4iLAogICAgICAgICLohInlvq7mrLLnu50iCiAgICAgIF0sCiAgICAgICLlipvpgZMiOiAi5peg5YqbIiwKICAgICAgIumAn+eOhyI6ICLov58iCiAgICB9LAogICAgImNvcmVfbG9naWMiOiAi5pu56aKW55Sr77ya5Zub6YCG5rGk5rK75bCR6Zi05a+S5Y6l4oCU4oCUJ+mYs+ihsOmYtOebm++8jOmdnuatpOS4jeiDveaVkemAhifjgILpmYTlrZDlpKfovpvlpKfng63lm57pmLPmlZHpgIbkuLrlkJvvvJvlubLlp5zmuKnkuK3mlaPlr5LkuLroh6PvvJvnlJjojYnnvJPpmYTlp5zkuYvng4jogIzooaXkuK3jgILmm7nmsI/orqTkuLrlm5vpgIbmsaTlj5bmlYjlhbPplK7lnKjkuo4n6ISJ5rKJ5b6uJ+KAlOKAlCfoi6XohInkuI3msonlvq7vvIzomb3ljqXkuqblvZPnu4bovqgn44CCIiwKICAgICJiYXNlIjogIumZhOWtkDE1Z++8iOWFiOeFjjHlsI/ml7bvvIkg5bmy5aecMTBnIOeUmOiNiTZnIiwKICAgICJpZl90aGVuIjogWwogICAgICB7CiAgICAgICAgImlmIjogIuS4i+WIqeS4jeatouiEieW+ruassue7nSIsCiAgICAgICAgInRoZW4iOiAi5Yqg5Lq65Y+CMTVn77yI5Zub6YCG5Yqg5Lq65Y+C5rGk77yJ5Zue6Ziz55uK5rCUIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIumYtOebm+agvOmYs++8iOmdoui1pO+8iSIsCiAgICAgICAgInRoZW4iOiAi5Yqg6JGx55m9NOiMju+8iOeZvemAmuaxpO+8ieegtOmYtOmAmumYsyIKICAgICAgfSwKICAgICAgewogICAgICAgICJpZiI6ICLohbnnl5vljqXpgIbnlJoiLAogICAgICAgICJ0aGVuIjogIuWKoOWQtOiMseiQuDZn5rip6IKd56Wb5a+SIgogICAgICB9LAogICAgICB7CiAgICAgICAgImlmIjogIuWIqeatouiEieS4jeWHuiIsCiAgICAgICAgInRoZW4iOiAi5Yqg5Lq65Y+CMTVn44CB6bqm5YasMTJn55uK5rCU5aSN6ISJIgogICAgICB9CiAgICBdLAogICAgIm5vdGUiOiAi5pu56aKW55Sr57uP5pa55a6e6aqM5b2V77yaJ+Wbm+mAhuaxpOS7peiEieW+rue7huS9huassuWvkOS4uueahOaNruKAlOKAlOatpOaXtumYs+awlOihsOW+ru+8jOS4jeaApeeUqOWbm+mAhuWImemYs+iEsemavuaVkeOAgifmm7nmsI/nibnliKvlvLrosIPpmYTlrZDnmoTngq7liLbkuI7nhY7ms5XvvJon5b+F5YWI54WO5LiA5bCP5pe25Y675YW25q+S77yM5ZCO5YWl5aec6I2J44CCJyIKICB9Cl0=
+[
+  {
+    "_meta": {
+      "version": "2.0",
+      "total": 18,
+      "author": "曹颖甫"
+    }
+  },
+  {
+    "id": "SKILL_CYF_001",
+    "group": "发汗解表",
+    "formula": "麻黄汤（曹氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "恶寒发热",
+        "无汗而喘",
+        "头身疼痛",
+        "骨节疼痛",
+        "脉阴阳俱紧"
+      ],
+      "脉象_总体": [
+        "浮紧",
+        "浮数有力"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：麻黄汤为太阳伤寒第一方——'表气闭郁，非麻桂不能开之'。麻黄开腠理发汗为君；桂枝助麻黄通阳达表为臣。曹氏用此方必见'无汗'——'有一分汗，便不用麻黄'。强调原方原量，不轻易加减。",
+    "base": "麻黄9g 桂枝6g 杏仁9g 甘草3g",
+    "if_then": [
+      {
+        "if": "项背强几几",
+        "then": "加葛根12g舒筋解肌（葛根汤法）"
+      },
+      {
+        "if": "烦躁（兼里热）",
+        "then": "加石膏20g清热（大青龙法）"
+      },
+      {
+        "if": "咳喘痰多",
+        "then": "加厚朴10g、半夏10g降气化痰"
+      },
+      {
+        "if": "体弱不耐峻汗",
+        "then": "麻黄减至6g，加苏叶10g、生姜10g解表"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'麻黄汤证必以脉紧为的据。'曹氏原方原量，不妄加一味。"
+  },
+  {
+    "id": "SKILL_CYF_002",
+    "group": "解肌和营",
+    "formula": "桂枝汤（曹氏化裁）",
+    "case_count": 5,
+    "trigger": {
+      "主症": [
+        "发热汗出",
+        "恶风",
+        "鼻鸣干呕",
+        "头痛",
+        "脉浮缓"
+      ],
+      "脉象_总体": [
+        "浮缓",
+        "浮弱",
+        "浮虚"
+      ],
+      "力道": "无力",
+      "速率": "缓"
+    },
+    "core_logic": "曹颖甫：桂枝汤为群方之冠——'调和营卫，非此不济'。桂枝解肌发汗为君；白芍敛阴和营为臣。曹氏特强调'啜热稀粥以助药力'——服药后啜粥是取效关键，不可省略。",
+    "base": "桂枝9g 白芍9g 生姜9g 大枣12枚 甘草6g",
+    "if_then": [
+      {
+        "if": "项背强痛",
+        "then": "加葛根12g（桂枝加葛根汤）"
+      },
+      {
+        "if": "喘咳",
+        "then": "加厚朴10g、杏仁10g降气平喘"
+      },
+      {
+        "if": "汗漏不止恶风甚",
+        "then": "加附子6g先煎（桂枝加附子汤）"
+      },
+      {
+        "if": "腹痛",
+        "then": "白芍加至18g（桂枝加芍药汤）"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'桂枝汤治太阳中风，以自汗出为眼目。必啜粥、温覆，取微似有汗者佳。'"
+  },
+  {
+    "id": "SKILL_CYF_003",
+    "group": "清解阳明",
+    "formula": "白虎汤（曹氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "大热",
+        "大汗",
+        "大渴",
+        "脉洪大",
+        "烦渴引饮",
+        "面赤",
+        "舌干"
+      ],
+      "脉象_总体": [
+        "洪大",
+        "洪数",
+        "滑数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：白虎汤治阳明经证——'四大证'备则径用之。石膏辛寒清热为君；知母滋阴润燥。曹氏用石膏极其果断——'热至壮盛，非石膏不能折其势'，常用30-60g。",
+    "base": "石膏30g 知母12g 粳米30g 甘草6g",
+    "if_then": [
+      {
+        "if": "热盛伤津口渴甚",
+        "then": "加人参10g（白虎加人参汤）"
+      },
+      {
+        "if": "兼表证恶寒",
+        "then": "加桂枝10g（白虎加桂枝汤）"
+      },
+      {
+        "if": "大便秘结转腑证",
+        "then": "加大黄10g后下通腑"
+      },
+      {
+        "if": "神昏谵语",
+        "then": "加安宫牛黄丸半粒化服"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'白虎以脉洪大为的据，若脉沉细则万不可用。'一著名案例：大热大汗脉洪大，径投白虎一剂汗出热退顿愈。"
+  },
+  {
+    "id": "SKILL_CYF_004",
+    "group": "攻下阳明",
+    "formula": "大承气汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "潮热",
+        "谵语",
+        "腹满硬痛拒按",
+        "大便秘结不通",
+        "目中不了了睛不和",
+        "舌苔焦黄起刺"
+      ],
+      "脉象_总体": [
+        "沉实",
+        "沉数有力",
+        "滑数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：大承气治阳明腑实重症——'痞满燥实坚'五证具备。大黄攻下泄热为君；芒硝软坚润燥。曹氏用此方极其谨慎——'一见目中不了了，即是急下存阴之候，不可迟疑'。",
+    "base": "大黄12g（后下） 芒硝10g（兑服） 枳实12g 厚朴15g",
+    "if_then": [
+      {
+        "if": "痞满为主燥实不显",
+        "then": "去芒硝（小承气汤）"
+      },
+      {
+        "if": "燥实为主痞满不显",
+        "then": "去枳朴加甘草10g（调胃承气汤）"
+      },
+      {
+        "if": "阴液大伤舌焦无津",
+        "then": "加玄参20g、生地20g增液行舟"
+      },
+      {
+        "if": "热结旁流",
+        "then": "仍用大承气通因通用"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'大承气以目中不了了、睛不和为急下之的据。'鉴别三承气：大承气全，小承气痞满，调胃承气燥实。"
+  },
+  {
+    "id": "SKILL_CYF_005",
+    "group": "温中补虚",
+    "formula": "理中汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "腹痛喜按",
+        "呕吐清涎",
+        "下利清谷",
+        "不欲饮食",
+        "手足不温",
+        "舌淡苔白"
+      ],
+      "脉象_总体": [
+        "沉细",
+        "沉迟",
+        "微弱"
+      ],
+      "力道": "无力",
+      "速率": "迟"
+    },
+    "core_logic": "曹颖甫：理中汤治太阴虚寒——'中焦虚寒，温中四味最工'。人参补中为君；干姜温中散寒为臣。曹氏认为本方贵在'守而不走'——不似四逆之走肾。",
+    "base": "人参10g 干姜10g 白术12g 甘草6g",
+    "if_then": [
+      {
+        "if": "下利益甚",
+        "then": "加附子6g先煎（附子理中汤）"
+      },
+      {
+        "if": "呕吐频繁",
+        "then": "加半夏10g、生姜10g和胃降逆"
+      },
+      {
+        "if": "腹痛甚",
+        "then": "加吴茱萸6g、肉桂5g后下散寒止痛"
+      },
+      {
+        "if": "兼表证",
+        "then": "加桂枝10g（桂枝人参汤）"
+      }
+    ],
+    "note": "曹颖甫论理中之脉：'太阴病脉必沉弱——浮则为表，沉则为里；微则为虚，紧则为寒。理中证脉沉微兼迟象。'"
+  },
+  {
+    "id": "SKILL_CYF_006",
+    "group": "回阳救逆",
+    "formula": "四逆汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "四肢厥逆",
+        "下利清谷",
+        "恶寒踡卧",
+        "冷汗自出",
+        "精神萎靡",
+        "舌淡苔白滑"
+      ],
+      "脉象_总体": [
+        "微细",
+        "沉微",
+        "脉微欲绝"
+      ],
+      "力道": "极无力",
+      "速率": "迟"
+    },
+    "core_logic": "曹颖甫：四逆汤治少阴寒厥——'阳衰阴盛，非此不能救逆'。附子大辛大热回阳救逆为君；干姜温中。曹氏认为取效关键在'脉沉微'——'若脉不沉微，虽厥亦当细辨'。",
+    "base": "附子15g（先煎1小时） 干姜10g 甘草6g",
+    "if_then": [
+      {
+        "if": "下利不止脉微欲绝",
+        "then": "加人参15g（四逆加人参汤）"
+      },
+      {
+        "if": "阴盛格阳面赤",
+        "then": "加葱白4茎→白通汤"
+      },
+      {
+        "if": "腹痛厥逆甚",
+        "then": "加吴茱萸6g温肝祛寒"
+      },
+      {
+        "if": "利止脉不出",
+        "then": "加人参15g、麦冬12g益气复脉"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'四逆以脉微细但欲寐为的据。'必先煎附子一小时去其毒，后入姜草。"
+  },
+  {
+    "id": "SKILL_CYF_007",
+    "group": "太阳少阴合病",
+    "formula": "葛根汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "项背强几几",
+        "恶寒发热无汗",
+        "头项强痛",
+        "神倦",
+        "脉右浮紧左沉弱"
+      ],
+      "脉象_总体": [
+        "浮紧",
+        "右浮紧",
+        "左沉弱"
+      ],
+      "力道": "表有力里弱",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：葛根汤证——太阳伤寒兼少阴不足。葛根升津舒筋为君，麻黄桂枝解表，白芍敛阴，姜枣草和中。曹氏从袁姓少年案中悟出右手脉候表、左手脉候里——'右浮紧为表实，左沉弱为里虚'，故用葛根汤开表而不伤正。",
+    "base": "葛根12g 麻黄9g 桂枝6g 白芍6g 生姜9g 大枣12枚 甘草6g",
+    "if_then": [
+      {
+        "if": "项背强痛甚",
+        "then": "葛根加至20g，加羌活10g舒筋"
+      },
+      {
+        "if": "呕吐",
+        "then": "加半夏10g（葛根加半夏汤）"
+      },
+      {
+        "if": "下利",
+        "then": "葛根加至15g升清止利"
+      },
+      {
+        "if": "神昏",
+        "then": "加石菖蒲10g开窍醒神"
+      }
+    ],
+    "note": "曹颖甫经方实验录袁姓少年案：项背强痛神昏，右脉浮紧左脉沉弱。投葛根汤一剂汗出神清。曹氏由此确立左右脉分诊法。"
+  },
+  {
+    "id": "SKILL_CYF_008",
+    "group": "外寒内饮",
+    "formula": "小青龙汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "恶寒发热",
+        "咳喘",
+        "咳吐清稀泡沫痰",
+        "背冷",
+        "舌淡苔白滑"
+      ],
+      "脉象_总体": [
+        "弦紧",
+        "浮紧",
+        "弦滑"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：小青龙治外寒内饮——'水寒射肺'。麻黄/桂枝解表散寒，干姜/细辛/半夏温肺化饮，白芍/五味子敛肺。曹氏认为小青龙证以咳吐清稀痰为特征，'背冷如掌大'为水饮停于心下的特异体征。",
+    "base": "麻黄9g 桂枝9g 细辛3g 干姜10g 半夏10g 白芍10g 五味子6g 甘草6g",
+    "if_then": [
+      {
+        "if": "烦躁",
+        "then": "加石膏15g（小青龙加石膏汤）"
+      },
+      {
+        "if": "喉中水鸡声",
+        "then": "加射干10g、紫菀10g、款冬花10g"
+      },
+      {
+        "if": "表解后咳喘不止",
+        "then": "去麻黄桂枝→苓甘五味姜辛汤"
+      },
+      {
+        "if": "痰多",
+        "then": "加陈皮10g、茯苓15g化痰"
+      }
+    ],
+    "note": "曹颖甫经方实验录：小青龙证的核心是'外寒内饮'——表寒未解、水饮在肺。咳吐稀白泡沫痰为辨证要点。"
+  },
+  {
+    "id": "SKILL_CYF_009",
+    "group": "和解少阳",
+    "formula": "小柴胡汤（曹氏化裁）",
+    "case_count": 4,
+    "trigger": {
+      "主症": [
+        "往来寒热",
+        "胸胁苦满",
+        "默默不欲饮食",
+        "心烦喜呕",
+        "口苦咽干"
+      ],
+      "脉象_总体": [
+        "弦细",
+        "弦数",
+        "弦"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：小柴胡汤治少阳——'但见一证便是，不必悉具'。柴胡解少阳郁热为君，黄芩清胆，半夏/生姜降逆止呕，参草枣扶正。曹氏认为小柴胡为'和法'代表——表里之枢机、寒热之调节全赖此方。",
+    "base": "柴胡12g 黄芩10g 半夏10g 人参10g 生姜10g 大枣5枚 甘草6g",
+    "if_then": [
+      {
+        "if": "口渴",
+        "then": "去半夏加天花粉12g"
+      },
+      {
+        "if": "腹痛",
+        "then": "去黄芩加白芍12g"
+      },
+      {
+        "if": "胁下痞硬",
+        "then": "去大枣加牡蛎20g"
+      },
+      {
+        "if": "心悸小便不利",
+        "then": "去黄芩加茯苓15g"
+      }
+    ],
+    "note": "曹颖甫经方实验录：小柴胡汤加减必本于仲景原文，每味去取皆有经义——不妄加、不妄减。"
+  },
+  {
+    "id": "SKILL_CYF_010",
+    "group": "少阳阳明",
+    "formula": "大柴胡汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "往来寒热",
+        "胸胁苦满",
+        "呕不止",
+        "心下急",
+        "大便秘结",
+        "郁郁微烦"
+      ],
+      "脉象_总体": [
+        "弦数",
+        "弦实",
+        "沉弦有力"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：大柴胡汤治少阳阳明合病——少阳未解而入阳明。柴胡/黄芩和解少阳，大黄/枳实通下阳明，白芍缓急，半夏/姜枣和胃。曹氏认为大柴胡证'呕不止'区别于小柴胡'喜呕'——呕势更急更重。",
+    "base": "柴胡15g 黄芩10g 半夏10g 生姜15g 大枣5枚 白芍12g 枳实10g 大黄10g（后下）",
+    "if_then": [
+      {
+        "if": "右上腹痛剧",
+        "then": "加金钱草30g、郁金15g利胆止痛"
+      },
+      {
+        "if": "黄疸",
+        "then": "加茵陈蒿30g、栀子10g"
+      },
+      {
+        "if": "高热",
+        "then": "加石膏30g清热"
+      },
+      {
+        "if": "便通后",
+        "then": "去大黄加白术12g、茯苓15g健脾"
+      }
+    ],
+    "note": "曹颖甫经方实验录：少阳阳明合病不可单攻——'伤寒呕多，虽有阳明证不可攻之'。大柴胡双解表里，不失仲景心法。"
+  },
+  {
+    "id": "SKILL_CYF_011",
+    "group": "寒热错杂痞",
+    "formula": "半夏泻心汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "心下痞满",
+        "呕吐",
+        "肠鸣下利",
+        "胃口不佳"
+      ],
+      "脉象_总体": [
+        "弦数",
+        "滑数",
+        "濡数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：半夏泻心治心下痞——寒热错杂于中焦。黄连/黄芩清热，干姜温中，半夏降逆止呕，参草枣补中。曹氏认为此方为'辛开苦降'法之典范——以辛散结（半夏/干姜），以苦泄热（黄连/黄芩）。",
+    "base": "半夏12g 黄连6g 黄芩10g 干姜10g 人参10g 甘草6g 大枣5枚",
+    "if_then": [
+      {
+        "if": "水饮食滞（干噫食臭）",
+        "then": "加生姜减干姜→生姜泻心汤"
+      },
+      {
+        "if": "下利益甚（日数十行）",
+        "then": "加甘草→甘草泻心汤"
+      },
+      {
+        "if": "腹胀满",
+        "then": "加枳实10g、厚朴10g行气消痞"
+      },
+      {
+        "if": "呕吐频繁",
+        "then": "加代赭石15g降逆"
+      }
+    ],
+    "note": "曹颖甫经方实验录：半夏泻心汤证的核心是'心下痞'，鉴别要点：大黄黄连泻心汤为热痞（不呕），半夏泻心为寒热错杂痞（呕利）。"
+  },
+  {
+    "id": "SKILL_CYF_012",
+    "group": "阳明轻证·缓下",
+    "formula": "调胃承气汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "潮热",
+        "心烦",
+        "谵语轻",
+        "大便秘结",
+        "腹胀不拒按"
+      ],
+      "脉象_总体": [
+        "滑数",
+        "沉数",
+        "实而数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：调胃承气治阳明燥实——燥热为主，痞满不显。大黄攻下泄热，芒硝软坚润燥，甘草缓大黄芒硝之峻。曹氏认为调胃承气为三承气中最轻者——'以调胃为主，下之在其次'。",
+    "base": "大黄12g（后下） 芒硝10g（兑服） 甘草6g",
+    "if_then": [
+      {
+        "if": "津伤明显",
+        "then": "加玄参15g、生地15g养阴"
+      },
+      {
+        "if": "心烦不眠",
+        "then": "加栀子10g、淡豆豉12g清宣郁热"
+      },
+      {
+        "if": "腹胀",
+        "then": "加厚朴10g行气"
+      },
+      {
+        "if": "谵语重",
+        "then": "转大承气汤急下"
+      }
+    ],
+    "note": "曹颖甫经方实验录：调胃承气、小承气、大承气三方的递进关系——燥实在胃→调胃承气；燥实在小肠→小承气；燥实在大肠→大承气。"
+  },
+  {
+    "id": "SKILL_CYF_013",
+    "group": "阳明轻证·行气",
+    "formula": "小承气汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "腹胀满",
+        "大便硬",
+        "潮热轻",
+        "谵语或有",
+        "腹大痛"
+      ],
+      "脉象_总体": [
+        "滑",
+        "滑数",
+        "沉实"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：小承气治阳明腑实轻证——痞满为主，燥实不重。大黄攻下，枳实/厚朴行气除满，不用芒硝因燥结尚轻。曹氏认为小承气以'腹大痛'为特征——腹胀满而痛，与大承气之'腹满硬痛拒按'程度有别。",
+    "base": "大黄12g（后下） 厚朴10g 枳实10g",
+    "if_then": [
+      {
+        "if": "燥实加重转大承气证",
+        "then": "加芒硝10g→大承气汤"
+      },
+      {
+        "if": "腹胀甚",
+        "then": "厚朴加至15g、加木香6g"
+      },
+      {
+        "if": "兼呕",
+        "then": "加半夏10g、生姜10g"
+      },
+      {
+        "if": "服后便通",
+        "then": "停药，糜粥自养"
+      }
+    ],
+    "note": "曹颖甫经方实验录：小承气与大承气的鉴别——'若腹大满不通者，可与小承气汤微和胃气，勿令大泄下'。小承气偏行气，大承气偏攻下。"
+  },
+  {
+    "id": "SKILL_CYF_014",
+    "group": "心血不足",
+    "formula": "炙甘草汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "心动悸",
+        "脉结代",
+        "神疲乏力",
+        "面色少华",
+        "气短",
+        "舌淡少苔"
+      ],
+      "脉象_总体": [
+        "结代",
+        "细弱",
+        "虚数"
+      ],
+      "力道": "无力",
+      "速率": "缓/不齐"
+    },
+    "core_logic": "曹颖甫：炙甘草汤治心动悸脉结代——心血不足、心阳不振。炙甘草补中复脉为君，人参/大枣补气，生地/阿胶/麦冬/麻仁滋阴养血，桂枝/生姜/清酒通阳。曹氏认为此方为补心复脉第一方，清酒为药引不可或缺。",
+    "base": "炙甘草12g 人参10g 桂枝10g 生姜10g 大枣30枚 生地30g 阿胶10g（烊化） 麦冬15g 麻仁15g 清酒30ml兑入",
+    "if_then": [
+      {
+        "if": "心悸怔忡甚",
+        "then": "加龙骨20g、牡蛎20g重镇安神"
+      },
+      {
+        "if": "失眠",
+        "then": "加酸枣仁15g、茯神15g宁心安神"
+      },
+      {
+        "if": "胸闷",
+        "then": "加丹参15g、郁金10g活血宽胸"
+      },
+      {
+        "if": "畏寒明显",
+        "then": "加附子6g先煎温阳"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'伤寒脉结代心动悸，炙甘草汤主之'。曹氏特别强调清酒的重要性——'以清酒七升，水八升，煮取三升'，酒可助药力行于血脉。"
+  },
+  {
+    "id": "SKILL_CYF_015",
+    "group": "表里双解·协热利",
+    "formula": "葛根黄芩黄连汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "下利暴注",
+        "肛门灼热",
+        "喘而汗出",
+        "口渴",
+        "身热不恶寒"
+      ],
+      "脉象_总体": [
+        "促",
+        "滑数",
+        "数而有力"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：葛根芩连治太阳误下热陷阳明——表未全解而里热已成。葛根解肌升清止利为君，黄芩/黄连清热燥湿，甘草和中。曹氏认为此方以'喘而汗出'为关键——肺与大肠相表里，热迫大肠则利，上蒸于肺则喘。",
+    "base": "葛根15g 黄芩10g 黄连6g 甘草6g",
+    "if_then": [
+      {
+        "if": "下利赤白",
+        "then": "加白头翁15g、秦皮10g清热止痢"
+      },
+      {
+        "if": "腹痛",
+        "then": "加白芍12g缓急止痛"
+      },
+      {
+        "if": "兼表证恶寒",
+        "then": "加苏叶10g解表"
+      },
+      {
+        "if": "口渴甚",
+        "then": "加天花粉12g生津"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'太阳病，桂枝证，医反下之，利遂不止，脉促者表未解也，喘而汗出者，葛根黄芩黄连汤主之'。脉促=表邪未全陷。"
+  },
+  {
+    "id": "SKILL_CYF_016",
+    "group": "化气行水",
+    "formula": "五苓散（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "小便不利",
+        "口渴欲饮",
+        "饮水即吐",
+        "水肿",
+        "脐下悸动"
+      ],
+      "脉象_总体": [
+        "浮",
+        "浮数",
+        "浮滑"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：五苓散治膀胱蓄水——表邪入里与水结于膀胱。桂枝通阳化气，猪苓/茯苓/泽泻利水，白术健脾制水。曹氏强调五苓散证之渴为'水蓄津不上承之渴'——非热渴，乃水堵。",
+    "base": "桂枝10g 茯苓15g 猪苓10g 泽泻15g 白术12g",
+    "if_then": [
+      {
+        "if": "水逆呕吐",
+        "then": "加半夏10g、生姜15g降逆"
+      },
+      {
+        "if": "水肿明显",
+        "then": "加车前子15g、冬瓜皮20g"
+      },
+      {
+        "if": "小便热痛",
+        "then": "加滑石15g、白茅根20g清热利尿"
+      },
+      {
+        "if": "口渴甚",
+        "then": "加天花粉12g"
+      }
+    ],
+    "note": "曹颖甫经方实验录：五苓散证的核心——'小便不利，微热消渴'。与白虎渴鉴别：白虎渴而烦躁大热，五苓渴而小便不利。"
+  },
+  {
+    "id": "SKILL_CYF_017",
+    "group": "温阳固表",
+    "formula": "桂枝加附子汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "汗漏不止",
+        "恶风甚",
+        "小便难",
+        "四肢微急难以屈伸"
+      ],
+      "脉象_总体": [
+        "浮弱",
+        "浮虚",
+        "微细"
+      ],
+      "力道": "无力",
+      "速率": "缓"
+    },
+    "core_logic": "曹颖甫：桂枝加附子治太阳病发汗太过——表阳随汗外泄。桂枝汤调和营卫，附子温阳固表止汗。曹氏认为此证为'坏病'——发汗不当导致表阳虚衰，非附子不能救逆。",
+    "base": "桂枝9g 白芍9g 生姜9g 大枣12枚 甘草6g 附子10g（先煎）",
+    "if_then": [
+      {
+        "if": "汗出不止",
+        "then": "加黄芪20g、煅牡蛎30g益气固表"
+      },
+      {
+        "if": "四肢拘急甚",
+        "then": "加木瓜12g、白芍加至18g柔筋缓急"
+      },
+      {
+        "if": "恶寒甚",
+        "then": "附子加至15g加干姜6g"
+      },
+      {
+        "if": "神疲",
+        "then": "加人参10g益气"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'太阳病，发汗，遂漏不止，其人恶风，小便难，四肢微急难以屈伸者，桂枝加附子汤主之'。此发汗太过亡阳之坏病。"
+  },
+  {
+    "id": "SKILL_CYF_018",
+    "group": "清宣肺热",
+    "formula": "麻杏甘石汤（曹氏化裁）",
+    "case_count": 3,
+    "trigger": {
+      "主症": [
+        "发热",
+        "汗出",
+        "喘咳",
+        "口渴",
+        "痰黄",
+        "舌红苔黄"
+      ],
+      "脉象_总体": [
+        "滑数",
+        "浮数",
+        "洪数"
+      ],
+      "力道": "有力",
+      "速率": "数"
+    },
+    "core_logic": "曹颖甫：麻杏甘石治肺热壅盛——表邪化热入肺，汗出而喘。麻黄宣肺平喘（取其宣散非发汗），石膏清肺热（量4-6倍于麻黄），杏仁降肺，甘草和中。曹氏认为'汗出用麻黄，非配石膏则汗出无度'。",
+    "base": "麻黄6g 杏仁10g 石膏30g 甘草6g",
+    "if_then": [
+      {
+        "if": "痰黄稠",
+        "then": "加瓜蒌15g、浙贝母10g清热化痰"
+      },
+      {
+        "if": "高热",
+        "then": "石膏加至60g加知母12g"
+      },
+      {
+        "if": "喘促",
+        "then": "加葶苈子10g、桑白皮12g泻肺"
+      },
+      {
+        "if": "伤阴",
+        "then": "加麦冬12g、沙参15g"
+      }
+    ],
+    "note": "曹颖甫经方实验录：'汗出而喘无大热者，可与麻杏甘石汤'。汗出说明表已解，喘为肺热未清。石膏必大于麻黄4-6倍。"
+  }
+]

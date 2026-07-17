@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(_OUTPUT_DIR, ".."))
 from formula_utils import is_zhongjing
 
 CHECKBOX_PATH = os.path.join(_OUTPUT_DIR, "胡希恕辨证勾选表_v1.json")
-SKILLS_PATH = os.path.join(_OUTPUT_DIR, "hu_xishu_skills_v1.json")
+SKILLS_PATH = os.path.join(_OUTPUT_DIR, "..", "skills", "hu_xishu_skills_v1.json")
 
 
 class HuXiShuEngine:
@@ -44,17 +44,6 @@ class HuXiShuEngine:
                     "jing": jing,
                     "step": "六经",
                 }
-
-    def diagnose(self, checked_ids: List[str]) -> Dict:
-        bagang_hits: Dict[str, List[str]] = {}
-        liujing_hits: Dict[str, List[str]] = {}
-        fangzheng_hits: Dict[str, str] = {}
-
-        for sid in checked_ids:
-            info = self._id_map.get(sid)
-            if not info:
-                continue
-        self._skills = self._load_skills()
 
     def _load_skills(self) -> dict:
         if not os.path.exists(SKILLS_PATH):
